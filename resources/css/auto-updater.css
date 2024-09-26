@@ -1,0 +1,132 @@
+/* auto-updater.css */
+.refresh-icon {
+    display: inline-block;
+    font-size: 1.5em;
+    color: red;
+    margin: 0px 10px;
+    font-weight: 400;
+    transition: transform 0.5s ease;
+}
+
+.refresh-icon.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.refresh-message {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.changelog-button {
+    background-color: #ed8936;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.changelog-button:hover {
+    background-color: #dd6b20;
+}
+
+.changelog-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #edf2f7;
+    border-radius: 4px;
+}
+
+.changelog-content {
+    color: #2d3748;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.auto-updater-card {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+.auto-updater-header {
+    background-color: #4a5568;
+    color: white;
+    padding: 15px 20px;
+}
+
+.auto-updater-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.auto-updater-content {
+    padding: 20px;
+}
+
+.version-tag {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.update-button {
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+    background-color: #3182ce;
+}
+
+.update-button:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.up-to-date {
+    color: #48bb78;
+    font-weight: bold;
+}
+
+.output-container {
+    display: none;
+    margin-top: 20px;
+    background-color: #2d3748;
+    border-radius: 4px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.output-content {
+    color: #a0aec0;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+}

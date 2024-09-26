@@ -1,0 +1,19 @@
+workbench:
+    welcome: true
+    install: true
+    start: /auto-updater
+    user: contact@anichur.com
+    guard: web
+    sync:
+        - from: ./public/
+          to: public/vendor/auto-updater
+    build:
+        - asset-publish
+        - create-sqlite-db
+        - migrate:refresh
+    assets:
+        - auto-updater-assets
+    discovers:
+        web: false
+        api: true
+        commands: true

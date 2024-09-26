@@ -1,0 +1,23 @@
+<?php
+
+use AnisAronno\LaravelAutoUpdater\Services\VersionConfig;
+use AnisAronno\LaravelAutoUpdater\Services\VersionSourceFactory;
+
+$release_url = env('RELEASE_URL', 'https://github.com/anisAronno/laravel-starter');
+$purchaseKey = env('PURCHASE_KEY', null);
+
+$source = VersionSourceFactory::createSource($release_url, $purchaseKey);
+$versionConfig = new VersionConfig($source);
+
+return array_merge($versionConfig->getConfig(), [
+    "exclude_items" => [
+        '.env',
+        '.git',
+        'storage',
+        'node_modules',
+        'vendor',
+        '.htaccess',
+        'public/.htaccess',
+    ],
+    "middleware" => ['web'],
+]);
