@@ -17,7 +17,7 @@ class ApiRequestService
      *
      * @param string $url The URL to make the request to.
      * @param array $headers Optional headers to pass in the request.
-     * @return \Illuminate\Http\Client\Response The HTTP response.
+     * @return Response The HTTP response.
      */
     public static function get(string $url, array $headers = []): Response
     {

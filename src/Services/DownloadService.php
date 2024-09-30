@@ -2,6 +2,7 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
@@ -19,7 +20,7 @@ class DownloadService
      * @param string $url
      * @param string $destination
      * @param Command $command
-     * @throws \Exception
+     * @throws Exception
      */
     public function download(string $url, string $destination, Command $command)
     {
@@ -28,7 +29,7 @@ class DownloadService
         $response = Http::timeout(120)->get($url);
 
         if ($response->failed()) {
-            throw new \Exception("Failed to download update: {$response->status()}");
+            throw new Exception("Failed to download update: {$response->status()}");
         }
 
         File::put($destination, $response->body());

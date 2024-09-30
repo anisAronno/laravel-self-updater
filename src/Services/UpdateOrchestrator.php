@@ -2,6 +2,7 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -14,10 +15,10 @@ use Illuminate\Support\Facades\Log;
  */
 class UpdateOrchestrator
 {
-    protected $backupService;
-    protected $downloadService;
-    protected $fileService;
-    protected $composerService;
+    protected BackupService $backupService;
+    protected DownloadService $downloadService;
+    protected FileService $fileService;
+    protected ComposerService $composerService;
 
     /**
      * UpdateOrchestrator constructor.
@@ -40,7 +41,7 @@ class UpdateOrchestrator
      *
      * @param array $releaseData
      * @param Command $command
-     * @throws \Exception
+     * @throws Exception
      */
     public function processUpdate(array $releaseData, Command $command)
     {
@@ -56,7 +57,7 @@ class UpdateOrchestrator
             $this->cleanup([$backupPath], $command);
 
             Log::info('Update completed successfully.');
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             $this->handleFailure($e, $backupPath, $command);
         } finally {
             $this->disableMaintenanceMode($command);
@@ -91,8 +92,7 @@ class UpdateOrchestrator
      * @param Command $command
      * @return string
      */
-    protected function createBackup(Command $command)
-    {
+    protected function createBackup(Command $command): string {
         $backupPath = $this->backupService->backup($command);
         $command->info('Backup completed successfully.');
         return $backupPath;
@@ -103,7 +103,7 @@ class UpdateOrchestrator
      *
      * @param array $releaseData
      * @param Command $command
-     * @throws \Exception
+     * @throws Exception
      */
     protected function updateProject(array $releaseData, Command $command)
     {
@@ -124,13 +124,12 @@ class UpdateOrchestrator
      *
      * @param array $releaseData
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function getUpdateUrl(array $releaseData)
-    {
+    protected function getUpdateUrl(array $releaseData): string {
         $zipballUrl = $releaseData['download_url'] ?? null;
         if (is_null($zipballUrl)) {
-            throw new \Exception('No update available.');
+            throw new Exception('No update available.');
         }
         return $zipballUrl;
     }
@@ -164,6 +163,7 @@ class UpdateOrchestrator
      * Install the Composer dependencies.
      *
      * @param Command $command
+     * @throws Exception
      */
     protected function installComposerDependencies(Command $command)
     {
@@ -188,12 +188,12 @@ class UpdateOrchestrator
     /**
      * Handle the failure scenario.
      *
-     * @param \Exception $e
+     * @param Exception $e
      * @param string $backupPath
      * @param Command $command
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function handleFailure(\Exception $e, $backupPath, Command $command)
+    protected function handleFailure( Exception $e, string $backupPath, Command $command)
     {
         Log::error("Update failed: {$e->getMessage()}");
         $command->error("Update failed: {$e->getMessage()}");

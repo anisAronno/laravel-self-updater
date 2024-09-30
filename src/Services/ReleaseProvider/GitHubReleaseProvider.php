@@ -1,21 +1,21 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\Adapters;
+namespace AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VersionSourceInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseProviderInterface;
 use InvalidArgumentException;
 
 /**
- * Class GitLabSource
+ * Class GitHubReleaseProvider
  *
- * Implements the API URL logic for GitLab repositories.
+ * Release provider for GitHub repositories.
  */
-class GitLabSource implements VersionSourceInterface
+class GitHubReleaseProvider implements ReleaseProviderInterface
 {
-    private $release_url;
+    private string $release_url;
 
     /**
-     * GitLabSource constructor.
+     * GitHubReleaseProvider constructor.
      *
      * @param string $release_url
      */
@@ -36,10 +36,10 @@ class GitLabSource implements VersionSourceInterface
         $parts = explode('/', $path);
 
         if (count($parts) !== 2) {
-            throw new InvalidArgumentException("Invalid GitLab repository URL: {$this->release_url}");
+            throw new InvalidArgumentException("Invalid GitHub repository URL: {$this->release_url}");
         }
 
         list($user, $repo) = $parts;
-        return sprintf('https://gitlab.com/api/v4/projects/%s%%2F%s/repository/tags', urlencode($user), urlencode($repo));
+        return sprintf('https://api.github.com/repos/%s/%s/releases', $user, $repo);
     }
 }

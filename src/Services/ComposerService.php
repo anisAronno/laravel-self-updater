@@ -2,6 +2,8 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
+use Exception;
+
 /**
  * Class ComposerService
  * 
@@ -12,7 +14,7 @@ class ComposerService
     /**
      * Run composer install.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function runComposerInstall()
     {
@@ -24,14 +26,13 @@ class ComposerService
      * Get the path to the composer executable.
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function getComposerPath()
-    {
+    protected function getComposerPath(): string {
         $composerPath = exec('which composer');
         
         if (empty($composerPath)) {
-            throw new \Exception('Composer is not installed or not found in the system PATH.');
+            throw new Exception('Composer is not installed or not found in the system PATH.');
         }
 
         return $composerPath;
@@ -42,10 +43,9 @@ class ComposerService
      *
      * @param string $composerPath
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function executeComposerInstall($composerPath)
-    {
+    protected function executeComposerInstall( string $composerPath): bool {
         $output = [];
         $returnVar = 0;
 
@@ -65,7 +65,7 @@ class ComposerService
      * Handle a failed composer install command.
      *
      * @param array $output
-     * @throws \Exception
+     * @throws Exception
      */
     protected function handleInstallFailure(array $output)
     {
@@ -73,9 +73,9 @@ class ComposerService
 
         // Check for specific errors in the output
         if (strpos($errorMessage, 'Failed to open stream') !== false) {
-            throw new \Exception('Composer install failed due to missing files. ' . $errorMessage);
+            throw new Exception('Composer install failed due to missing files. ' . $errorMessage);
         }
 
-        throw new \Exception('Composer install failed: ' . $errorMessage);
+        throw new Exception('Composer install failed: ' . $errorMessage);
     }
 }

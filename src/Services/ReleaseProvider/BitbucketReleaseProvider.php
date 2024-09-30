@@ -1,21 +1,21 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\Adapters;
+namespace AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VersionSourceInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseProviderInterface;
 use InvalidArgumentException;
 
 /**
- * Class BitbucketSource
+ * Class BitbucketReleaseProvider
  *
- * Implements the API URL logic for Bitbucket repositories.
+ * Release provider for Bitbucket repositories.
  */
-class BitbucketSource implements VersionSourceInterface
+class BitbucketReleaseProvider implements ReleaseProviderInterface
 {
-    private $release_url;
+    private string $release_url;
 
     /**
-     * BitbucketSource constructor.
+     * BitbucketReleaseProvider constructor.
      *
      * @param string $release_url
      */
