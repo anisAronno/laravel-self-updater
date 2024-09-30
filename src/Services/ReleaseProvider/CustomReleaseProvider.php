@@ -1,22 +1,22 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\Adapters;
+namespace AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VersionSourceInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseProviderInterface;
 use InvalidArgumentException;
 
 /**
- * Class CustomAdapter
+ * Class CustomReleaseProvider
  *
- * Implements the API URL logic for custom repositories.
+ * Release provider for custom repositories.
  */
-class CustomSource implements VersionSourceInterface
+class CustomReleaseProvider implements ReleaseProviderInterface
 {
-    private $release_url;
-    private $purchaseKey;
+    private string $release_url;
+    private ?string $purchaseKey;
 
     /**
-     * CustomAdapter constructor.
+     * CustomReleaseProvider constructor.
      *
      * @param string $release_url
      * @param string|null $purchaseKey

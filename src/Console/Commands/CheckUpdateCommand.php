@@ -11,7 +11,7 @@ class CheckUpdateCommand extends Command
 
     protected $description = 'Check for available updates for the project';
 
-    protected $versionService;
+    protected VersionService $versionService;
 
     public function __construct(VersionService $versionService)
     {
@@ -24,7 +24,7 @@ class CheckUpdateCommand extends Command
         try {
             // Get the current version and latest release data
             $currentVersion = $this->versionService->getCurrentVersion();
-            $latestRelease = $this->versionService->fetchReleaseData();
+            $latestRelease = $this->versionService->collectReleaseData();
 
             if (empty($latestRelease)) {
                 $this->alert('No update data found.');

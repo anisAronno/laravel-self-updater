@@ -1,24 +1,26 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelAutoUpdater\Services\DataCollector;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseDataCollectorInterface;
 use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
+use Exception;
 
 /**
- * Class BitbucketUpdateFetcher
- * 
- * This class is responsible for fetching release data from Bitbucket.
+ * Class BitbucketReleaseDataCollector
+ *
+ * Fetch release data from Bitbucket.
  */
-class BitbucketUpdateFetcher implements UpdateFetcherInterface
+class BitbucketReleaseDataCollector implements ReleaseDataCollectorInterface
 {
     /**
-     * Fetch release data from Bitbucket.
+     * Collect the release data for the given version.
      *
      * @param string|null $version The specific version to fetch (optional).
      * @return array The release data or an empty array on failure.
+     * @throws Exception
      */
-    public function fetchReleaseData(?string $version): array
+    public function collectReleaseData(?string $version): array
     {
         $release_url  = $this->buildRepoUrl($version);
         $response = ApiRequestService::get($release_url);
@@ -51,6 +53,7 @@ class BitbucketUpdateFetcher implements UpdateFetcherInterface
      * @param array $data The API response data.
      * @param string|null $version The version to fetch.
      * @return array The formatted release data.
+     * @throws Exception
      */
     protected function extractReleaseData(array $data, ?string $version): array
     {
@@ -68,6 +71,7 @@ class BitbucketUpdateFetcher implements UpdateFetcherInterface
      *
      * @param array $data The API response data for a single version.
      * @return array The formatted release data.
+     * @throws Exception
      */
     protected function extractSingleReleaseData(array $data): array
     {
@@ -83,6 +87,7 @@ class BitbucketUpdateFetcher implements UpdateFetcherInterface
      *
      * @param array $data The API response data for multiple versions.
      * @return array The formatted release data.
+     * @throws Exception
      */
     protected function extractMultipleReleaseData(array $data): array
     {
@@ -104,7 +109,7 @@ class BitbucketUpdateFetcher implements UpdateFetcherInterface
      * Parse the project information from the API URL.
      *
      * @return array The project information containing workspace and repo_slug.
-     * @throws \Exception If unable to parse the project information.
+     * @throws Exception If unable to parse the project information.
      */
     protected function parseProjectInfo(): array
     {
@@ -122,7 +127,7 @@ class BitbucketUpdateFetcher implements UpdateFetcherInterface
             ];
         }
 
-        throw new \Exception('Unable to parse project information from API URL');
+        throw new Exception('Unable to parse project information from API URL');
     }
 
     /**

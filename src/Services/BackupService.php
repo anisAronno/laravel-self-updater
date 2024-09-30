@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
  */
 class BackupService
 {
-    protected $fileService;
+    protected FileService $fileService;
 
     /**
      * BackupService constructor.
@@ -59,7 +59,7 @@ class BackupService
      * @param string $backupPath
      * @param Command $command
      */
-    public function rollback($backupPath, Command $command)
+    public function rollback( string $backupPath, Command $command)
     {
         if (File::isDirectory($backupPath)) {
             $command->info('Rolling back to backup...');

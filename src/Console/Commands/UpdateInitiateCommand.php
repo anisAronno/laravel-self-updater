@@ -11,8 +11,8 @@ class UpdateInitiateCommand extends Command
     protected $signature = 'update:initiate {version?}';
     protected $description = 'Initiate project update to the latest version or a specific version.';
 
-    protected $versionService;
-    protected $updateOrchestrator;
+    protected VersionService $versionService;
+    protected UpdateOrchestrator $updateOrchestrator;
 
     public function __construct(VersionService $versionService, UpdateOrchestrator $updateOrchestrator)
     {
@@ -27,7 +27,7 @@ class UpdateInitiateCommand extends Command
             $version = $this->argument('version');
             $this->info($version ? "Initiating update for version: $version" : 'Initiating update for the latest version.');
 
-            $releaseData = $this->versionService->fetchReleaseData($version);
+            $releaseData = $this->versionService->collectReleaseData($version);
 
             if (empty($releaseData) || is_null($releaseData['version']) || is_null($releaseData['download_url'])) {
                 $this->error('No update available.');

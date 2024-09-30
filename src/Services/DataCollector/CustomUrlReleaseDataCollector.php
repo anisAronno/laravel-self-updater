@@ -1,24 +1,24 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelAutoUpdater\Services\DataCollector;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseDataCollectorInterface;
 use Illuminate\Support\Facades\Http;
 
 /**
- * Class CustomUrlUpdateFetcher
- * 
- * This class fetches the release data from a custom URL.
+ * Class CustomUrlReleaseDataCollector
+ *
+ * Custom URL release data collector.
  */
-class CustomUrlUpdateFetcher implements UpdateFetcherInterface
+class CustomUrlReleaseDataCollector implements ReleaseDataCollectorInterface
 {
     /**
-     * Fetch the release data from the custom URL.
+     * Collect the release data for the given version.
      *
      * @param string|null $version
      * @return array
      */
-    public function fetchReleaseData(?string $version): array
+    public function collectReleaseData(?string $version): array
     {
         $release_url = config('auto-updater-config.custom_url');
         $response  = Http::withHeaders(['User-Agent' => 'PHP'])->get($release_url);

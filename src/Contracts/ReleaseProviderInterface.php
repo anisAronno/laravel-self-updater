@@ -2,7 +2,7 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Contracts;
 
-interface VersionSourceInterface
+interface ReleaseProviderInterface
 {
     /**
      * Get the API URL for the repository.

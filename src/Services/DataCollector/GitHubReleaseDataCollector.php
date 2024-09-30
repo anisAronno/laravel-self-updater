@@ -1,24 +1,24 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelAutoUpdater\Services\DataCollector;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseDataCollectorInterface;
 use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
 
 /**
- * Class GitHubUpdateFetcher
- * 
- * This class is responsible for fetching release data from GitHub.
+ * Class GitHubReleaseDataCollector
+ *
+ * Fetch release data from GitHub.
  */
-class GitHubUpdateFetcher implements UpdateFetcherInterface
+class GitHubReleaseDataCollector implements ReleaseDataCollectorInterface
 {
     /**
-     * Fetch release data from GitHub.
+     * Collect the release data for the given version.
      *
-     * @param string|null $version The specific version to fetch (optional).
-     * @return array The release data or null on failure.
+     * @param string|null $version The version to fetch (optional).
+     * @return array The release data or an empty array on failure.
      */
-    public function fetchReleaseData(?string $version): array
+    public function collectReleaseData(?string $version): array
     {
         $release_url = $this->buildRepoUrl($version);
         $response = ApiRequestService::get($release_url);

@@ -4,6 +4,9 @@ namespace AnisAronno\LaravelAutoUpdater\Services;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 /**
  * Class FileService
@@ -13,16 +16,16 @@ use Illuminate\Support\Facades\File;
 class FileService
 {
     /**
-     * Get the list of files to backup.
+     * Get the list of files to back up.
      * 
      * @param string $basePath
      * @return array
      */
     public function getFilesToBackup(string $basePath): array
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($basePath, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($basePath, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
         );
 
         $filesToBackup = [];
@@ -56,7 +59,7 @@ class FileService
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
 
         if ($zip->open($filePath) === true) {
             File::ensureDirectoryExists($extractTo);
@@ -85,9 +88,9 @@ class FileService
      */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
         );
 
         $command->info('Replacing project files...');
@@ -215,9 +218,9 @@ class FileService
     protected function getFileList(string $dir): array
     {
         $files = [];
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($iterator as $file) {
@@ -238,15 +241,15 @@ class FileService
     protected function removeEmptyDirectories(string $dir, Command $command)
     {
         $command->info('Removing empty directories...');
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($iterator as $path) {
             if ($path->isDir()) {
                 $dirPath = $path->getPathname();
-                if (!(new \FilesystemIterator($dirPath))->valid()) {
+                if (!(new \RecursiveDirectoryIterator($dirPath))->valid()) {
                     rmdir($dirPath);
                     $command->line("Removed empty directory: $dirPath");
                 }
