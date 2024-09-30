@@ -4,6 +4,7 @@ namespace AnisAronno\LaravelAutoUpdater\Services;
 
 use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
 use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
+use Exception;
 
 /**
  * Class GitLabUpdateFetcher
@@ -17,6 +18,7 @@ class GitLabUpdateFetcher implements UpdateFetcherInterface
      *
      * @param string|null $version The specific version to fetch (optional).
      * @return array The release data or an empty array on failure.
+     * @throws Exception
      */
     public function fetchReleaseData(?string $version): array
     {
@@ -50,6 +52,7 @@ class GitLabUpdateFetcher implements UpdateFetcherInterface
      *
      * @param array $data The API response data.
      * @return array The formatted release data.
+     * @throws Exception
      */
     protected function extractReleaseData(array $data): array
     {
@@ -73,7 +76,7 @@ class GitLabUpdateFetcher implements UpdateFetcherInterface
      * Parse the project path from the API URL.
      *
      * @return string The project path.
-     * @throws \Exception If unable to parse the project path.
+     * @throws Exception If unable to parse the project path.
      */
     protected function parseProjectPath(): string
     {
@@ -87,7 +90,7 @@ class GitLabUpdateFetcher implements UpdateFetcherInterface
             return urldecode($path[$projectIndex + 1]);
         }
 
-        throw new \Exception("Unable to parse project path from API URL");
+        throw new Exception("Unable to parse project path from API URL");
     }
 
     /**

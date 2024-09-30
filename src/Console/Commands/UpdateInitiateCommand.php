@@ -11,8 +11,8 @@ class UpdateInitiateCommand extends Command
     protected $signature = 'update:initiate {version?}';
     protected $description = 'Initiate project update to the latest version or a specific version.';
 
-    protected $versionService;
-    protected $updateOrchestrator;
+    protected VersionService $versionService;
+    protected UpdateOrchestrator $updateOrchestrator;
 
     public function __construct(VersionService $versionService, UpdateOrchestrator $updateOrchestrator)
     {

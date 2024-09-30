@@ -12,6 +12,7 @@ use AnisAronno\LaravelAutoUpdater\Services\Adapters\CustomSource;
 use AnisAronno\LaravelAutoUpdater\Services\Adapters\GitHubSource;
 use AnisAronno\LaravelAutoUpdater\Services\Adapters\GitLabSource;
 use AnisAronno\LaravelAutoUpdater\Services\Adapters\BitbucketSource;
+use InvalidArgumentException;
 
 /**
  * Class VersionSourceFactory
@@ -24,7 +25,7 @@ class VersionSourceFactory
      *
      * @param string $source
      * @return UpdateFetcherInterface
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function createFetcher(string $source): UpdateFetcherInterface
     {
@@ -41,7 +42,7 @@ class VersionSourceFactory
             case 'custom':
                 return new CustomUrlUpdateFetcher();
             default:
-                throw new \InvalidArgumentException("Invalid source [$source] provided.");
+                throw new InvalidArgumentException("Invalid source [$source] provided.");
         }
     }
 
@@ -74,7 +75,7 @@ class VersionSourceFactory
      * @param string $url
      * @return bool
      */
-    private static function isGitHubUrl($url): bool
+    private static function isGitHubUrl( string $url): bool
     {
         return preg_match('/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)$/', $url);
     }
@@ -85,7 +86,7 @@ class VersionSourceFactory
      * @param string $url
      * @return bool
      */
-    private static function isGitLabUrl($url): bool
+    private static function isGitLabUrl( string $url): bool
     {
         return preg_match('/^https:\/\/gitlab\.com\/([^\/]+)\/([^\/]+)$/', $url);
     }
@@ -96,7 +97,7 @@ class VersionSourceFactory
      * @param string $url
      * @return bool
      */
-    private static function isBitbucketUrl($url): bool
+    private static function isBitbucketUrl( string $url): bool
     {
         return preg_match('/^https:\/\/bitbucket\.org\/([^\/]+)\/([^\/]+)$/', $url);
     }

@@ -12,7 +12,7 @@ use InvalidArgumentException;
  */
 class GitHubSource implements VersionSourceInterface
 {
-    private $release_url;
+    private string $release_url;
 
     /**
      * GitHubSource constructor.

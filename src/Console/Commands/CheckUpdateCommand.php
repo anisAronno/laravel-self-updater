@@ -11,7 +11,7 @@ class CheckUpdateCommand extends Command
 
     protected $description = 'Check for available updates for the project';
 
-    protected $versionService;
+    protected VersionService $versionService;
 
     public function __construct(VersionService $versionService)
     {

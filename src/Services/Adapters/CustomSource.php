@@ -12,8 +12,8 @@ use InvalidArgumentException;
  */
 class CustomSource implements VersionSourceInterface
 {
-    private $release_url;
-    private $purchaseKey;
+    private string $release_url;
+    private ?string $purchaseKey;
 
     /**
      * CustomAdapter constructor.

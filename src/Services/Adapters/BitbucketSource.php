@@ -12,7 +12,7 @@ use InvalidArgumentException;
  */
 class BitbucketSource implements VersionSourceInterface
 {
-    private $release_url;
+    private string $release_url;
 
     /**
      * BitbucketSource constructor.

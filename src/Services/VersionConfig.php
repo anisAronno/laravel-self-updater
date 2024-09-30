@@ -14,7 +14,7 @@ use AnisAronno\LaravelAutoUpdater\Services\Adapters\BitbucketSource;
  */
 class VersionConfig
 {
-    private $source;
+    private VersionSourceInterface $source;
 
     /**
      * VersionConfig constructor.

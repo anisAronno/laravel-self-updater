@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
  */
 class VersionService
 {
-    protected $fetcher;
+    protected UpdateFetcherInterface $fetcher;
 
     /**
      * VersionService constructor.
@@ -46,7 +46,7 @@ class VersionService
     /**
      * Fetch release data from the repository.
      *
-     * @param string $version
+     * @param string|null $version
      * @return array
      */
     public function fetchReleaseData(string $version = null): array
