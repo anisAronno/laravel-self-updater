@@ -22,12 +22,13 @@ class CheckUpdateCommand extends Command
     public function handle()
     {
         try {
+
             // Get the current version and latest release data
             $currentVersion = $this->versionService->getCurrentVersion();
             $latestRelease = $this->versionService->collectReleaseData();
 
             if (empty($latestRelease)) {
-                $this->alert('No update data found.');
+                $this->error('Failed to fetch the latest release data.');
                 return Command::SUCCESS;
             }
 
@@ -36,12 +37,12 @@ class CheckUpdateCommand extends Command
 
             // Compare the current version with the latest release
             if (version_compare($latestVersion, $currentVersion, '>')) {
-                $this->alert('Update Available!');
+                $this->info('<fg=yellow;bg=black;options=bold>🚀  Update Available! 🚀</>', 'info');
                 $this->line('Current Version: ' . $currentVersion);
                 $this->line('Latest Version: ' . $latestVersion);
                 $this->line('Changelog: ' . PHP_EOL . $changelog);
             } else {
-                $this->info('Your project is already up to date.');
+                $this->alert('Your project is up to date!');
             }
 
             return Command::SUCCESS;

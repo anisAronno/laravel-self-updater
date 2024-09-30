@@ -7,77 +7,124 @@ use AnisAronno\LaravelAutoUpdater\Services\VersionService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 
 class AutoUpdater extends Component
 {
-    public $hasUpdate;
-    public $currentVersion;
-    public $latestVersion;
-    public $changelog;
-    public $error;
+    private const CACHE_KEY = 'auto_updater_data';
+    private const CACHE_DURATION_IN_SECONDS = 600; // 10 minutes
 
-    protected $versionService;
+    private VersionService $versionService;
+    private array $versionData;
 
     public function __construct(VersionService $versionService)
     {
         $this->versionService = $versionService;
-        $this->refreshVersionData();
+        $this->versionData = $this->retrieveVersionData();
     }
 
     public function render()
     {
-        return view('auto-updater::components.auto-updater');
+        return view('auto-updater::components.auto-updater', $this->versionData);
     }
 
-    protected function refreshVersionData(): void
-    {
-        try {
-            $this->currentVersion = $this->versionService->getCurrentVersion();
-            $latestRelease = $this->versionService->collectReleaseData();
-
-            $this->latestVersion = $latestRelease['version'] ?? null;
-            $this->changelog = $latestRelease['changelog'] ?? null;
-
-            if ($this->currentVersion && $this->latestVersion) {
-                $this->hasUpdate = version_compare($this->latestVersion, $this->currentVersion, '>');
-            } else {
-                $this->hasUpdate = false;
-                $this->error = 'Unable to determine update status due to missing version information.';
-            }
-        } catch (Exception $e) {
-            $this->error = 'Error fetching release data: ' . $e->getMessage();
-            $this->hasUpdate = false;
-        }
-    }
-
-    public function initiateUpdate(): JsonResponse
+    public function initiateSystemUpdate(): JsonResponse
     {
         try {
             Artisan::call('update:initiate');
-            return $this->jsonResponse(true, Artisan::output());
+            return $this->createJsonResponse(true, Artisan::output());
         } catch (Exception $e) {
             Artisan::call('up');
-            return $this->jsonResponse(false, 'Error: ' . $e->getMessage());
+            return $this->createJsonResponse(false, "Error: {$e->getMessage()}");
         }
     }
 
-    public function checkForUpdates(): JsonResponse
+    public function checkForSystemUpdates(): JsonResponse
     {
-        $this->refreshVersionData();
-
-        if ($this->error) {
-            return $this->jsonResponse(false, $this->error);
+        $this->versionData = $this->retrieveVersionData(true);
+        if (!empty($this->versionData['error'])) {
+            return $this->createJsonResponse(false, $this->versionData['error']);
         }
 
-        return $this->jsonResponse(true, 'Update check successful', [
-            'current_version' => $this->currentVersion,
-            'latest_version' => $this->latestVersion,
-            'changelog' => $this->changelog,
-            'has_update' => $this->hasUpdate
-        ]);
+        return $this->createJsonResponse(true, 'Data refreshed successfully.', $this->versionData);
     }
 
-    protected function jsonResponse(bool $success, string $message, array $data = []): JsonResponse
+    private function retrieveVersionData(bool $forceRefresh = false): array
+    {
+        if (!$forceRefresh && $this->isVersionDataCached()) {
+            return $this->getVersionDataFromCache();
+        }
+
+        return $this->fetchAndStoreVersionData();
+    }
+
+    private function isVersionDataCached(): bool
+    {
+        return Cache::has(self::CACHE_KEY);
+    }
+
+    private function getVersionDataFromCache(): array
+    {
+        return Cache::get(self::CACHE_KEY);
+    }
+
+    private function fetchAndStoreVersionData(): array
+    {
+        try {
+            $versionData = $this->fetchLatestVersionData();
+            $this->storeVersionDataInCache($versionData);
+            return $versionData;
+        } catch (Exception $e) {
+            return $this->createErrorResponse($e);
+        }
+    }
+
+    private function fetchLatestVersionData(): array
+    {
+        $currentVersion = $this->versionService->getCurrentVersion();
+        $latestRelease = $this->versionService->collectReleaseData();
+
+        return $this->compareAndStructureVersionData($currentVersion, $latestRelease);
+    }
+
+    private function compareAndStructureVersionData(string $currentVersion, array $latestRelease): array
+    {
+        $versionData = [
+            'currentVersion' => $currentVersion,
+            'latestVersion' => !empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : null,
+            'changelog' => $latestRelease['changelog'] ?? null,
+            'hasUpdate' => false,
+            'error' => null
+        ];
+
+        if ($versionData['currentVersion'] && $versionData['latestVersion']) {
+            $versionData['hasUpdate'] = $this->isNewVersionAvailable($versionData['latestVersion'], $versionData['currentVersion']);
+        } else {
+            $versionData['error'] = 'Unable to determine update status due to missing version information.';
+        }
+
+        return $versionData;
+    }
+
+    private function isNewVersionAvailable(string $currentVersion, string $latestVersion): bool
+    {
+        return version_compare($currentVersion, $latestVersion, '>');
+    }
+
+    private function storeVersionDataInCache(array $versionData): void
+    {
+        Cache::put(self::CACHE_KEY, $versionData, self::CACHE_DURATION_IN_SECONDS);
+    }
+
+    private function createErrorResponse(Exception $e): array
+    {
+        return [
+            'hasUpdate' => false,
+            'error' => "Error fetching release data: {$e->getMessage()}"
+        ];
+    }
+
+    private function createJsonResponse(bool $success, string $message, array $data = []): JsonResponse
     {
         return response()->json(array_merge(
             ['success' => $success, 'message' => $message],

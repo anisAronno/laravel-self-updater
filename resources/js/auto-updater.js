@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetElement.style.display = 'block';
                 targetElement.style.color = isError ? 'red' : 'green';
                 targetElement.textContent = message;
-            }
+            }            
         },
         clearMessage: (messageElement) => {
             if (messageElement) {
@@ -49,13 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const versionInfo = `
-        <p>Current Version: <span id="currentVersion" class="version-tag">${data.current_version || 'Unknown'}</span></p>
-        <p>Latest Version: <span id="latestVersion" class="version-tag">${data.latest_version || 'Unknown'}</span>
+        <p>Current Version: <span id="currentVersion" class="version-tag">${data.currentVersion || 'Unknown'}</span></p>
+        <p>Latest Version: <span id="latestVersion" class="version-tag">${data.latestVersion || 'Unknown'}</span>
             <span id="refreshIcon" class="refresh-icon" style="cursor: pointer;">&#x21bb;</span>
         </p>`;
         elements.autoUpdaterContent.innerHTML += versionInfo;
 
-        if (data.has_update) {
+        if (data.hasUpdate) {
             const updateButton = `<button id="updateButton" class="update-button">Update Now</button>`;
             elements.autoUpdaterContent.innerHTML += updateButton;
 
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.success) {
                 updateUI(data);
-                utils.showMessage(data.message || 'Refresh completed successfully!', false, elements.refreshMessage);
+                displayRefreshMessage(data.message || 'Refresh completed successfully!');
             } else {
                 throw new Error(data.message || 'Error checking for update');
             }
@@ -179,6 +179,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const displayRefreshMessage = function (message) {
+        requestAnimationFrame(() => {
+            const refreshMessage = document.getElementById('refreshMessage');
+            if (refreshMessage) {
+                utils.showMessage(message, false, refreshMessage);
+                setTimeout(() => {
+                    utils.clearMessage(refreshMessage);
+                }, 3000);
+            }
+        });
+    };
+    
     // Initial attachment of event listeners
     attachEventListeners();
 
