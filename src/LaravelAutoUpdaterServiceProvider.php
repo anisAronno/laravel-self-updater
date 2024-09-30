@@ -2,8 +2,8 @@
 
 namespace AnisAronno\LaravelAutoUpdater;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
-use AnisAronno\LaravelAutoUpdater\Services\VersionSourceFactory;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseDataCollectorInterface;
+use AnisAronno\LaravelAutoUpdater\Factories\ReleaseDataCollectorFactory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
@@ -22,9 +22,9 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->mergeConfigFrom(__DIR__.'/../config/auto-updater-config.php', 'auto-updater');
 
-        $this->app->singleton(UpdateFetcherInterface::class, function ($app) {
+        $this->app->singleton(ReleaseDataCollectorInterface::class, function ($app) {
             $source = config('auto-updater.source', 'github');
-            return VersionSourceFactory::createFetcher($source);
+            return ReleaseDataCollectorFactory::create($source);
         });
     }
 

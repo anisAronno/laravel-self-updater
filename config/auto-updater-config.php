@@ -1,7 +1,18 @@
 <?php
 
-use AnisAronno\LaravelAutoUpdater\Services\VersionConfig;
-use AnisAronno\LaravelAutoUpdater\Services\VersionSourceFactory;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseProviderConfig;
+use AnisAronno\LaravelAutoUpdater\Factories\ReleaseProviderFactory;
+
+/**
+ * Auto-updater configuration.
+ *
+ * This file contains settings for the auto-updater, including:
+ * - Update source URL
+ * - Check frequency
+ * - Backup settings
+ * - Notification settings
+ * - Authentication
+ */
 
 /**
  * Auto-updater configuration.
@@ -17,8 +28,8 @@ use AnisAronno\LaravelAutoUpdater\Services\VersionSourceFactory;
 $release_url = env('RELEASE_URL', 'https://github.com/anisAronno/laravel-starter');
 $purchaseKey = env('PURCHASE_KEY', null);
 
-$source = VersionSourceFactory::createSource($release_url, $purchaseKey);
-$versionConfig = new VersionConfig($source);
+$source = ReleaseProviderFactory::create($release_url, $purchaseKey);
+$versionConfig = new ReleaseProviderConfig($source);
 
 return array_merge($versionConfig->getConfig(), [
     "exclude_items" => [

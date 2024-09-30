@@ -33,7 +33,7 @@ class AutoUpdater extends Component
     {
         try {
             $this->currentVersion = $this->versionService->getCurrentVersion();
-            $latestRelease = $this->versionService->fetchReleaseData();
+            $latestRelease = $this->versionService->collectReleaseData();
 
             $this->latestVersion = $latestRelease['version'] ?? null;
             $this->changelog = $latestRelease['changelog'] ?? null;
@@ -64,7 +64,7 @@ class AutoUpdater extends Component
     public function checkForUpdates(): JsonResponse
     {
         $this->refreshVersionData();
-        
+
         if ($this->error) {
             return $this->jsonResponse(false, $this->error);
         }

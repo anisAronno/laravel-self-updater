@@ -1,21 +1,21 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\Adapters;
+namespace AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VersionSourceInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseProviderInterface;
 use InvalidArgumentException;
 
 /**
- * Class GitLabSource
+ * Class GitLabReleaseProvider
  *
- * Implements the API URL logic for GitLab repositories.
+ * Release provider for GitLab repositories.
  */
-class GitLabSource implements VersionSourceInterface
+class GitLabReleaseProvider implements ReleaseProviderInterface
 {
     private string $release_url;
 
     /**
-     * GitLabSource constructor.
+     * GitLabReleaseProvider constructor.
      *
      * @param string $release_url
      */

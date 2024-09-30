@@ -1,21 +1,21 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\Adapters;
+namespace AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VersionSourceInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseProviderInterface;
 use InvalidArgumentException;
 
 /**
- * Class GitHubSource
+ * Class GitHubReleaseProvider
  *
- * Implements the API URL logic for GitHub repositories.
+ * Release provider for GitHub repositories.
  */
-class GitHubSource implements VersionSourceInterface
+class GitHubReleaseProvider implements ReleaseProviderInterface
 {
     private string $release_url;
 
     /**
-     * GitHubSource constructor.
+     * GitHubReleaseProvider constructor.
      *
      * @param string $release_url
      */

@@ -1,26 +1,26 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelAutoUpdater\Services\DataCollector;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
 use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseDataCollectorInterface;
 use Exception;
 
 /**
- * Class GitLabUpdateFetcher
- * 
- * This class is responsible for fetching release data from GitLab.
+ * Class GitHubReleaseDataCollector
+ *
+ * Fetch release data from GitHub.
  */
-class GitLabUpdateFetcher implements UpdateFetcherInterface
+class GitHubReleaseDataCollector implements ReleaseDataCollectorInterface
 {
     /**
-     * Fetch release data from GitLab.
+     * Collect the release data for the given version.
      *
      * @param string|null $version The specific version to fetch (optional).
      * @return array The release data or an empty array on failure.
      * @throws Exception
      */
-    public function fetchReleaseData(?string $version): array
+    public function collectReleaseData(?string $version): array
     {
         $release_url = $this->buildRepoUrl($version);
         $response = ApiRequestService::get($release_url);
@@ -68,9 +68,10 @@ class GitLabUpdateFetcher implements UpdateFetcherInterface
         return [
             'version'      => $version,
             'download_url' => $this->getZipDownloadUrl($projectPath, $version),
-            'changelog'    => data_get($latestRelease, 'release.description', 'No changelog available'),
+            'changelog'    => data_get($latestRelease, 'body', 'No changelog available'),
         ];
     }
+
 
     /**
      * Parse the project path from the API URL.
@@ -81,16 +82,19 @@ class GitLabUpdateFetcher implements UpdateFetcherInterface
     protected function parseProjectPath(): string
     {
         $apiUrl = config('auto-updater.api_url');
-        $parts = parse_url($apiUrl);
-        $path = explode('/', trim($parts['path'], '/'));
 
-        // The project path should be the part after 'projects' in the URL
-        $projectIndex = array_search('projects', $path);
-        if ($projectIndex !== false && isset($path[$projectIndex + 1])) {
-            return urldecode($path[$projectIndex + 1]);
+        $parts = parse_url($apiUrl);
+        $path = trim($parts['path'], '/');
+        $pathParts = explode('/', $path);
+
+        // GitHub URL format: api.github.com/repos/username/repository
+        if (strpos($apiUrl, 'api.github.com') !== false) {
+            if (count($pathParts) >= 3 && $pathParts[0] === 'repos') {
+                return $pathParts[1] . '/' . $pathParts[2];
+            }
         }
 
-        throw new Exception("Unable to parse project path from API URL");
+        throw new Exception("Unable to parse project path from API URL: $apiUrl");
     }
 
     /**

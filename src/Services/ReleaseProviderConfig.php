@@ -2,26 +2,26 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VersionSourceInterface;
-use AnisAronno\LaravelAutoUpdater\Services\Adapters\GitLabSource;
-use AnisAronno\LaravelAutoUpdater\Services\Adapters\GitHubSource;
-use AnisAronno\LaravelAutoUpdater\Services\Adapters\BitbucketSource;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseProviderInterface;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider\GitLabReleaseProvider;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider\GitHubReleaseProvider;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseProvider\BitbucketReleaseProvider;
 
 /**
- * Class VersionConfig
+ * Class ReleaseProviderConfig
  *
- * Provides the configuration for the version source.
+ * Configuration class for the version source.
  */
-class VersionConfig
+class ReleaseProviderConfig
 {
-    private VersionSourceInterface $source;
+    private ReleaseProviderInterface $source;
 
     /**
-     * VersionConfig constructor.
+     * ReleaseProviderConfig constructor.
      *
-     * @param VersionSourceInterface $source
+     * @param ReleaseProviderInterface $source
      */
-    public function __construct(VersionSourceInterface $source)
+    public function __construct(ReleaseProviderInterface $source)
     {
         $this->source = $source;
     }
@@ -47,11 +47,11 @@ class VersionConfig
     private function getSourceType(): string
     {
         switch (get_class($this->source)) {
-            case GitHubSource::class:
+            case GitHubReleaseProvider::class:
                 return 'github';
-            case GitLabSource::class:
+            case GitLabReleaseProvider::class:
                 return 'gitlab';
-            case BitbucketSource::class:
+            case BitbucketReleaseProvider::class:
                 return 'bitbucket';
             default:
                 return 'custom';

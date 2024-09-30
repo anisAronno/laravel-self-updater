@@ -2,25 +2,25 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\UpdateFetcherInterface;
+use AnisAronno\LaravelAutoUpdater\Contracts\ReleaseDataCollectorInterface;
 use Illuminate\Support\Facades\File;
 
 /**
  * Class VersionService
- * 
+ *
  * This class is responsible for fetching the current version of the project
  * and fetching release data from the repository.
  */
 class VersionService
 {
-    protected UpdateFetcherInterface $fetcher;
+    protected ReleaseDataCollectorInterface $fetcher;
 
     /**
      * VersionService constructor.
      *
-     * @param UpdateFetcherInterface $fetcher
+     * @param ReleaseDataCollectorInterface $fetcher
      */
-    public function __construct(UpdateFetcherInterface $fetcher)
+    public function __construct(ReleaseDataCollectorInterface $fetcher)
     {
         $this->fetcher = $fetcher;
     }
@@ -49,8 +49,8 @@ class VersionService
      * @param string|null $version
      * @return array
      */
-    public function fetchReleaseData(string $version = null): array
+    public function collectReleaseData(string $version = null): array
     {
-        return $this->fetcher->fetchReleaseData($version);
+        return $this->fetcher->collectReleaseData($version);
     }
 }
