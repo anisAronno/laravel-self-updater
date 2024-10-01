@@ -6,3 +6,5 @@
 phpunit.xml.bak
 .idea/
 .vscode/
+.phpunit.cache
+.phpunit.cache/
