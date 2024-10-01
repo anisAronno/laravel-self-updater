@@ -39,7 +39,7 @@ class GitHubProviderTest extends TestCase
             'body' => 'Test changelog',
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
         $mockApiRequestService->shouldReceive('get')
             ->once()
             ->with('https://api.github.com/repos/anisAronno/laravel-starter/releases/latest')
@@ -64,7 +64,7 @@ class GitHubProviderTest extends TestCase
             'body' => 'Test changelog',
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
         $mockApiRequestService->shouldReceive('get')
             ->once()
             ->with('https://api.github.com/repos/anisAronno/laravel-starter/releases/tags/v0.3.2')

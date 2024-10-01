@@ -42,7 +42,7 @@ class GitLabProviderTest extends TestCase
             ],
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
         $mockApiRequestService->shouldReceive('get')->once()->with('https://gitlab.com/api/v4/projects/anis-aleshatech%2Flaravel-starter/repository/tags')->andReturn($mockResponse);
 
         $expected = [
@@ -67,7 +67,7 @@ class GitLabProviderTest extends TestCase
             ],
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
         $mockApiRequestService->shouldReceive('get')->once()->with('https://gitlab.com/api/v4/projects/anis-aleshatech%2Flaravel-starter/repository/tags/v0.3.1')->andReturn($mockResponse);
 
         $expected = [
