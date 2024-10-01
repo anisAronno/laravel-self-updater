@@ -14,8 +14,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -32,8 +30,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap the service provider.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -49,8 +45,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
     /**
      * Register the package's console commands.
-     *
-     * @return void
      */
     protected function registerCommands(): void
     {
@@ -62,8 +56,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
     /**
      * Register the package's routes.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -72,8 +64,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
     /**
      * Register the package's resources.
-     *
-     * @return void
      */
     protected function registerResources(): void
     {
@@ -82,8 +72,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
     /**
      * Register the package's Blade components.
-     *
-     * @return void
      */
     protected function registerBladeComponents(): void
     {
@@ -92,8 +80,6 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
     /**
      * Register the package's publishable resources.
-     *
-     * @return void
      */
     protected function registerPublishing(): void
     {

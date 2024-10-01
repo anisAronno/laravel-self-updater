@@ -14,9 +14,8 @@ class VCSFactory
     /**
      * Create a VCS provider instance.
      *
-     * @param string $releaseUrl The release URL.
-     * @param string|null $purchaseKey The purchase key.
-     * @return VCSProviderInterface
+     * @param  string  $releaseUrl  The release URL.
+     * @param  string|null  $purchaseKey  The purchase key.
      */
     public static function create(string $releaseUrl, ?string $purchaseKey): VCSProviderInterface
     {

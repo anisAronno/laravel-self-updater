@@ -15,8 +15,8 @@ class ApiRequestService
     /**
      * Static method to make a GET request.
      *
-     * @param string $url The URL to make the request to.
-     * @param array $headers Optional headers to pass in the request.
+     * @param  string  $url  The URL to make the request to.
+     * @param  array  $headers  Optional headers to pass in the request.
      * @return Response The HTTP response.
      */
     public static function get(string $url, array $headers = []): Response

@@ -17,8 +17,6 @@ class ReleaseService
 
     /**
      * ReleaseService constructor.
-     *
-     * @param VCSProviderInterface $fetcher
      */
     public function __construct(VCSProviderInterface $fetcher)
     {
@@ -27,8 +25,6 @@ class ReleaseService
 
     /**
      * Get the current version of the project.
-     *
-     * @return string
      */
     public function getCurrentVersion(): string
     {
@@ -45,11 +41,8 @@ class ReleaseService
 
     /**
      * Fetch release data from the repository.
-     *
-     * @param string|null $version
-     * @return array
      */
-    public function collectReleaseData(string $version = null): array
+    public function collectReleaseData(?string $version = null): array
     {
         if ($version) {
             return $this->fetcher->getReleaseByVersion($version);

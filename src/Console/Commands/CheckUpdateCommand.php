@@ -38,16 +38,16 @@ class CheckUpdateCommand extends Command
             // Compare the current version with the latest release
             if (version_compare($latestVersion, $currentVersion, '>')) {
                 $this->info('<fg=yellow;bg=black;options=bold>🚀  Update Available! 🚀</>', 'info');
-                $this->line('Current Version: ' . $currentVersion);
-                $this->line('Latest Version: ' . $latestVersion);
-                $this->line('Changelog: ' . PHP_EOL . $changelog);
+                $this->line('Current Version: '.$currentVersion);
+                $this->line('Latest Version: '.$latestVersion);
+                $this->line('Changelog: '.PHP_EOL.$changelog);
             } else {
                 $this->alert('Your project is up to date!');
             }
 
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->error('An error occurred while checking for updates: ' . $th->getMessage());
+            $this->error('An error occurred while checking for updates: '.$th->getMessage());
 
             return Command::FAILURE;
         }

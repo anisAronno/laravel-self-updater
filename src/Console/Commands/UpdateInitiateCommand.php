@@ -9,9 +9,11 @@ use Illuminate\Console\Command;
 class UpdateInitiateCommand extends Command
 {
     protected $signature = 'update:initiate {version?}';
+
     protected $description = 'Initiate project update to the latest version or a specific version.';
 
     protected ReleaseService $releaseService;
+
     protected UpdateOrchestrator $updateOrchestrator;
 
     public function __construct(ReleaseService $releaseService, UpdateOrchestrator $updateOrchestrator)

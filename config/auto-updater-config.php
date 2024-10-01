@@ -8,7 +8,7 @@ return [
     'release_url' => env('RELEASE_URL', 'https://github.com/anisAronno/laravel-starter'),
     'purchase_key' => env('PURCHASE_KEY', null),
     'request_timeout' => 120,
-    "exclude_items" => [
+    'exclude_items' => [
         '.env',
         '.git',
         'storage',
@@ -17,5 +17,5 @@ return [
         '.htaccess',
         'public/.htaccess',
     ],
-    "middleware" => ['web'],
+    'middleware' => ['web'],
 ];

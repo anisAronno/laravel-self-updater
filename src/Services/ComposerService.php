@@ -26,7 +26,6 @@ class ComposerService
     /**
      * Get the path to the composer executable.
      *
-     * @return string
      * @throws Exception
      */
     protected function getComposerPath(): string
@@ -43,8 +42,6 @@ class ComposerService
     /**
      * Execute the composer install command.
      *
-     * @param string $composerPath
-     * @return bool
      * @throws Exception
      */
     protected function executeComposerInstall(string $composerPath): bool
@@ -69,16 +66,15 @@ class ComposerService
     /**
      * Handle a failed composer install command.
      *
-     * @param string $output
      * @throws Exception
      */
     protected function handleInstallFailure(string $output)
     {
         // Check for specific errors in the output
         if (str_contains($output, 'Failed to open stream')) {
-            throw new Exception('Composer install failed due to missing files. ' . $output);
+            throw new Exception('Composer install failed due to missing files. '.$output);
         }
 
-        throw new Exception('Composer install failed: ' . $output);
+        throw new Exception('Composer install failed: '.$output);
     }
 }

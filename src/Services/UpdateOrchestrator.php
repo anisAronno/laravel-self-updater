@@ -17,17 +17,15 @@ use Illuminate\Support\Facades\Process;
 class UpdateOrchestrator
 {
     protected BackupService $backupService;
+
     protected DownloadService $downloadService;
+
     protected FileService $fileService;
+
     protected ComposerService $composerService;
 
     /**
      * UpdateOrchestrator constructor.
-     *
-     * @param BackupService $backupService
-     * @param DownloadService $downloadService
-     * @param FileService $fileService
-     * @param ComposerService $composerService
      */
     public function __construct(BackupService $backupService, DownloadService $downloadService, FileService $fileService, ComposerService $composerService)
     {
@@ -40,8 +38,6 @@ class UpdateOrchestrator
     /**
      * Process the update.
      *
-     * @param array $releaseData
-     * @param Command $command
      * @throws Exception
      */
     public function processUpdate(array $releaseData, Command $command)
@@ -67,8 +63,6 @@ class UpdateOrchestrator
 
     /**
      * Enable maintenance mode.
-     *
-     * @param Command $command
      */
     protected function enableMaintenanceMode(Command $command)
     {
@@ -78,8 +72,6 @@ class UpdateOrchestrator
 
     /**
      * Disable maintenance mode.
-     *
-     * @param Command $command
      */
     protected function disableMaintenanceMode(Command $command)
     {
@@ -89,9 +81,6 @@ class UpdateOrchestrator
 
     /**
      * Create a backup of the project files.
-     *
-     * @param Command $command
-     * @return string
      */
     protected function createBackup(Command $command): string
     {
@@ -104,8 +93,6 @@ class UpdateOrchestrator
     /**
      * Update the project files.
      *
-     * @param array $releaseData
-     * @param Command $command
      * @throws Exception
      */
     protected function updateProject(array $releaseData, Command $command)
@@ -125,8 +112,6 @@ class UpdateOrchestrator
     /**
      * Get the update URL from the release data.
      *
-     * @param array $releaseData
-     * @return string
      * @throws Exception
      */
     protected function getUpdateUrl(array $releaseData): string
@@ -141,8 +126,6 @@ class UpdateOrchestrator
 
     /**
      * Run the migrations.
-     *
-     * @param Command $command
      */
     protected function runMigrations(Command $command)
     {
@@ -153,8 +136,6 @@ class UpdateOrchestrator
 
     /**
      * Clear the cache.
-     *
-     * @param Command $command
      */
     protected function clearCache(Command $command)
     {
@@ -167,7 +148,6 @@ class UpdateOrchestrator
     /**
      * Install the Composer dependencies.
      *
-     * @param Command $command
      * @throws Exception
      */
     protected function installComposerDependencies(Command $command)
@@ -179,9 +159,6 @@ class UpdateOrchestrator
 
     /**
      * Cleanup the temporary files.
-     *
-     * @param array $paths
-     * @param Command $command
      */
     protected function cleanup(array $paths, Command $command)
     {
@@ -193,9 +170,6 @@ class UpdateOrchestrator
     /**
      * Handle the failure scenario.
      *
-     * @param Exception $e
-     * @param string $backupPath
-     * @param Command $command
      * @throws Exception
      */
     protected function handleFailure(Exception $e, string $backupPath, Command $command)

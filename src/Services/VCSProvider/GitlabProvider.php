@@ -11,21 +11,16 @@ class GitlabProvider extends AbstractVCSProvider
 {
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     public function getApiUrl(): string
     {
-        list($user, $repo) = $this->extractUserAndRepo();
+        [$user, $repo] = $this->extractUserAndRepo();
 
         return sprintf('https://gitlab.com/api/v4/projects/%s%%2F%s/repository/tags', urlencode($user), urlencode($repo));
     }
 
     /**
      * Extract the user and repository from the release URL.
-     *
-     * @param string|null $version
-     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {
@@ -37,7 +32,7 @@ class GitlabProvider extends AbstractVCSProvider
     /**
      * Parse the release data.
      *
-     * @param array $data The API response data.
+     * @param  array  $data  The API response data.
      * @return array The formatted release data.
      */
     protected function parseReleaseData(array $data): array
@@ -61,8 +56,8 @@ class GitlabProvider extends AbstractVCSProvider
     /**
      * Get GitLab repository download URL.
      *
-     * @param string $projectPath The GitLab project path.
-     * @param string $version The version (tag name) to download.
+     * @param  string  $projectPath  The GitLab project path.
+     * @param  string  $version  The version (tag name) to download.
      * @return string The download URL.
      */
     protected function getZipDownloadUrl(string $projectPath, string $version): string

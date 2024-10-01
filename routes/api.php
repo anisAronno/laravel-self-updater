@@ -1,6 +1,5 @@
 <?php
 
-
 use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
 use Illuminate\Support\Facades\Route;
 
@@ -9,8 +8,8 @@ $middleware = config('auto-updater.middleware', []);
 
 Route::middleware($middleware)->prefix('api')->group(function () {
     Route::post('/auto-updater/update', [AutoUpdater::class, 'initiateSystemUpdate'])
-    ->name('auto_updater.update');
+        ->name('auto_updater.update');
 
     Route::get('/auto-updater/check', [AutoUpdater::class, 'checkForSystemUpdates'])
-    ->name('auto_updater.check');
+        ->name('auto_updater.check');
 });
