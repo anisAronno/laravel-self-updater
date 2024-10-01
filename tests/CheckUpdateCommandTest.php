@@ -2,9 +2,7 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Console\Commands\CheckUpdateCommand;
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
-use Illuminate\Support\Facades\Artisan;
 use Mockery;
 use Orchestra\Testbench\TestCase;
 
@@ -55,8 +53,8 @@ class CheckUpdateCommandTest extends TestCase
         ]);
 
         $this->artisan('update:check')
-        ->expectsOutput('✅ Your project is up to date!')
-        ->assertExitCode(0);
+            ->expectsOutput('✅ Your project is up to date!')
+            ->assertExitCode(0);
     }
 
     public function testHandleWithFailedToFetchReleaseData()

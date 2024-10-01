@@ -11,6 +11,7 @@ use Orchestra\Testbench\TestCase;
 class UpdateInitiateCommandTest extends TestCase
 {
     protected $releaseService;
+
     protected $updateOrchestrator;
 
     protected function setUp(): void
