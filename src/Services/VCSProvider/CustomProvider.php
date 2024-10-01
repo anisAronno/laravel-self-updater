@@ -1,0 +1,78 @@
+<?php
+
+namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+
+use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\AbstractVCSProvider;
+use InvalidArgumentException;
+
+/**
+ * Class CustomProvider
+ *
+ * Custom provider for custom repositories.
+ */
+class CustomProvider extends AbstractVCSProvider
+{
+    /**
+     * The purchase key.
+     *
+     * @var string|null
+     */
+    private ?string $purchaseKey;
+
+    /**
+     * CustomProvider constructor.
+     *
+     * @param string $releaseUrl
+     * @param string|null $purchaseKey
+     */
+    public function __construct(string $releaseUrl, ?string $purchaseKey)
+    {
+        parent::__construct($releaseUrl);
+        $this->purchaseKey = $purchaseKey;
+    }
+    
+    /**
+     * Get the API URL.
+     *
+     * @return string
+     */
+    protected function getApiUrl(): string
+    {
+        if (!filter_var($this->releaseUrl, FILTER_VALIDATE_URL)) {
+            throw new InvalidArgumentException("Invalid custom API URL: {$this->releaseUrl}");
+        }
+
+        if ($this->purchaseKey) {
+            return $this->releaseUrl . '?purchase_key=' . urlencode($this->purchaseKey);
+        }
+
+        $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));
+        return sprintf('https://api.github.com/repos/%s/%s/releases', $parts[1], $parts[2]);
+    }
+
+    /**
+     * Build the API URL.
+     *
+     * @param string|null $version
+     * @return string
+     */
+    protected function buildApiUrl(?string $version): string
+    {
+        return $this->getApiUrl();
+    }
+
+    /**
+     * Parse the release data.
+     *
+     * @param array $data The API response data.
+     * @return array The formatted release data.
+     */
+    protected function parseReleaseData(array $data): array
+    {
+        return array_merge($data, [
+            'version' => $data['version'] ? ltrim($data['version'], 'v') : null,
+            'download_url' => $data['download_url'] ?? null,
+            'changelog' => $data['changelog'] ?? 'No changelog available',
+        ]);
+    }
+}

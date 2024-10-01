@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Process;
 
 /**
  * Class UpdateOrchestrator
@@ -155,7 +156,7 @@ class UpdateOrchestrator
     {
         $command->info('Clearing cache...');
         Artisan::call('optimize:clear');
-        exec('composer clear-cache');
+        Process::run('composer clear-cache');
         $command->info('Cache cleared.');
     }
 

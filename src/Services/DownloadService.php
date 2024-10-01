@@ -26,7 +26,9 @@ class DownloadService
     {
         $command->info("Downloading update from: $url");
 
-        $response = Http::timeout(120)->get($url);
+        $requestTimeout = config('auto-updater.request_timeout', 120);
+
+        $response = Http::timeout($requestTimeout)->get($url);
 
         if ($response->failed()) {
             throw new Exception("Failed to download update: {$response->status()}");

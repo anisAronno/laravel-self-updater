@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 // set middleware from config file
 $middleware = config('auto-updater.middleware', []);
 
-Route::middleware(array_merge($middleware, ))->prefix('api')->group(function () {
+Route::middleware($middleware)->prefix('api')->group(function () {
     Route::post('/auto-updater/update', [AutoUpdater::class, 'initiateSystemUpdate'])
     ->name('auto_updater.update');
 

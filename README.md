@@ -1,7 +1,7 @@
 # Laravel Auto Updater
 
 A robust Laravel package facilitating automatic updates from GitHub, GitLab, Bitbucket, or custom repositories for your Laravel applications.
-**Supports Laravel version 8 and above.**
+**Supports Laravel version 10 and above.**
 
 ## Table of Contents
 
@@ -144,7 +144,7 @@ php artisan update:initiate
 
 ### Scheduling Updates
 
-Add to `app/Console/Kernel.php` (Laravel 10 and below):
+Add to `app/Console/Kernel.php` (Laravel 10):
 
 ```php
 protected function schedule(Schedule $schedule)

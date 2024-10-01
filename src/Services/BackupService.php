@@ -30,8 +30,7 @@ class BackupService
      * @param Command $command
      * @return string
      */
-    public function backup(Command $command)
-    {
+    public function backup(Command $command): string {
         $backupPath = storage_path('app/backup/' . date('Y-m-d_H-i-s'));
         File::ensureDirectoryExists($backupPath);
 
@@ -66,7 +65,7 @@ class BackupService
             $this->fileService->replaceProjectFiles($backupPath, base_path(), $command);
             $command->info("Rolled back to backup: $backupPath");
         } else {
-            $command->warning("Backup not found: $backupPath");
+            $command->error("Backup not found: $backupPath");
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\View\Components;
 
 use Illuminate\View\Component;
-use AnisAronno\LaravelAutoUpdater\Services\VersionService;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\JsonResponse;
 use Exception;
@@ -14,12 +14,12 @@ class AutoUpdater extends Component
     private const CACHE_KEY = 'auto_updater_data';
     private const CACHE_DURATION_IN_SECONDS = 600; // 10 minutes
 
-    private VersionService $versionService;
+    private ReleaseService $releaseService;
     private array $versionData;
 
-    public function __construct(VersionService $versionService)
+    public function __construct(ReleaseService $releaseService)
     {
-        $this->versionService = $versionService;
+        $this->releaseService = $releaseService;
         $this->versionData = $this->retrieveVersionData();
     }
 
@@ -81,8 +81,8 @@ class AutoUpdater extends Component
 
     private function fetchLatestVersionData(): array
     {
-        $currentVersion = $this->versionService->getCurrentVersion();
-        $latestRelease = $this->versionService->collectReleaseData();
+        $currentVersion = $this->releaseService->getCurrentVersion();
+        $latestRelease = $this->releaseService->collectReleaseData();
 
         return $this->compareAndStructureVersionData($currentVersion, $latestRelease);
     }
