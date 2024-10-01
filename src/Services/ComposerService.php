@@ -3,6 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
 use Exception;
+use Illuminate\Support\Facades\Process;
 
 /**
  * Class ComposerService
@@ -28,14 +29,15 @@ class ComposerService
      * @return string
      * @throws Exception
      */
-    protected function getComposerPath(): string {
-        $composerPath = exec('which composer');
-        
-        if (empty($composerPath)) {
+    protected function getComposerPath(): string
+    {
+        $result = Process::run('which composer');
+
+        if (!$result->successful()) {
             throw new Exception('Composer is not installed or not found in the system PATH.');
         }
 
-        return $composerPath;
+        return trim($result->output());
     }
 
     /**
@@ -45,37 +47,36 @@ class ComposerService
      * @return bool
      * @throws Exception
      */
-    protected function executeComposerInstall( string $composerPath): bool {
-        $output = [];
-        $returnVar = 0;
+    protected function executeComposerInstall(string $composerPath): bool
+    {
+        try {
+            $result = Process::run("$composerPath install --no-interaction");
 
-        // Run composer install and capture the output and return code
-        exec("$composerPath install --no-interaction 2>&1", $output, $returnVar);
+            if (!$result->successful()) {
+                $this->handleInstallFailure($result->output());
+                return false;
+            }
 
-        // Check if the command failed
-        if ($returnVar !== 0) {
-            $this->handleInstallFailure($output);
+            return true;
+        } catch (\Throwable $e) {
+            $this->handleInstallFailure($e->getMessage());
+            return false;
         }
-
-        // Composer install was successful
-        return true;
     }
 
     /**
      * Handle a failed composer install command.
      *
-     * @param array $output
+     * @param string $output
      * @throws Exception
      */
-    protected function handleInstallFailure(array $output)
+    protected function handleInstallFailure(string $output)
     {
-        $errorMessage = implode("\n", $output);
-
         // Check for specific errors in the output
-        if (strpos($errorMessage, 'Failed to open stream') !== false) {
-            throw new Exception('Composer install failed due to missing files. ' . $errorMessage);
+        if (str_contains($output, 'Failed to open stream')) {
+            throw new Exception('Composer install failed due to missing files. ' . $output);
         }
 
-        throw new Exception('Composer install failed: ' . $errorMessage);
+        throw new Exception('Composer install failed: ' . $output);
     }
 }

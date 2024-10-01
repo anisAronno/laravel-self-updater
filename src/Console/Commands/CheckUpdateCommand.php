@@ -3,7 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
 
 use Illuminate\Console\Command;
-use AnisAronno\LaravelAutoUpdater\Services\VersionService;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 
 class CheckUpdateCommand extends Command
 {
@@ -11,21 +11,20 @@ class CheckUpdateCommand extends Command
 
     protected $description = 'Check for available updates for the project';
 
-    protected VersionService $versionService;
+    protected ReleaseService $releaseService;
 
-    public function __construct(VersionService $versionService)
+    public function __construct(ReleaseService $releaseService)
     {
         parent::__construct();
-        $this->versionService = $versionService;
+        $this->releaseService = $releaseService;
     }
 
     public function handle()
     {
         try {
-
             // Get the current version and latest release data
-            $currentVersion = $this->versionService->getCurrentVersion();
-            $latestRelease = $this->versionService->collectReleaseData();
+            $currentVersion = $this->releaseService->getCurrentVersion();
+            $latestRelease = $this->releaseService->collectReleaseData();
 
             if (empty($latestRelease)) {
                 $this->error('Failed to fetch the latest release data.');

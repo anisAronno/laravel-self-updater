@@ -3,7 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
 
 use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
-use AnisAronno\LaravelAutoUpdater\Services\VersionService;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use Illuminate\Console\Command;
 
 class UpdateInitiateCommand extends Command
@@ -11,13 +11,13 @@ class UpdateInitiateCommand extends Command
     protected $signature = 'update:initiate {version?}';
     protected $description = 'Initiate project update to the latest version or a specific version.';
 
-    protected VersionService $versionService;
+    protected ReleaseService $releaseService;
     protected UpdateOrchestrator $updateOrchestrator;
 
-    public function __construct(VersionService $versionService, UpdateOrchestrator $updateOrchestrator)
+    public function __construct(ReleaseService $releaseService, UpdateOrchestrator $updateOrchestrator)
     {
         parent::__construct();
-        $this->versionService = $versionService;
+        $this->releaseService = $releaseService;
         $this->updateOrchestrator = $updateOrchestrator;
     }
 
@@ -27,7 +27,7 @@ class UpdateInitiateCommand extends Command
             $version = $this->argument('version');
             $this->info($version ? "Initiating update for version: $version" : 'Initiating update for the latest version.');
 
-            $releaseData = $this->versionService->collectReleaseData($version);
+            $releaseData = $this->releaseService->collectReleaseData($version);
 
             if (empty($releaseData) || is_null($releaseData['version']) || is_null($releaseData['download_url'])) {
                 $this->error('No update available.');
