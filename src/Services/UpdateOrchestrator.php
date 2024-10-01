@@ -58,7 +58,7 @@ class UpdateOrchestrator
             $this->cleanup([$backupPath], $command);
 
             Log::info('Update completed successfully.');
-        } catch ( Exception $e) {
+        } catch (Exception $e) {
             $this->handleFailure($e, $backupPath, $command);
         } finally {
             $this->disableMaintenanceMode($command);
@@ -93,9 +93,11 @@ class UpdateOrchestrator
      * @param Command $command
      * @return string
      */
-    protected function createBackup(Command $command): string {
+    protected function createBackup(Command $command): string
+    {
         $backupPath = $this->backupService->backup($command);
         $command->info('Backup completed successfully.');
+
         return $backupPath;
     }
 
@@ -127,11 +129,13 @@ class UpdateOrchestrator
      * @return string
      * @throws Exception
      */
-    protected function getUpdateUrl(array $releaseData): string {
+    protected function getUpdateUrl(array $releaseData): string
+    {
         $zipballUrl = $releaseData['download_url'] ?? null;
         if (is_null($zipballUrl)) {
             throw new Exception('No update available.');
         }
+
         return $zipballUrl;
     }
 
@@ -194,7 +198,7 @@ class UpdateOrchestrator
      * @param Command $command
      * @throws Exception
      */
-    protected function handleFailure( Exception $e, string $backupPath, Command $command)
+    protected function handleFailure(Exception $e, string $backupPath, Command $command)
     {
         Log::error("Update failed: {$e->getMessage()}");
         $command->error("Update failed: {$e->getMessage()}");

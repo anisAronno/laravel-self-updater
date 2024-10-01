@@ -6,7 +6,7 @@ use Exception;
 
 /**
  * Class BitbucketProvider
- * 
+ *
  * VCS provider for Bitbucket.
  */
 class BitbucketProvider extends AbstractVCSProvider
@@ -19,6 +19,7 @@ class BitbucketProvider extends AbstractVCSProvider
     public function getApiUrl(): string
     {
         list($user, $repo) = $this->extractUserAndRepo();
+
         return sprintf('https://api.bitbucket.org/2.0/repositories/%s/%s/refs/tags', $user, $repo);
     }
 
@@ -31,6 +32,7 @@ class BitbucketProvider extends AbstractVCSProvider
     protected function buildApiUrl(?string $version): string
     {
         $baseUrl = $this->getApiUrl();
+
         return $version ? "{$baseUrl}/{$version}" : $baseUrl;
     }
 

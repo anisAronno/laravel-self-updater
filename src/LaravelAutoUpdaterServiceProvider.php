@@ -25,6 +25,7 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
         $this->app->singleton(VCSProviderInterface::class, function () {
             $releaseUrl = config('auto-updater.release_url');
             $purchaseKey = config('auto-updater.purchase_key');
+
             return VCSFactory::create($releaseUrl, $purchaseKey);
         });
     }

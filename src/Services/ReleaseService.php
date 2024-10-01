@@ -51,7 +51,7 @@ class ReleaseService
      */
     public function collectReleaseData(string $version = null): array
     {
-        if($version){
+        if ($version) {
             return $this->fetcher->getReleaseByVersion($version);
         } else {
             return $this->fetcher->getLatestRelease();

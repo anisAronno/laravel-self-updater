@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Process;
 
 /**
  * Class ComposerService
- * 
+ *
  * Service class to run composer install.
  */
 class ComposerService
@@ -33,7 +33,7 @@ class ComposerService
     {
         $result = Process::run('which composer');
 
-        if (!$result->successful()) {
+        if (! $result->successful()) {
             throw new Exception('Composer is not installed or not found in the system PATH.');
         }
 
@@ -52,14 +52,16 @@ class ComposerService
         try {
             $result = Process::run("$composerPath install --no-interaction 2>&1");
 
-            if (!$result->successful()) {
+            if (! $result->successful()) {
                 $this->handleInstallFailure($result->output());
+
                 return false;
             }
 
             return true;
         } catch (\Throwable $e) {
             $this->handleInstallFailure($e->getMessage());
+
             return false;
         }
     }

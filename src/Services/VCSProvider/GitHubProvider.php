@@ -1,11 +1,10 @@
-<?php 
-namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+<?php
 
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\AbstractVCSProvider;
+namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
 /**
  * Class GitHubProvider
- * 
+ *
  * VCS provider for GitHub.
  */
 class GitHubProvider extends AbstractVCSProvider
@@ -18,6 +17,7 @@ class GitHubProvider extends AbstractVCSProvider
     public function getApiUrl(): string
     {
         list($user, $repo) = $this->extractUserAndRepo();
+
         return sprintf('https://api.github.com/repos/%s/%s/releases', $user, $repo);
     }
 
@@ -30,6 +30,7 @@ class GitHubProvider extends AbstractVCSProvider
     protected function buildApiUrl(?string $version): string
     {
         $baseUrl = $this->getApiUrl();
+
         return $version ? "{$baseUrl}/tags/v{$version}" : "{$baseUrl}/latest";
     }
 

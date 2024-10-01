@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 
 /**
  * Class BackupService
- * 
+ *
  * This class provides backup-related operations.
  */
 class BackupService
@@ -16,7 +16,7 @@ class BackupService
 
     /**
      * BackupService constructor.
-     * 
+     *
      * @param FileService $fileService
      */
     public function __construct(FileService $fileService)
@@ -26,11 +26,12 @@ class BackupService
 
     /**
      * Create a backup of the project files.
-     * 
+     *
      * @param Command $command
      * @return string
      */
-    public function backup(Command $command): string {
+    public function backup(Command $command): string
+    {
         $backupPath = storage_path('app/backup/' . date('Y-m-d_H-i-s'));
         File::ensureDirectoryExists($backupPath);
 
@@ -54,11 +55,11 @@ class BackupService
 
     /**
      * Rollback to the backup.
-     * 
+     *
      * @param string $backupPath
      * @param Command $command
      */
-    public function rollback( string $backupPath, Command $command)
+    public function rollback(string $backupPath, Command $command)
     {
         if (File::isDirectory($backupPath)) {
             $command->info('Rolling back to backup...');

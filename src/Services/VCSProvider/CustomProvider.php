@@ -2,7 +2,6 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\AbstractVCSProvider;
 use InvalidArgumentException;
 
 /**
@@ -30,7 +29,7 @@ class CustomProvider extends AbstractVCSProvider
         parent::__construct($releaseUrl);
         $this->purchaseKey = $purchaseKey;
     }
-    
+
     /**
      * Get the API URL.
      *
@@ -38,7 +37,7 @@ class CustomProvider extends AbstractVCSProvider
      */
     protected function getApiUrl(): string
     {
-        if (!filter_var($this->releaseUrl, FILTER_VALIDATE_URL)) {
+        if (! filter_var($this->releaseUrl, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException("Invalid custom API URL: {$this->releaseUrl}");
         }
 
@@ -47,6 +46,7 @@ class CustomProvider extends AbstractVCSProvider
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));
+
         return sprintf('https://api.github.com/repos/%s/%s/releases', $parts[1], $parts[2]);
     }
 
