@@ -195,7 +195,6 @@ class FileService
             storage_path(),
             $basePath . DIRECTORY_SEPARATOR . '.env',
             $basePath . DIRECTORY_SEPARATOR . '.git',
-            $basePath . DIRECTORY_SEPARATOR . 'vendor',
             $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite'
         ], $excludeItems);
 

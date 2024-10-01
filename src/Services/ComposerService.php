@@ -50,7 +50,7 @@ class ComposerService
     protected function executeComposerInstall(string $composerPath): bool
     {
         try {
-            $result = Process::run("$composerPath install --no-interaction");
+            $result = Process::run("$composerPath install --no-interaction 2>&1");
 
             if (!$result->successful()) {
                 $this->handleInstallFailure($result->output());
