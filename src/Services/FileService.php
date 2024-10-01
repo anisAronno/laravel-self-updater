@@ -52,7 +52,7 @@ class FileService
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($filePath) === true) {
             File::ensureDirectoryExists($extractTo);
