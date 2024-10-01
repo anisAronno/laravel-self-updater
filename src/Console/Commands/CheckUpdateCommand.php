@@ -42,7 +42,7 @@ class CheckUpdateCommand extends Command
                 $this->line('Latest Version: '.$latestVersion);
                 $this->line('Changelog: '.PHP_EOL.$changelog);
             } else {
-                $this->alert('Your project is up to date!');
+                $this->info('<fg=green>✅ Your project is up to date!</>');
             }
 
             return Command::SUCCESS;

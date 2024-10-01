@@ -1,7 +1,7 @@
 {
     "name": "anisaronno/laravel-auto-updater",
     "description": "Laravel Auto Updater is a package that helps you to update your Laravel application automatically.",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "license": "MIT",
     "keywords": [
         "laravel",
@@ -26,6 +26,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.64",
+        "mockery/mockery": "^1.6",
         "orchestra/testbench": "^8.13",
         "phpunit/phpunit": "^10.4"
     },
