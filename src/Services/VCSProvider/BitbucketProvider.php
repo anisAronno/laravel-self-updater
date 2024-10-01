@@ -13,21 +13,16 @@ class BitbucketProvider extends AbstractVCSProvider
 {
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     public function getApiUrl(): string
     {
-        list($user, $repo) = $this->extractUserAndRepo();
+        [$user, $repo] = $this->extractUserAndRepo();
 
         return sprintf('https://api.bitbucket.org/2.0/repositories/%s/%s/refs/tags', $user, $repo);
     }
 
     /**
      * Extract the user and repository from the release URL.
-     *
-     * @param string|null $version
-     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {
@@ -39,8 +34,9 @@ class BitbucketProvider extends AbstractVCSProvider
     /**
      * Parse the release data.
      *
-     * @param array $data The API response data.
+     * @param  array  $data  The API response data.
      * @return array The formatted release data.
+     *
      * @throws Exception
      */
     protected function parseReleaseData(array $data): array
@@ -56,7 +52,7 @@ class BitbucketProvider extends AbstractVCSProvider
     /**
      * Extract data for a single release.
      *
-     * @param array $data The API response data for a single version.
+     * @param  array  $data  The API response data for a single version.
      * @return array The formatted release data.
      */
     protected function extractSingleReleaseData(array $data): array
@@ -74,8 +70,9 @@ class BitbucketProvider extends AbstractVCSProvider
     /**
      * Extract data for multiple releases.
      *
-     * @param array $data The API response data for multiple versions.
+     * @param  array  $data  The API response data for multiple versions.
      * @return array The formatted release data.
+     *
      * @throws Exception
      */
     protected function extractMultipleReleaseData(array $data): array
@@ -99,8 +96,8 @@ class BitbucketProvider extends AbstractVCSProvider
     /**
      * Get Bitbucket repository download URL.
      *
-     * @param array $repositoryParseData The project information containing workspace and repo_slug.
-     * @param string $version The version (tag name) to download.
+     * @param  array  $repositoryParseData  The project information containing workspace and repo_slug.
+     * @param  string  $version  The version (tag name) to download.
      * @return string The download URL.
      */
     protected function getZipDownloadUrl(array $repositoryParseData, string $version): string

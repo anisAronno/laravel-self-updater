@@ -15,15 +15,11 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 {
     /**
      * The release URL.
-     *
-     * @var string
      */
     protected string $releaseUrl;
 
     /**
      * AbstractVCSProvider constructor.
-     *
-     * @param string $releaseUrl
      */
     public function __construct(string $releaseUrl)
     {
@@ -32,24 +28,16 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     abstract protected function getApiUrl(): string;
 
     /**
      * Parse the release data.
-     *
-     * @param array $data
-     * @return array
      */
     abstract protected function parseReleaseData(array $data): array;
 
     /**
      * Fetch the release data.
-     *
-     * @param string|null $version
-     * @return array
      */
     protected function fetchReleaseData(?string $version = null): array
     {
@@ -61,17 +49,11 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Build the API URL.
-     *
-     * @param string|null $version
-     * @return string
      */
     abstract protected function buildApiUrl(?string $version): string;
 
     /**
      * Make an API request.
-     *
-     * @param string $url
-     * @return array
      */
     protected function makeApiRequest(string $url): array
     {
@@ -86,8 +68,6 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Get the latest release.
-     *
-     * @return array
      */
     public function getLatestRelease(): array
     {
@@ -96,9 +76,6 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Get the release by version.
-     *
-     * @param string $version
-     * @return array
      */
     public function getReleaseByVersion(string $version): array
     {
@@ -109,6 +86,7 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
      * Extract the username and repository name from the release URL.
      *
      * @return array The username and repository name.
+     *
      * @throws \InvalidArgumentException If the release URL is invalid.
      */
     protected function extractUserAndRepo(): array

@@ -12,9 +12,11 @@ use Illuminate\View\Component;
 class AutoUpdater extends Component
 {
     private const CACHE_KEY = 'auto_updater_data';
+
     private const CACHE_DURATION_IN_SECONDS = 600; // 10 minutes
 
     private ReleaseService $releaseService;
+
     private array $versionData;
 
     public function __construct(ReleaseService $releaseService)

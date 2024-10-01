@@ -17,9 +17,6 @@ class FileService
 {
     /**
      * Get the list of files to back up.
-     *
-     * @param string $basePath
-     * @return array
      */
     public function getFilesToBackup(string $basePath): array
     {
@@ -35,13 +32,13 @@ class FileService
                 continue;
             }
 
-            $relativePath = str_replace($basePath . DIRECTORY_SEPARATOR, '', $item->getPathname());
+            $relativePath = str_replace($basePath.DIRECTORY_SEPARATOR, '', $item->getPathname());
 
             if ($this->shouldExclude($relativePath)) {
                 continue;
             }
 
-            $targetPath = $basePath . DIRECTORY_SEPARATOR . $relativePath;
+            $targetPath = $basePath.DIRECTORY_SEPARATOR.$relativePath;
             $filesToBackup[$item->getPathname()] = $targetPath;
         }
 
@@ -51,15 +48,11 @@ class FileService
     /**
      * Extract a zip file.
      *
-     * @param string $filePath
-     * @param string $extractTo
-     * @param Command $command
-     * @return string
      * @throws \Exception
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($filePath) === true) {
             File::ensureDirectoryExists($extractTo);
@@ -82,10 +75,6 @@ class FileService
 
     /**
      * Replace project files with the new files.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param Command $command
      */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
@@ -120,10 +109,6 @@ class FileService
 
     /**
      * Remove old files from the destination directory.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param Command $command
      */
     public function removeOldFiles(string $source, string $destination, Command $command)
     {
@@ -137,7 +122,7 @@ class FileService
         $progressBar->start();
 
         foreach ($filesToRemove as $file) {
-            $fullPath = $destination . DIRECTORY_SEPARATOR . $file;
+            $fullPath = $destination.DIRECTORY_SEPARATOR.$file;
 
             if ($this->shouldSkipFile($fullPath, $destination)) {
                 continue;
@@ -158,8 +143,6 @@ class FileService
 
     /**
      * Delete a file or directory.
-     *
-     * @param string $path
      */
     public function delete(string $path)
     {
@@ -172,9 +155,6 @@ class FileService
 
     /**
      * Check if a file should be excluded from the backup.
-     *
-     * @param string $path
-     * @return bool
      */
     protected function shouldExclude(string $path): bool
     {
@@ -183,10 +163,6 @@ class FileService
 
     /**
      * Check if a file should be skipped.
-     *
-     * @param string $path
-     * @param string $basePath
-     * @return bool
      */
     protected function shouldSkipFile(string $path, string $basePath): bool
     {
@@ -194,10 +170,10 @@ class FileService
 
         $skipPaths = array_merge([
             storage_path(),
-            $basePath . DIRECTORY_SEPARATOR . '.env',
-            $basePath . DIRECTORY_SEPARATOR . '.git',
-            $basePath . DIRECTORY_SEPARATOR . 'vendor',
-            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite',
+            $basePath.DIRECTORY_SEPARATOR.'.env',
+            $basePath.DIRECTORY_SEPARATOR.'.git',
+            $basePath.DIRECTORY_SEPARATOR.'vendor',
+            $basePath.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'database.sqlite',
         ], $excludeItems);
 
         // Check if the path starts with any of the skip paths
@@ -212,9 +188,6 @@ class FileService
 
     /**
      * Get the list of files in a directory.
-     *
-     * @param string $dir
-     * @return array
      */
     protected function getFileList(string $dir): array
     {
@@ -226,7 +199,7 @@ class FileService
 
         foreach ($iterator as $file) {
             if (! $file->isDir()) {
-                $files[] = str_replace($dir . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                $files[] = str_replace($dir.DIRECTORY_SEPARATOR, '', $file->getPathname());
             }
         }
 
@@ -235,9 +208,6 @@ class FileService
 
     /**
      * Remove empty directories from a directory.
-     *
-     * @param string $dir
-     * @param Command $command
      */
     protected function removeEmptyDirectories(string $dir, Command $command)
     {
@@ -261,9 +231,6 @@ class FileService
 
     /**
      * Cleanup the temporary files.
-     *
-     * @param array $paths
-     * @param Command $command
      */
     public function cleanup(array $paths, Command $command)
     {

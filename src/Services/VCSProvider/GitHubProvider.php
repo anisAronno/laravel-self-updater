@@ -11,21 +11,16 @@ class GitHubProvider extends AbstractVCSProvider
 {
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     public function getApiUrl(): string
     {
-        list($user, $repo) = $this->extractUserAndRepo();
+        [$user, $repo] = $this->extractUserAndRepo();
 
         return sprintf('https://api.github.com/repos/%s/%s/releases', $user, $repo);
     }
 
     /**
      * Extract the user and repository from the release URL.
-     *
-     * @param string|null $version
-     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {
@@ -37,7 +32,7 @@ class GitHubProvider extends AbstractVCSProvider
     /**
      * Parse the release data.
      *
-     * @param array $data The API response data.
+     * @param  array  $data  The API response data.
      * @return array The formatted release data.
      */
     protected function parseReleaseData(array $data): array

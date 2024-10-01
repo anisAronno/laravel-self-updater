@@ -16,8 +16,6 @@ class BackupService
 
     /**
      * BackupService constructor.
-     *
-     * @param FileService $fileService
      */
     public function __construct(FileService $fileService)
     {
@@ -26,13 +24,10 @@ class BackupService
 
     /**
      * Create a backup of the project files.
-     *
-     * @param Command $command
-     * @return string
      */
     public function backup(Command $command): string
     {
-        $backupPath = storage_path('app/backup/' . date('Y-m-d_H-i-s'));
+        $backupPath = storage_path('app/backup/'.date('Y-m-d_H-i-s'));
         File::ensureDirectoryExists($backupPath);
 
         $command->info('Starting backup process...');
@@ -55,9 +50,6 @@ class BackupService
 
     /**
      * Rollback to the backup.
-     *
-     * @param string $backupPath
-     * @param Command $command
      */
     public function rollback(string $backupPath, Command $command)
     {

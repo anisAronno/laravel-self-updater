@@ -13,16 +13,11 @@ class CustomProvider extends AbstractVCSProvider
 {
     /**
      * The purchase key.
-     *
-     * @var string|null
      */
     private ?string $purchaseKey;
 
     /**
      * CustomProvider constructor.
-     *
-     * @param string $releaseUrl
-     * @param string|null $purchaseKey
      */
     public function __construct(string $releaseUrl, ?string $purchaseKey)
     {
@@ -32,8 +27,6 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     protected function getApiUrl(): string
     {
@@ -42,7 +35,7 @@ class CustomProvider extends AbstractVCSProvider
         }
 
         if ($this->purchaseKey) {
-            return $this->releaseUrl . '?purchase_key=' . urlencode($this->purchaseKey);
+            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));
@@ -52,9 +45,6 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Build the API URL.
-     *
-     * @param string|null $version
-     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {
@@ -64,7 +54,7 @@ class CustomProvider extends AbstractVCSProvider
     /**
      * Parse the release data.
      *
-     * @param array $data The API response data.
+     * @param  array  $data  The API response data.
      * @return array The formatted release data.
      */
     protected function parseReleaseData(array $data): array
