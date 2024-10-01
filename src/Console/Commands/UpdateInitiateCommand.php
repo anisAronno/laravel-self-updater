@@ -2,8 +2,8 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
 
-use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
+use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
 use Illuminate\Console\Command;
 
 class UpdateInitiateCommand extends Command
@@ -31,6 +31,7 @@ class UpdateInitiateCommand extends Command
 
             if (empty($releaseData) || is_null($releaseData['version']) || is_null($releaseData['download_url'])) {
                 $this->error('No update available.');
+
                 return Command::SUCCESS;
             }
 
@@ -38,9 +39,11 @@ class UpdateInitiateCommand extends Command
 
             $this->updateOrchestrator->processUpdate($releaseData, $this);
             $this->info('Update process has been completed successfully.');
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Update failed: {$e->getMessage()}");
+
             return Command::FAILURE;
         }
     }

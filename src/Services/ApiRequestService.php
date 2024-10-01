@@ -2,12 +2,12 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class ApiRequestService
- * 
+ *
  * This class provides methods to make API requests.
  */
 class ApiRequestService

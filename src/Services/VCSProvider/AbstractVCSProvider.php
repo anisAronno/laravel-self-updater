@@ -1,12 +1,14 @@
-<?php 
+<?php
+
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+
 use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
 use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
 use InvalidArgumentException;
 
 /**
  * Class AbstractVCSProvider
- * 
+ *
  * Abstract class for the VCS provider.
  */
 abstract class AbstractVCSProvider implements VCSProviderInterface
@@ -53,6 +55,7 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
     {
         $url = $this->buildApiUrl($version);
         $response = $this->makeApiRequest($url);
+
         return $this->parseReleaseData($response);
     }
 
@@ -113,12 +116,11 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
         $parsedUrl = parse_url($this->releaseUrl);
         $path = trim($parsedUrl['path'], '/');
         $parts = explode('/', $path);
-    
+
         if (count($parts) !== 2) {
             throw new InvalidArgumentException("Invalid repository URL: {$this->releaseUrl}");
         }
-    
+
         return $parts;
     }
-    
 }

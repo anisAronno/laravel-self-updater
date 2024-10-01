@@ -4,7 +4,7 @@ namespace AnisAronno\LaravelAutoUpdater\Contracts;
 
 /**
  * Interface VCSProviderInterface
- * 
+ *
  * Interface for the VCS provider.
  */
 interface VCSProviderInterface

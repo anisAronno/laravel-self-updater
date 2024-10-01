@@ -2,8 +2,8 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
 
-use Illuminate\Console\Command;
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
+use Illuminate\Console\Command;
 
 class CheckUpdateCommand extends Command
 {
@@ -28,10 +28,11 @@ class CheckUpdateCommand extends Command
 
             if (empty($latestRelease)) {
                 $this->error('Failed to fetch the latest release data.');
+
                 return Command::SUCCESS;
             }
 
-            $latestVersion = !empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : 'Not found';
+            $latestVersion = ! empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : 'Not found';
             $changelog = $latestRelease['changelog'] ?? 'No changelog available';
 
             // Compare the current version with the latest release
@@ -47,6 +48,7 @@ class CheckUpdateCommand extends Command
             return Command::SUCCESS;
         } catch (\Throwable $th) {
             $this->error('An error occurred while checking for updates: ' . $th->getMessage());
+
             return Command::FAILURE;
         }
     }

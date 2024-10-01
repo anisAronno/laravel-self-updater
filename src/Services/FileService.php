@@ -10,14 +10,14 @@ use ZipArchive;
 
 /**
  * Class FileService
- * 
+ *
  * This class provides various file-related operations.
  */
 class FileService
 {
     /**
      * Get the list of files to back up.
-     * 
+     *
      * @param string $basePath
      * @return array
      */
@@ -50,7 +50,7 @@ class FileService
 
     /**
      * Extract a zip file.
-     * 
+     *
      * @param string $filePath
      * @param string $extractTo
      * @param Command $command
@@ -73,6 +73,7 @@ class FileService
             }
 
             $command->info('Zip file extracted successfully.');
+
             return $extractedDirs[0];
         } else {
             throw new \Exception('Failed to open the zip file.');
@@ -81,7 +82,7 @@ class FileService
 
     /**
      * Replace project files with the new files.
-     * 
+     *
      * @param string $source
      * @param string $destination
      * @param Command $command
@@ -119,7 +120,7 @@ class FileService
 
     /**
      * Remove old files from the destination directory.
-     * 
+     *
      * @param string $source
      * @param string $destination
      * @param Command $command
@@ -157,7 +158,7 @@ class FileService
 
     /**
      * Delete a file or directory.
-     * 
+     *
      * @param string $path
      */
     public function delete(string $path)
@@ -171,7 +172,7 @@ class FileService
 
     /**
      * Check if a file should be excluded from the backup.
-     * 
+     *
      * @param string $path
      * @return bool
      */
@@ -182,7 +183,7 @@ class FileService
 
     /**
      * Check if a file should be skipped.
-     * 
+     *
      * @param string $path
      * @param string $basePath
      * @return bool
@@ -190,13 +191,13 @@ class FileService
     protected function shouldSkipFile(string $path, string $basePath): bool
     {
         $excludeItems = config('auto-updater.exclude_items', []);
-        
+
         $skipPaths = array_merge([
             storage_path(),
             $basePath . DIRECTORY_SEPARATOR . '.env',
             $basePath . DIRECTORY_SEPARATOR . '.git',
             $basePath . DIRECTORY_SEPARATOR . 'vendor',
-            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite'
+            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite',
         ], $excludeItems);
 
         // Check if the path starts with any of the skip paths
@@ -211,7 +212,7 @@ class FileService
 
     /**
      * Get the list of files in a directory.
-     * 
+     *
      * @param string $dir
      * @return array
      */
@@ -224,7 +225,7 @@ class FileService
         );
 
         foreach ($iterator as $file) {
-            if (!$file->isDir()) {
+            if (! $file->isDir()) {
                 $files[] = str_replace($dir . DIRECTORY_SEPARATOR, '', $file->getPathname());
             }
         }
@@ -234,7 +235,7 @@ class FileService
 
     /**
      * Remove empty directories from a directory.
-     * 
+     *
      * @param string $dir
      * @param Command $command
      */
@@ -249,7 +250,7 @@ class FileService
         foreach ($iterator as $path) {
             if ($path->isDir()) {
                 $dirPath = $path->getPathname();
-                if (!(new \RecursiveDirectoryIterator($dirPath))->valid()) {
+                if (! (new \RecursiveDirectoryIterator($dirPath))->valid()) {
                     rmdir($dirPath);
                     $command->line("Removed empty directory: $dirPath");
                 }
@@ -260,7 +261,7 @@ class FileService
 
     /**
      * Cleanup the temporary files.
-     * 
+     *
      * @param array $paths
      * @param Command $command
      */
@@ -271,5 +272,4 @@ class FileService
         }
         $command->info('Cleanup completed.');
     }
-
 }

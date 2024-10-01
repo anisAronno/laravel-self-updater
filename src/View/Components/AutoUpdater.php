@@ -2,12 +2,12 @@
 
 namespace AnisAronno\LaravelAutoUpdater\View\Components;
 
-use Illuminate\View\Component;
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\Component;
 
 class AutoUpdater extends Component
 {
@@ -32,9 +32,11 @@ class AutoUpdater extends Component
     {
         try {
             Artisan::call('update:initiate');
+
             return $this->createJsonResponse(true, Artisan::output());
         } catch (Exception $e) {
             Artisan::call('up');
+
             return $this->createJsonResponse(false, "Error: {$e->getMessage()}");
         }
     }
@@ -42,7 +44,7 @@ class AutoUpdater extends Component
     public function checkForSystemUpdates(): JsonResponse
     {
         $this->versionData = $this->retrieveVersionData(true);
-        if (!empty($this->versionData['error'])) {
+        if (! empty($this->versionData['error'])) {
             return $this->createJsonResponse(false, $this->versionData['error']);
         }
 
@@ -51,7 +53,7 @@ class AutoUpdater extends Component
 
     private function retrieveVersionData(bool $forceRefresh = false): array
     {
-        if (!$forceRefresh && $this->isVersionDataCached()) {
+        if (! $forceRefresh && $this->isVersionDataCached()) {
             return $this->getVersionDataFromCache();
         }
 
@@ -73,6 +75,7 @@ class AutoUpdater extends Component
         try {
             $versionData = $this->fetchLatestVersionData();
             $this->storeVersionDataInCache($versionData);
+
             return $versionData;
         } catch (Exception $e) {
             return $this->createErrorResponse($e);
@@ -91,10 +94,10 @@ class AutoUpdater extends Component
     {
         $versionData = [
             'currentVersion' => $currentVersion,
-            'latestVersion' => !empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : null,
+            'latestVersion' => ! empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : null,
             'changelog' => $latestRelease['changelog'] ?? null,
             'hasUpdate' => false,
-            'error' => null
+            'error' => null,
         ];
 
         if ($versionData['currentVersion'] && $versionData['latestVersion']) {
@@ -120,7 +123,7 @@ class AutoUpdater extends Component
     {
         return [
             'hasUpdate' => false,
-            'error' => "Error fetching release data: {$e->getMessage()}"
+            'error' => "Error fetching release data: {$e->getMessage()}",
         ];
     }
 

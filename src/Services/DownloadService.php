@@ -4,19 +4,19 @@ namespace AnisAronno\LaravelAutoUpdater\Services;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class DownloadService
- * 
+ *
  * This class provides download-related operations.
  */
 class DownloadService
 {
     /**
      * Download the file from the given URL.
-     * 
+     *
      * @param string $url
      * @param string $destination
      * @param Command $command

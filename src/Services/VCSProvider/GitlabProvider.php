@@ -2,11 +2,9 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\AbstractVCSProvider;
-
 /**
  * Class GitlabProvider
- * 
+ *
  * VCS provider for GitLab.
  */
 class GitlabProvider extends AbstractVCSProvider
@@ -19,7 +17,7 @@ class GitlabProvider extends AbstractVCSProvider
     public function getApiUrl(): string
     {
         list($user, $repo) = $this->extractUserAndRepo();
-        
+
         return sprintf('https://gitlab.com/api/v4/projects/%s%%2F%s/repository/tags', urlencode($user), urlencode($repo));
     }
 
@@ -32,6 +30,7 @@ class GitlabProvider extends AbstractVCSProvider
     protected function buildApiUrl(?string $version): string
     {
         $baseUrl = $this->getApiUrl();
+
         return $version ? "{$baseUrl}/{$version}" : $baseUrl;
     }
 
@@ -53,9 +52,9 @@ class GitlabProvider extends AbstractVCSProvider
         $version = data_get($release, 'name', '');
 
         return [
-            'version'      => $version,
+            'version' => $version,
             'download_url' => $this->getZipDownloadUrl($projectPath, $version),
-            'changelog'    => data_get($release, 'release.description', 'No changelog available'),
+            'changelog' => data_get($release, 'release.description', 'No changelog available'),
         ];
     }
 
