@@ -15,6 +15,7 @@ A robust Laravel package facilitating automatic updates from GitHub, GitLab, Bit
     - [Excluding Items from Updates](#excluding-items-from-updates)
     - [Set Middleware in the Config File](#set-middleware-in-the-config-file)
     - [Application Version](#application-version)
+    - [Composer Dependencies](#composer-dependencies)
   - [Usage](#usage)
     - [Update Check Command](#update-check-command)
     - [Update Initiate Command](#update-initiate-command)
@@ -37,6 +38,7 @@ A robust Laravel package facilitating automatic updates from GitHub, GitLab, Bit
 - Global Blade component for easy integration
 - API endpoints for programmatic update management
 - Configurable middleware for API security
+- Optional Composer dependencies management during updates
 
 ## Installation
 
@@ -82,6 +84,7 @@ The `config/auto-updater.php` file contains important settings:
 - **Repository Configuration**: The file uses `ReleaseProviderFactory` to create an appropriate adapter based on your `RELEASE_URL`.
 - **Excluded Items**: Define files and folders to exclude from updates.
 - **Middleware**: Specify which middleware to apply to the auto-updater's API endpoints.
+- **Composer Dependencies**: Configure whether to run Composer install or update during the update process.
 
 ### Excluding Items from Updates
 
@@ -117,6 +120,17 @@ Specify your app's version in `composer.json`:
   "version": "1.0.0"
 }
 ```
+
+### Composer Dependencies
+
+Configure whether to run Composer install or update during the update process:
+
+```php
+'require_composer_install' => false,
+'require_composer_update' => false,
+```
+
+Set these to `true` if you want to run Composer install or update respectively during the update process.
 
 After making configuration changes, refresh the config cache:
 

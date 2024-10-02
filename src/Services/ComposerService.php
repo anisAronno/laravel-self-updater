@@ -4,12 +4,8 @@ namespace AnisAronno\LaravelAutoUpdater\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Log;
 
-/**
- * Class ComposerService
- *
- * Service class to run composer install.
- */
 class ComposerService
 {
     /**
@@ -19,62 +15,52 @@ class ComposerService
      */
     public function runComposerInstall()
     {
-        $composerPath = $this->getComposerPath();
-        $this->executeComposerInstall($composerPath);
+        $this->executeComposerCommand('install --no-interaction');
     }
 
     /**
-     * Get the path to the composer executable.
+     * Run composer update.
      *
      * @throws Exception
      */
-    protected function getComposerPath(): string
+    public function runComposerUpdate()
     {
-        $result = Process::run('which composer');
-
-        if (! $result->successful()) {
-            throw new Exception('Composer is not installed or not found in the system PATH.');
-        }
-
-        return trim($result->output());
+        $this->executeComposerCommand('update --no-interaction');
     }
 
     /**
-     * Execute the composer install command.
+     * Execute the composer command.
      *
+     * @param string $command
      * @throws Exception
      */
-    protected function executeComposerInstall(string $composerPath): bool
+    protected function executeComposerCommand(string $command)
     {
         try {
-            $result = Process::run("$composerPath install --no-interaction 2>&1");
-
-            if (! $result->successful()) {
-                $this->handleInstallFailure($result->output());
-
-                return false;
+            $result = Process::run("composer $command 2>&1");
+            if (!$result->successful()) {
+                $this->handleCommandFailure($result->output());
             }
-
-            return true;
+            Log::info("Composer command executed successfully: $command");
+            Log::info("Output: " . $result->output());
         } catch (\Throwable $e) {
-            $this->handleInstallFailure($e->getMessage());
-
-            return false;
+            $this->handleCommandFailure($e->getMessage());
         }
     }
 
     /**
-     * Handle a failed composer install command.
+     * Handle a failed composer command.
      *
      * @throws Exception
      */
-    protected function handleInstallFailure(string $output)
+    protected function handleCommandFailure(string $output)
     {
-        // Check for specific errors in the output
+        Log::error("Composer command failed. Error output: $output");
+
         if (str_contains($output, 'Failed to open stream')) {
-            throw new Exception('Composer install failed due to missing files. '.$output);
+            throw new Exception('Composer command failed due to missing files. '.$output);
         }
 
-        throw new Exception('Composer install failed: '.$output);
+        throw new Exception('Composer command failed: '.$output);
     }
 }
