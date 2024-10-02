@@ -1,7 +1,7 @@
 workbench:
     welcome: true
     install: true
-    start: /auto-updater
+    start: /laravel-auto-updater
     user: contact@anichur.com
     guard: web
     sync:
@@ -17,3 +17,4 @@ workbench:
         web: false
         api: true
         commands: true
+        views: true

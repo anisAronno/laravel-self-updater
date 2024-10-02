@@ -7,7 +7,6 @@ use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\CustomProvider;
 use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\GitHubProvider;
 use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\GitLabProvider;
 use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\VCSFactory;
-use PHPUnit\Framework\TestCase;
 
 class VCSFactoryTest extends TestCase
 {

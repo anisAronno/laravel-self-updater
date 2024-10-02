@@ -4,7 +4,6 @@ namespace AnisAronno\LaravelAutoUpdater\Tests;
 
 use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\CustomProvider;
 use Mockery;
-use Orchestra\Testbench\TestCase;
 
 class CustomProviderTest extends TestCase
 {

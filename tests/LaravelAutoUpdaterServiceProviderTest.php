@@ -6,7 +6,6 @@ use AnisAronno\LaravelAutoUpdater\Console\Commands\CheckUpdateCommand;
 use AnisAronno\LaravelAutoUpdater\Console\Commands\UpdateInitiateCommand;
 use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
 use AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider;
-use Orchestra\Testbench\TestCase;
 
 class LaravelAutoUpdaterServiceProviderTest extends TestCase
 {

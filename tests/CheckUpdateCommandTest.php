@@ -4,7 +4,6 @@ namespace AnisAronno\LaravelAutoUpdater\Tests;
 
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use Mockery;
-use Orchestra\Testbench\TestCase;
 
 class CheckUpdateCommandTest extends TestCase
 {
