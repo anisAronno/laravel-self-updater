@@ -4,7 +4,6 @@ namespace AnisAronno\LaravelAutoUpdater\Tests;
 
 use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\BitbucketProvider;
 use Mockery;
-use Orchestra\Testbench\TestCase;
 
 class BitbucketProviderTest extends TestCase
 {
