@@ -6,7 +6,6 @@ use AnisAronno\LaravelAutoUpdater\Console\Commands\UpdateInitiateCommand;
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
 use Mockery;
-use Orchestra\Testbench\TestCase;
 
 class UpdateInitiateCommandTest extends TestCase
 {

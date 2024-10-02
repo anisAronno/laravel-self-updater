@@ -5,7 +5,6 @@ namespace AnisAronno\LaravelAutoUpdater\Tests;
 use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
 use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\GitHubProvider;
 use Mockery;
-use Orchestra\Testbench\TestCase;
 
 class GitHubProviderTest extends TestCase
 {
