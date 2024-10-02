@@ -2,9 +2,9 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
