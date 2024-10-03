@@ -4,7 +4,6 @@ namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
 use Carbon\Carbon;
 use InvalidArgumentException;
-use Carbon\Carbon;
 
 /**
  * Class CustomProvider

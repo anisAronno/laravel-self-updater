@@ -2,7 +2,6 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
-use Carbon\Carbon;
 use Exception;
 use Carbon\Carbon;
 
