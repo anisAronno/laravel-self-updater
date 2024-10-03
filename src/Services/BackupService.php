@@ -35,7 +35,7 @@ class BackupService
             $command->info('Starting backup process...');
             $filesToBackup = $this->fileService->getFilesToBackup(base_path());
 
-            $zip = new ZipArchive;
+            $zip = new ZipArchive();
             $zipPath = $backupPath.'/backup.zip';
 
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
@@ -66,6 +66,7 @@ class BackupService
         } catch (Exception $e) {
             Log::error('Backup failed: '.$e->getMessage());
             $command->error('Backup failed: '.$e->getMessage());
+
             throw $e;
         }
     }
@@ -86,7 +87,7 @@ class BackupService
         $command->info('Rolling back to backup...');
 
         try {
-            $zip = new ZipArchive;
+            $zip = new ZipArchive();
             if ($zip->open($zipPath) !== true) {
                 throw new Exception("Cannot open zip file: $zipPath");
             }
@@ -105,6 +106,7 @@ class BackupService
         } catch (Exception $e) {
             Log::error('Rollback failed: '.$e->getMessage());
             $command->error('Rollback failed: '.$e->getMessage());
+
             throw $e;
         }
     }

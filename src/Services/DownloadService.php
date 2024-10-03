@@ -30,6 +30,7 @@ class DownloadService
         } catch (Exception $e) {
             Log::error('Download failed: '.$e->getMessage());
             $command->error('Download failed: '.$e->getMessage());
+
             throw $e;
         }
     }

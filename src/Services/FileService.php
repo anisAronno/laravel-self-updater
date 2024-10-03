@@ -11,66 +11,171 @@ use ZipArchive;
 
 class FileService
 {
-    /**
-     * Get the list of files to back up.
-     */
+    protected $excludeItems;
+    protected $criticalDirectories;
+
+    public function __construct()
+    {
+        $this->excludeItems = config('auto-updater.exclude_items', []);
+        $this->criticalDirectories = [
+            base_path('bootstrap/cache'),
+            storage_path('app'),
+            storage_path('framework/cache'),
+            storage_path('framework/sessions'),
+            storage_path('framework/views'),
+            storage_path('logs'),
+        ];
+    }
+
     public function getFilesToBackup(string $basePath): array
     {
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->files()->in($basePath);
 
         $filesToBackup = [];
         foreach ($finder as $file) {
             $relativePath = $file->getRelativePathname();
             if (! $this->shouldExclude($relativePath)) {
-                $filesToBackup[$file->getRealPath()] = $basePath.DIRECTORY_SEPARATOR.$relativePath;
+                $filesToBackup[$file->getRealPath()] = $relativePath;
             }
         }
 
         return $filesToBackup;
     }
 
-    /**
-     * Extract a zip file.
-     *
-     * @throws Exception
-     */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive;
-
-        if ($zip->open($filePath) === true) {
-            File::ensureDirectoryExists($extractTo);
-            $zip->extractTo($extractTo);
-            $zip->close();
-
-            $extractedDirs = File::directories($extractTo);
-
-            if (empty($extractedDirs)) {
-                throw new Exception('Failed to locate extracted directory.');
-            }
-
-            $command->info('Zip file extracted successfully.');
-
-            return $extractedDirs[0];
-        } else {
+        $zip = new ZipArchive();
+        if ($zip->open($filePath) !== true) {
             throw new Exception('Failed to open the zip file.');
         }
+
+        $this->performExtraction($zip, $extractTo);
+        $extractedDir = $this->getExtractedDirectory($extractTo);
+        $command->info('Zip file extracted successfully.');
+
+        return $extractedDir;
     }
 
-    /**
-     * Replace project files with the new files.
-     */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
         $command->info('Replacing project files...');
-
-        $finder = new Finder;
-        $finder->in($source)->ignoreDotFiles(false);
-
+        $finder = $this->getSourceFinder($source);
         $progressBar = $command->getOutput()->createProgressBar($finder->count());
         $progressBar->start();
 
+        $this->copyFiles($finder, $source, $destination, $progressBar);
+
+        $progressBar->finish();
+        $command->info("\nProject files replaced successfully.");
+    }
+
+    public function removeOldFiles(string $source, string $destination, Command $command)
+    {
+        $command->info('Removing old files...');
+        $filesToRemove = $this->getFilesToRemove($source, $destination);
+        $progressBar = $command->getOutput()->createProgressBar(count($filesToRemove));
+        $progressBar->start();
+
+        $this->deleteOldFiles($filesToRemove, $destination, $progressBar);
+
+        $progressBar->finish();
+        $command->info("\nOld files removed successfully.");
+        $this->removeEmptyDirectories($destination, $command);
+    }
+
+    public function delete(string $path)
+    {
+        if (File::isDirectory($path)) {
+            File::deleteDirectory($path);
+        } elseif (File::exists($path)) {
+            File::delete($path);
+        }
+    }
+
+    public function cleanup(array $paths, Command $command)
+    {
+        foreach ($paths as $path) {
+            try {
+                $this->delete($path);
+            } catch (Exception $e) {
+                $this->logAndNotifyError("Failed to delete {$path}: " . $e->getMessage(), $command);
+            }
+        }
+        $command->info('Cleanup completed.');
+    }
+
+    protected function shouldExclude(string $path): bool
+    {
+        return $this->shouldSkipFile($path, base_path());
+    }
+
+    protected function shouldSkipFile(string $path, string $basePath): bool
+    {
+        $skipPaths = array_merge([
+            storage_path(),
+            $basePath . DIRECTORY_SEPARATOR . '.env',
+            $basePath . DIRECTORY_SEPARATOR . '.git',
+            $basePath . DIRECTORY_SEPARATOR . 'vendor',
+            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite',
+        ], $this->excludeItems);
+
+        return collect($skipPaths)->contains(fn ($skipPath) => str_starts_with($path, $skipPath));
+    }
+
+    protected function getFileList(string $dir): array
+    {
+        $finder = new Finder();
+        $finder->files()->in($dir);
+
+        return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
+    }
+
+    protected function removeEmptyDirectories(string $dir, Command $command)
+    {
+        if (! File::isDirectory($dir)) {
+            $command->warn("Directory does not exist: $dir");
+
+            return;
+        }
+
+        $command->info('Removing empty directories...');
+
+        try {
+            $this->processDirectories($dir, $command);
+        } catch (Exception $e) {
+            $this->logAndNotifyError("Error while removing empty directories: " . $e->getMessage(), $command);
+        }
+
+        $command->info('Empty directories removal process completed.');
+    }
+
+    private function performExtraction(ZipArchive $zip, string $extractTo): void
+    {
+        File::ensureDirectoryExists($extractTo);
+        $zip->extractTo($extractTo);
+        $zip->close();
+    }
+
+    private function getExtractedDirectory(string $extractTo): string
+    {
+        $extractedDirs = File::directories($extractTo);
+        if (empty($extractedDirs)) {
+            throw new Exception('Failed to locate extracted directory.');
+        }
+
+        return $extractedDirs[0];
+    }
+
+    private function getSourceFinder(string $source): Finder
+    {
+        $finder = new Finder();
+
+        return $finder->in($source)->ignoreDotFiles(false);
+    }
+
+    private function copyFiles(Finder $finder, string $source, string $destination, $progressBar): void
+    {
         foreach ($finder as $item) {
             $target = str_replace($source, $destination, $item->getRealPath());
 
@@ -78,36 +183,32 @@ class FileService
                 continue;
             }
 
-            if ($item->isDir()) {
-                File::ensureDirectoryExists($target);
-            } else {
-                File::copy($item->getRealPath(), $target, true);
-            }
-
+            $this->copyFileOrCreateDirectory($item, $target);
             $progressBar->advance();
         }
-
-        $progressBar->finish();
-        $command->info("\nProject files replaced successfully.");
     }
 
-    /**
-     * Remove old files from the destination directory.
-     */
-    public function removeOldFiles(string $source, string $destination, Command $command)
+    private function copyFileOrCreateDirectory($item, string $target): void
     {
-        $command->info('Removing old files...');
+        if ($item->isDir()) {
+            File::ensureDirectoryExists($target);
+        } else {
+            File::copy($item->getRealPath(), $target, true);
+        }
+    }
 
+    private function getFilesToRemove(string $source, string $destination): array
+    {
         $sourceFiles = $this->getFileList($source);
         $destFiles = $this->getFileList($destination);
 
-        $filesToRemove = array_diff($destFiles, $sourceFiles);
+        return array_diff($destFiles, $sourceFiles);
+    }
 
-        $progressBar = $command->getOutput()->createProgressBar(count($filesToRemove));
-        $progressBar->start();
-
+    private function deleteOldFiles(array $filesToRemove, string $destination, $progressBar): void
+    {
         foreach ($filesToRemove as $file) {
-            $fullPath = $destination.DIRECTORY_SEPARATOR.$file;
+            $fullPath = $destination . DIRECTORY_SEPARATOR . $file;
 
             if ($this->shouldSkipFile($fullPath, $destination)) {
                 continue;
@@ -119,106 +220,50 @@ class FileService
 
             $progressBar->advance();
         }
-
-        $progressBar->finish();
-        $command->info("\nOld files removed successfully.");
-
-        $this->removeEmptyDirectories($destination, $command);
     }
 
-    /**
-     * Delete a file or directory.
-     */
-    public function delete(string $path)
+    private function processDirectories(string $dir, Command $command): void
     {
-        if (File::isDirectory($path)) {
-            File::deleteDirectory($path);
-        } elseif (File::exists($path)) {
-            File::delete($path);
-        }
-    }
-
-    /**
-     * Check if a file should be excluded from the backup.
-     */
-    protected function shouldExclude(string $path): bool
-    {
-        return $this->shouldSkipFile($path, base_path());
-    }
-
-    /**
-     * Check if a file should be skipped.
-     */
-    protected function shouldSkipFile(string $path, string $basePath): bool
-    {
-        $excludeItems = config('auto-updater.exclude_items', []);
-
-        $skipPaths = array_merge([
-            storage_path(),
-            $basePath.DIRECTORY_SEPARATOR.'.env',
-            $basePath.DIRECTORY_SEPARATOR.'.git',
-            $basePath.DIRECTORY_SEPARATOR.'vendor',
-            $basePath.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'database.sqlite',
-        ], $excludeItems);
-
-        foreach ($skipPaths as $skipPath) {
-            if (str_starts_with($path, $skipPath)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the list of files in a directory.
-     */
-    protected function getFileList(string $dir): array
-    {
-        $finder = new Finder;
-        $finder->files()->in($dir);
-
-        $files = [];
-        foreach ($finder as $file) {
-            $files[] = $file->getRelativePathname();
-        }
-
-        return $files;
-    }
-
-    /**
-     * Remove empty directories from a directory.
-     */
-    protected function removeEmptyDirectories(string $dir, Command $command)
-    {
-        $command->info('Removing empty directories...');
-
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->directories()->in($dir);
 
         foreach ($finder as $directory) {
-            if (! (new Finder)->in($directory->getRealPath())->files()->count()) {
-                File::deleteDirectory($directory->getRealPath());
-                $command->line("Removed empty directory: {$directory->getRealPath()}");
-            }
+            $this->processDirectory($directory, $command);
         }
-
-        $command->info('Empty directories removed.');
     }
 
-    /**
-     * Cleanup the temporary files.
-     */
-    public function cleanup(array $paths, Command $command)
+    private function processDirectory($directory, Command $command): void
     {
-        foreach ($paths as $path) {
-            try {
-                $this->delete($path);
-            } catch (Exception $e) {
-                Log::error("Failed to delete {$path}: ".$e->getMessage());
-                $command->error("Failed to delete {$path}: ".$e->getMessage());
-            }
+        $dirPath = $directory->getRealPath();
+
+        if (! File::isDirectory($dirPath) || in_array($dirPath, $this->criticalDirectories)) {
+            return;
         }
-        $command->info('Cleanup completed.');
+
+        try {
+            if ($this->isEmptyDirectory($dirPath)) {
+                File::deleteDirectory($dirPath);
+                $command->line("Removed empty directory: $dirPath");
+            }
+        } catch (Exception $e) {
+            $this->logAndNotifyWarning("Failed to process directory $dirPath: " . $e->getMessage(), $command);
+        }
+    }
+
+    private function isEmptyDirectory(string $dirPath): bool
+    {
+        return ! (new Finder())->in($dirPath)->files()->count();
+    }
+
+    private function logAndNotifyError(string $message, Command $command): void
+    {
+        Log::error($message);
+        $command->error($message);
+    }
+
+    private function logAndNotifyWarning(string $message, Command $command): void
+    {
+        Log::warning($message);
+        $command->warn($message);
     }
 }

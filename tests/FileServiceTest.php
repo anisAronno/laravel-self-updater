@@ -16,7 +16,7 @@ class FileServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->fileService = new FileService;
+        $this->fileService = new FileService();
 
         // Create a temporary directory for all file operations
         $this->tempDir = $this->app->basePath('temp/file_service_test_'.time());
@@ -36,16 +36,26 @@ class FileServiceTest extends TestCase
 
     public function testGetFilesToBackup()
     {
-        $testDir = $this->tempDir.'/backup_test';
-        File::makeDirectory($testDir.'/subdir', 0755, true, true);
-        File::put($testDir.'/file1.txt', 'content');
-        File::put($testDir.'/subdir/file2.txt', 'content');
+        // Create test files
+        File::put($this->tempDir . '/file1.txt', 'Content 1');
+        File::put($this->tempDir . '/file2.txt', 'Content 2');
+        File::makeDirectory($this->tempDir . '/subdir');
+        File::put($this->tempDir . '/subdir/file3.txt', 'Content 3');
 
-        $result = $this->fileService->getFilesToBackup($testDir);
+        $filesToBackup = $this->fileService->getFilesToBackup($this->tempDir);
 
-        $this->assertCount(2, $result);
-        $this->assertArrayHasKey($testDir.'/file1.txt', $result);
-        $this->assertArrayHasKey($testDir.'/subdir/file2.txt', $result);
+        $this->assertCount(3, $filesToBackup);
+
+        $expectedPaths = [
+            $this->tempDir . '/file1.txt' => 'file1.txt',
+            $this->tempDir . '/file2.txt' => 'file2.txt',
+            $this->tempDir . '/subdir/file3.txt' => 'subdir' . DIRECTORY_SEPARATOR . 'file3.txt',
+        ];
+
+        foreach ($expectedPaths as $fullPath => $relativePath) {
+            $this->assertArrayHasKey($fullPath, $filesToBackup);
+            $this->assertEquals($relativePath, $filesToBackup[$fullPath]);
+        }
     }
 
     public function testExtractZip()
@@ -54,7 +64,7 @@ class FileServiceTest extends TestCase
         $extractTo = $this->tempDir.'/extracted';
 
         // Create a test zip file
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         if ($zip->open($zipFile, ZipArchive::CREATE) === true) {
             $zip->addFromString('test.txt', 'Test content');
             $zip->addEmptyDir('empty_dir');
