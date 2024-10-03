@@ -98,6 +98,7 @@ class AutoUpdater extends Component
             'currentVersion' => $currentVersion,
             'latestVersion' => ! empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : null,
             'changelog' => $latestRelease['changelog'] ?? null,
+            'releaseDate' => $latestRelease['release_date'] ?? null,
             'hasUpdate' => false,
             'error' => null,
         ];

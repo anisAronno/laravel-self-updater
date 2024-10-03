@@ -47,7 +47,8 @@ class GitLabProviderTest extends TestCase
         $expected = [
             'version' => 'v0.3.1',
             'download_url' => 'https://gitlab.com/anis-aleshatech/laravel-starter/-/archive/v0.3.1/v0.3.1.zip',
-            'changelog' => 'Test changelog',
+            'changelog' => 'No changelog available',
+            'release_date' => null,
         ];
 
         $this->assertEquals($expected, $this->provider->getLatestRelease());
@@ -72,7 +73,8 @@ class GitLabProviderTest extends TestCase
         $expected = [
             'version' => 'v0.3.1',
             'download_url' => 'https://gitlab.com/anis-aleshatech/laravel-starter/-/archive/v0.3.1/v0.3.1.zip',
-            'changelog' => 'Test changelog',
+            'changelog' => 'No changelog available',
+            'release_date' => null,
         ];
 
         $this->assertEquals($expected, $this->provider->getReleaseByVersion('v0.3.1'));

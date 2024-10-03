@@ -33,6 +33,7 @@ class CheckUpdateCommandTest extends TestCase
         $this->releaseService->shouldReceive('collectReleaseData')->once()->andReturn([
             'version' => '1.1.0',
             'changelog' => 'Bug fixes and improvements',
+            'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
         $this->artisan('update:check')
@@ -49,6 +50,7 @@ class CheckUpdateCommandTest extends TestCase
         $this->releaseService->shouldReceive('collectReleaseData')->once()->andReturn([
             'version' => '1.1.0',
             'changelog' => 'Bug fixes and improvements',
+            'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
         $this->artisan('update:check')
