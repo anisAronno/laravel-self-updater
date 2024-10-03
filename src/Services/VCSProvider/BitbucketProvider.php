@@ -2,8 +2,8 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
-use Exception;
 use Carbon\Carbon;
+use Exception;
 
 /**
  * Class BitbucketProvider
