@@ -12,6 +12,7 @@ use ZipArchive;
 class FileService
 {
     protected $excludeItems;
+
     protected $criticalDirectories;
 
     public function __construct()
@@ -29,7 +30,7 @@ class FileService
 
     public function getFilesToBackup(string $basePath): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($basePath);
 
         $filesToBackup = [];
@@ -45,7 +46,7 @@ class FileService
 
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         if ($zip->open($filePath) !== true) {
             throw new Exception('Failed to open the zip file.');
         }
@@ -99,7 +100,7 @@ class FileService
             try {
                 $this->delete($path);
             } catch (Exception $e) {
-                $this->logAndNotifyError("Failed to delete {$path}: " . $e->getMessage(), $command);
+                $this->logAndNotifyError("Failed to delete {$path}: ".$e->getMessage(), $command);
             }
         }
         $command->info('Cleanup completed.');
@@ -114,10 +115,10 @@ class FileService
     {
         $skipPaths = array_merge([
             storage_path(),
-            $basePath . DIRECTORY_SEPARATOR . '.env',
-            $basePath . DIRECTORY_SEPARATOR . '.git',
-            $basePath . DIRECTORY_SEPARATOR . 'vendor',
-            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite',
+            $basePath.DIRECTORY_SEPARATOR.'.env',
+            $basePath.DIRECTORY_SEPARATOR.'.git',
+            $basePath.DIRECTORY_SEPARATOR.'vendor',
+            $basePath.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'database.sqlite',
         ], $this->excludeItems);
 
         return collect($skipPaths)->contains(fn ($skipPath) => str_starts_with($path, $skipPath));
@@ -125,7 +126,7 @@ class FileService
 
     protected function getFileList(string $dir): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($dir);
 
         return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
@@ -144,7 +145,7 @@ class FileService
         try {
             $this->processDirectories($dir, $command);
         } catch (Exception $e) {
-            $this->logAndNotifyError("Error while removing empty directories: " . $e->getMessage(), $command);
+            $this->logAndNotifyError('Error while removing empty directories: '.$e->getMessage(), $command);
         }
 
         $command->info('Empty directories removal process completed.');
@@ -169,7 +170,7 @@ class FileService
 
     private function getSourceFinder(string $source): Finder
     {
-        $finder = new Finder();
+        $finder = new Finder;
 
         return $finder->in($source)->ignoreDotFiles(false);
     }
@@ -208,7 +209,7 @@ class FileService
     private function deleteOldFiles(array $filesToRemove, string $destination, $progressBar): void
     {
         foreach ($filesToRemove as $file) {
-            $fullPath = $destination . DIRECTORY_SEPARATOR . $file;
+            $fullPath = $destination.DIRECTORY_SEPARATOR.$file;
 
             if ($this->shouldSkipFile($fullPath, $destination)) {
                 continue;
@@ -224,7 +225,7 @@ class FileService
 
     private function processDirectories(string $dir, Command $command): void
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->directories()->in($dir);
 
         foreach ($finder as $directory) {
@@ -246,13 +247,13 @@ class FileService
                 $command->line("Removed empty directory: $dirPath");
             }
         } catch (Exception $e) {
-            $this->logAndNotifyWarning("Failed to process directory $dirPath: " . $e->getMessage(), $command);
+            $this->logAndNotifyWarning("Failed to process directory $dirPath: ".$e->getMessage(), $command);
         }
     }
 
     private function isEmptyDirectory(string $dirPath): bool
     {
-        return ! (new Finder())->in($dirPath)->files()->count();
+        return ! (new Finder)->in($dirPath)->files()->count();
     }
 
     private function logAndNotifyError(string $message, Command $command): void
