@@ -53,7 +53,7 @@ class GitlabProvider extends AbstractVCSProvider
             'version' => $version,
             'download_url' => $this->getZipDownloadUrl($projectPath, $version),
             'changelog' => data_get($release, 'message', 'No changelog available'),
-            "release_date" => ! empty($releaseDate) ? Carbon::parse($releaseDate)->format('d M, Y h:i:s a') : null,
+            'release_date' => ! empty($releaseDate) ? Carbon::parse($releaseDate)->format('d M, Y h:i:s a') : null,
         ];
     }
 

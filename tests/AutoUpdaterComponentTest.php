@@ -16,6 +16,7 @@ class AutoUpdaterComponentTest extends TestCase
      * @var \Mockery\MockInterface|ReleaseService
      */
     protected $releaseService;
+
     /**
      * @var AutoUpdater
      */

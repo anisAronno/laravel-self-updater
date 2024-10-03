@@ -3,8 +3,8 @@
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
 use Carbon\Carbon;
-use InvalidArgumentException;
 use Carbon\Carbon;
+use InvalidArgumentException;
 
 /**
  * Class CustomProvider
@@ -37,7 +37,7 @@ class CustomProvider extends AbstractVCSProvider
         }
 
         if ($this->purchaseKey) {
-            return $this->releaseUrl . '?purchase_key=' . urlencode($this->purchaseKey);
+            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));

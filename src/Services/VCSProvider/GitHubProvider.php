@@ -3,6 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
 use Carbon\Carbon;
+
 /**
  * Class GitHubProvider
  *
@@ -42,7 +43,7 @@ class GitHubProvider extends AbstractVCSProvider
             'version' => ltrim($data['tag_name'] ?? '', 'v'),
             'download_url' => $data['zipball_url'] ?? '',
             'changelog' => $data['body'] ?? 'No changelog available',
-            'release_date' => !empty($data['created_at']) ? Carbon::parse($data['created_at'])->format('d M, Y h:i:s a') : null,
+            'release_date' => ! empty($data['created_at']) ? Carbon::parse($data['created_at'])->format('d M, Y h:i:s a') : null,
         ];
     }
 }
