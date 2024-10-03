@@ -13,20 +13,17 @@ class FileService
 {
     /**
      * Get the list of files to back up.
-     *
-     * @param string $basePath
-     * @return array
      */
     public function getFilesToBackup(string $basePath): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($basePath);
 
         $filesToBackup = [];
         foreach ($finder as $file) {
             $relativePath = $file->getRelativePathname();
             if (! $this->shouldExclude($relativePath)) {
-                $filesToBackup[$file->getRealPath()] = $basePath . DIRECTORY_SEPARATOR . $relativePath;
+                $filesToBackup[$file->getRealPath()] = $basePath.DIRECTORY_SEPARATOR.$relativePath;
             }
         }
 
@@ -36,15 +33,11 @@ class FileService
     /**
      * Extract a zip file.
      *
-     * @param string $filePath
-     * @param string $extractTo
-     * @param Command $command
-     * @return string
      * @throws Exception
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($filePath) === true) {
             File::ensureDirectoryExists($extractTo);
@@ -67,16 +60,12 @@ class FileService
 
     /**
      * Replace project files with the new files.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param Command $command
      */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
         $command->info('Replacing project files...');
 
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->in($source)->ignoreDotFiles(false);
 
         $progressBar = $command->getOutput()->createProgressBar($finder->count());
@@ -104,10 +93,6 @@ class FileService
 
     /**
      * Remove old files from the destination directory.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param Command $command
      */
     public function removeOldFiles(string $source, string $destination, Command $command)
     {
@@ -122,7 +107,7 @@ class FileService
         $progressBar->start();
 
         foreach ($filesToRemove as $file) {
-            $fullPath = $destination . DIRECTORY_SEPARATOR . $file;
+            $fullPath = $destination.DIRECTORY_SEPARATOR.$file;
 
             if ($this->shouldSkipFile($fullPath, $destination)) {
                 continue;
@@ -143,8 +128,6 @@ class FileService
 
     /**
      * Delete a file or directory.
-     *
-     * @param string $path
      */
     public function delete(string $path)
     {
@@ -157,9 +140,6 @@ class FileService
 
     /**
      * Check if a file should be excluded from the backup.
-     *
-     * @param string $path
-     * @return bool
      */
     protected function shouldExclude(string $path): bool
     {
@@ -168,10 +148,6 @@ class FileService
 
     /**
      * Check if a file should be skipped.
-     *
-     * @param string $path
-     * @param string $basePath
-     * @return bool
      */
     protected function shouldSkipFile(string $path, string $basePath): bool
     {
@@ -179,10 +155,10 @@ class FileService
 
         $skipPaths = array_merge([
             storage_path(),
-            $basePath . DIRECTORY_SEPARATOR . '.env',
-            $basePath . DIRECTORY_SEPARATOR . '.git',
-            $basePath . DIRECTORY_SEPARATOR . 'vendor',
-            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite',
+            $basePath.DIRECTORY_SEPARATOR.'.env',
+            $basePath.DIRECTORY_SEPARATOR.'.git',
+            $basePath.DIRECTORY_SEPARATOR.'vendor',
+            $basePath.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'database.sqlite',
         ], $excludeItems);
 
         foreach ($skipPaths as $skipPath) {
@@ -196,13 +172,10 @@ class FileService
 
     /**
      * Get the list of files in a directory.
-     *
-     * @param string $dir
-     * @return array
      */
     protected function getFileList(string $dir): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($dir);
 
         $files = [];
@@ -215,19 +188,16 @@ class FileService
 
     /**
      * Remove empty directories from a directory.
-     *
-     * @param string $dir
-     * @param Command $command
      */
     protected function removeEmptyDirectories(string $dir, Command $command)
     {
         $command->info('Removing empty directories...');
 
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->directories()->in($dir);
 
         foreach ($finder as $directory) {
-            if (! (new Finder())->in($directory->getRealPath())->files()->count()) {
+            if (! (new Finder)->in($directory->getRealPath())->files()->count()) {
                 File::deleteDirectory($directory->getRealPath());
                 $command->line("Removed empty directory: {$directory->getRealPath()}");
             }
@@ -238,9 +208,6 @@ class FileService
 
     /**
      * Cleanup the temporary files.
-     *
-     * @param array $paths
-     * @param Command $command
      */
     public function cleanup(array $paths, Command $command)
     {
@@ -248,8 +215,8 @@ class FileService
             try {
                 $this->delete($path);
             } catch (Exception $e) {
-                Log::error("Failed to delete {$path}: " . $e->getMessage());
-                $command->error("Failed to delete {$path}: " . $e->getMessage());
+                Log::error("Failed to delete {$path}: ".$e->getMessage());
+                $command->error("Failed to delete {$path}: ".$e->getMessage());
             }
         }
         $command->info('Cleanup completed.');

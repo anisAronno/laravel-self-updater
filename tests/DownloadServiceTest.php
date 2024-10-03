@@ -3,28 +3,30 @@
 namespace AnisAronno\LaravelAutoUpdater\Tests;
 
 use AnisAronno\LaravelAutoUpdater\Services\DownloadService;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Mockery;
-use Exception;
 
 class DownloadServiceTest extends TestCase
 {
     protected $downloadService;
+
     protected $command;
+
     protected $tempDir;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->downloadService = new DownloadService();
+        $this->downloadService = new DownloadService;
         $this->command = Mockery::mock(Command::class);
-        
+
         // Create a temporary directory for downloads
-        $this->tempDir = $this->app->basePath('temp/download_service_test_' . time());
+        $this->tempDir = $this->app->basePath('temp/download_service_test_'.time());
         File::makeDirectory($this->tempDir, 0755, true, true);
 
         // Mock Log facade for all tests
@@ -38,7 +40,7 @@ class DownloadServiceTest extends TestCase
         if (File::isDirectory($this->tempDir)) {
             File::deleteDirectory($this->tempDir);
         }
-        
+
         Mockery::close();
         parent::tearDown();
     }
@@ -46,7 +48,7 @@ class DownloadServiceTest extends TestCase
     public function testSuccessfulDownload()
     {
         $url = 'https://example.com/update.zip';
-        $destination = $this->tempDir . '/update.zip';
+        $destination = $this->tempDir.'/update.zip';
         $content = 'Mock file content';
 
         $responseMock = Mockery::mock('Illuminate\Http\Client\Response');
@@ -67,7 +69,7 @@ class DownloadServiceTest extends TestCase
     public function testFailedDownload()
     {
         $url = 'https://example.com/update.zip';
-        $destination = $this->tempDir . '/update.zip';
+        $destination = $this->tempDir.'/update.zip';
 
         $responseMock = Mockery::mock('Illuminate\Http\Client\Response');
         $responseMock->shouldReceive('failed')->andReturn(true);

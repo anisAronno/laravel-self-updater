@@ -28,8 +28,8 @@ class DownloadService
             $command->info("Download completed: $destination");
             Log::info("Update downloaded successfully to: $destination");
         } catch (Exception $e) {
-            Log::error("Download failed: " . $e->getMessage());
-            $command->error("Download failed: " . $e->getMessage());
+            Log::error('Download failed: '.$e->getMessage());
+            $command->error('Download failed: '.$e->getMessage());
             throw $e;
         }
     }
@@ -37,7 +37,7 @@ class DownloadService
     protected function saveFile(string $destination, string $content)
     {
         $directory = dirname($destination);
-        if (!File::isDirectory($directory)) {
+        if (! File::isDirectory($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
 

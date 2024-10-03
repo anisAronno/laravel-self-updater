@@ -15,7 +15,7 @@ class ComposerServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->composerService = new ComposerService();
+        $this->composerService = new ComposerService;
     }
 
     protected function tearDown(): void
@@ -27,13 +27,13 @@ class ComposerServiceTest extends TestCase
     public function testRunComposerInstall()
     {
         $this->mockComposerExecution('install --no-interaction', true);
-    
+
         Log::shouldReceive('info')
             ->twice()
             ->with(Mockery::type('string')); // Expect the log to be called with a string
-    
+
         $this->composerService->runComposerInstall();
-    
+
         // Assert that the composer install process was successful
         $this->assertTrue(true); // This confirms that the command ran without issues.
     }
@@ -41,13 +41,13 @@ class ComposerServiceTest extends TestCase
     public function testRunComposerUpdate()
     {
         $this->mockComposerExecution('update --no-interaction', true);
-    
+
         Log::shouldReceive('info')
             ->twice()
             ->with(Mockery::type('string')); // Expect the log to be called with a string
-    
+
         $this->composerService->runComposerUpdate();
-    
+
         // Assert that the composer update process was successful
         $this->assertTrue(true); // This confirms that the command ran without issues.
     }

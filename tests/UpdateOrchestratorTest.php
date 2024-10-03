@@ -7,21 +7,23 @@ use AnisAronno\LaravelAutoUpdater\Services\ComposerService;
 use AnisAronno\LaravelAutoUpdater\Services\DownloadService;
 use AnisAronno\LaravelAutoUpdater\Services\FileService;
 use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
+use Illuminate\Console\Command;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Mockery;
-use Illuminate\Console\Command;
-
-
 
 class UpdateOrchestratorTest extends TestCase
 {
- 
     protected $backupService;
+
     protected $downloadService;
+
     protected $fileService;
+
     protected $composerService;
+
     protected $updateOrchestrator;
+
     protected $command;
 
     protected function setUp(): void
@@ -38,7 +40,7 @@ class UpdateOrchestratorTest extends TestCase
             $this->backupService,
             $this->downloadService,
             $this->fileService,
-            $this->composerService
+            $this->composerService,
         ])->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
@@ -62,13 +64,12 @@ class UpdateOrchestratorTest extends TestCase
         $this->assertEquals(DownloadService::class, $parameters[1]->getType()->getName());
         $this->assertEquals(FileService::class, $parameters[2]->getType()->getName());
         $this->assertEquals(ComposerService::class, $parameters[3]->getType()->getName());
-        
+
         // Check the type of the fifth parameter
         $fifthParamType = $parameters[4]->getType();
         $this->assertTrue($fifthParamType->allowsNull());
         $this->assertEquals('callable', $fifthParamType->getName());
     }
-
 
     public function testGetUpdateUrlMethod()
     {

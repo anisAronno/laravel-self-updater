@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Log;
 class UpdateOrchestrator
 {
     protected BackupService $backupService;
+
     protected DownloadService $downloadService;
+
     protected FileService $fileService;
+
     protected ComposerService $composerService;
+
     protected $artisanCaller;
 
     public function __construct(
@@ -68,6 +72,7 @@ class UpdateOrchestrator
     {
         $backupPath = $this->backupService->backup($command);
         $command->info('Backup completed successfully.');
+
         return $backupPath;
     }
 
@@ -104,8 +109,9 @@ class UpdateOrchestrator
         $requireComposerInstall = config('auto-updater.require_composer_install', false);
         $requireComposerUpdate = config('auto-updater.require_composer_update', false);
 
-        if (!$requireComposerInstall && !$requireComposerUpdate) {
+        if (! $requireComposerInstall && ! $requireComposerUpdate) {
             $command->info('Skipping composer install/update.');
+
             return;
         }
 
@@ -149,6 +155,7 @@ class UpdateOrchestrator
         if (is_null($zipballUrl)) {
             throw new Exception('No update available.');
         }
+
         return $zipballUrl;
     }
 }

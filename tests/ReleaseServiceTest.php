@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Services;
 
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
+use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
+use AnisAronno\LaravelAutoUpdater\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use Mockery;
-use AnisAronno\LaravelAutoUpdater\Tests\TestCase;
 
 class ReleaseServiceTest extends TestCase
 {
@@ -113,5 +113,4 @@ class ReleaseServiceTest extends TestCase
         $result = $service->collectReleaseData();
         $this->assertEquals(['version' => 'latest', 'data' => 'latest release data'], $result);
     }
-
 }

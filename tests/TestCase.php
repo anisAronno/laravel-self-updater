@@ -4,8 +4,8 @@ namespace AnisAronno\LaravelAutoUpdater\Tests;
 
 use AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Mockery;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -15,7 +15,7 @@ class TestCase extends Orchestra
         $this->setUpConfig();
         Mockery::getConfiguration()->allowMockingNonExistentMethods(true);
     }
-    
+
     protected function getPackageProviders($app)
     {
         return [

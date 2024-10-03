@@ -2,12 +2,11 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use ZipArchive;
-use Exception;
 
 class BackupService
 {
@@ -15,8 +14,6 @@ class BackupService
 
     /**
      * BackupService constructor.
-     *
-     * @param FileService $fileService
      */
     public function __construct(FileService $fileService)
     {
@@ -26,22 +23,20 @@ class BackupService
     /**
      * Create a backup of the project files.
      *
-     * @param Command $command
-     * @return string
      * @throws Exception
      */
     public function backup(Command $command): string
     {
         $backupPath = $this->getBackupPath();
-        
+
         try {
             File::ensureDirectoryExists($backupPath);
 
             $command->info('Starting backup process...');
             $filesToBackup = $this->fileService->getFilesToBackup(base_path());
 
-            $zip = new ZipArchive();
-            $zipPath = $backupPath . '/backup.zip';
+            $zip = new ZipArchive;
+            $zipPath = $backupPath.'/backup.zip';
 
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
                 throw new Exception("Cannot create zip file: $zipPath");
@@ -51,7 +46,7 @@ class BackupService
             $progressBar->start();
 
             foreach ($filesToBackup as $source => $target) {
-                $relativeTarget = str_replace(base_path() . '/', '', $target);
+                $relativeTarget = str_replace(base_path().'/', '', $target);
                 if (File::isDirectory($source)) {
                     $zip->addEmptyDir($relativeTarget);
                 } else {
@@ -64,13 +59,13 @@ class BackupService
             $progressBar->finish();
 
             $command->info("\nBackup completed: $zipPath");
-            
+
             $this->logBackupDetails($backupPath, $zipPath);
 
             return $backupPath;
         } catch (Exception $e) {
-            Log::error('Backup failed: ' . $e->getMessage());
-            $command->error('Backup failed: ' . $e->getMessage());
+            Log::error('Backup failed: '.$e->getMessage());
+            $command->error('Backup failed: '.$e->getMessage());
             throw $e;
         }
     }
@@ -78,22 +73,20 @@ class BackupService
     /**
      * Rollback to the backup.
      *
-     * @param string $backupPath
-     * @param Command $command
      * @throws Exception
      */
     public function rollback(string $backupPath, Command $command)
     {
-        $zipPath = $backupPath . '/backup.zip';
+        $zipPath = $backupPath.'/backup.zip';
 
-        if (!File::exists($zipPath)) {
+        if (! File::exists($zipPath)) {
             throw new Exception("Backup not found: $zipPath");
         }
 
         $command->info('Rolling back to backup...');
 
         try {
-            $zip = new ZipArchive();
+            $zip = new ZipArchive;
             if ($zip->open($zipPath) !== true) {
                 throw new Exception("Cannot open zip file: $zipPath");
             }
@@ -110,27 +103,22 @@ class BackupService
 
             $command->info("Rolled back to backup: $backupPath");
         } catch (Exception $e) {
-            Log::error('Rollback failed: ' . $e->getMessage());
-            $command->error('Rollback failed: ' . $e->getMessage());
+            Log::error('Rollback failed: '.$e->getMessage());
+            $command->error('Rollback failed: '.$e->getMessage());
             throw $e;
         }
     }
 
     /**
      * Get the backup path.
-     *
-     * @return string
      */
     protected function getBackupPath(): string
     {
-        return storage_path('app/backup/' . date('Y-m-d_H-i-s'));
+        return storage_path('app/backup/'.date('Y-m-d_H-i-s'));
     }
 
     /**
      * Log backup details.
-     *
-     * @param string $backupPath
-     * @param string $zipPath
      */
     protected function logBackupDetails(string $backupPath, string $zipPath): void
     {
@@ -138,27 +126,23 @@ class BackupService
         $backupFiles = count(File::allFiles($backupPath));
 
         Log::info("Backup created at: $backupPath");
-        Log::info("Backup size: " . $this->formatBytes($backupSize));
+        Log::info('Backup size: '.$this->formatBytes($backupSize));
         Log::info("Files backed up: $backupFiles");
     }
 
     /**
      * Format bytes to human-readable format.
-     *
-     * @param int $bytes
-     * @param int $precision
-     * @return string
      */
     protected function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-    
+
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-    
+
         $bytes /= (1 << (10 * $pow));
-    
-        return round($bytes, $precision) . ' ' . $units[$pow];
+
+        return round($bytes, $precision).' '.$units[$pow];
     }
 }

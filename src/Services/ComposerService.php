@@ -3,8 +3,8 @@
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
 use Exception;
-use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Process;
 
 class ComposerService
 {
@@ -31,18 +31,17 @@ class ComposerService
     /**
      * Execute the composer command.
      *
-     * @param string $command
      * @throws Exception
      */
     protected function executeComposerCommand(string $command)
     {
         try {
             $result = Process::run("composer $command 2>&1");
-            if (!$result->successful()) {
+            if (! $result->successful()) {
                 $this->handleCommandFailure($result->output());
             }
             Log::info("Composer command executed successfully: $command");
-            Log::info("Output: " . $result->output());
+            Log::info('Output: '.$result->output());
         } catch (\Throwable $e) {
             $this->handleCommandFailure($e->getMessage());
         }

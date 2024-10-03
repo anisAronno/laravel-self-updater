@@ -12,23 +12,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BackupServiceTest extends TestCase
 {
     protected $backupService;
+
     protected $fileService;
+
     protected $command;
+
     protected $output;
+
     protected $tempDir;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->fileService = new FileService();
+        $this->fileService = new FileService;
         $this->backupService = new BackupService($this->fileService);
         $this->output = Mockery::mock(OutputInterface::class);
         $this->command = Mockery::mock(Command::class);
         $this->command->shouldReceive('getOutput')->andReturn($this->output);
 
         // Create a temporary directory for all backup operations
-        $this->tempDir = $this->app->basePath('temp/backup_service_test_' . time());
+        $this->tempDir = $this->app->basePath('temp/backup_service_test_'.time());
         File::makeDirectory($this->tempDir, 0755, true, true);
     }
 
@@ -38,7 +42,7 @@ class BackupServiceTest extends TestCase
         if (File::isDirectory($this->tempDir)) {
             File::deleteDirectory($this->tempDir);
         }
-        
+
         Mockery::close();
         parent::tearDown();
     }
@@ -46,8 +50,8 @@ class BackupServiceTest extends TestCase
     public function testBackup()
     {
         // Create test files
-        File::put($this->tempDir . '/file1.txt', 'Content 1');
-        File::put($this->tempDir . '/file2.txt', 'Content 2');
+        File::put($this->tempDir.'/file1.txt', 'Content 1');
+        File::put($this->tempDir.'/file2.txt', 'Content 2');
 
         // Mock the command and output
         $this->command->shouldReceive('info')->atLeast()->once();
@@ -62,11 +66,11 @@ class BackupServiceTest extends TestCase
 
         // Assertions
         $this->assertDirectoryExists($backupPath);
-        $this->assertFileExists($backupPath . '/backup.zip');
+        $this->assertFileExists($backupPath.'/backup.zip');
 
         // Verify zip contents
-        $zip = new \ZipArchive();
-        $this->assertTrue($zip->open($backupPath . '/backup.zip') === TRUE);
+        $zip = new \ZipArchive;
+        $this->assertTrue($zip->open($backupPath.'/backup.zip') === true);
         $this->assertGreaterThan(0, $zip->numFiles);
         $zip->close();
     }
@@ -74,11 +78,11 @@ class BackupServiceTest extends TestCase
     public function testRollback()
     {
         // Create a mock backup
-        $backupPath = $this->tempDir . '/backup';
+        $backupPath = $this->tempDir.'/backup';
         File::makeDirectory($backupPath);
-        $zipPath = $backupPath . '/backup.zip';
+        $zipPath = $backupPath.'/backup.zip';
 
-        $zip = new \ZipArchive();
+        $zip = new \ZipArchive;
         $zip->open($zipPath, \ZipArchive::CREATE);
         $zip->addFromString('file1.txt', 'Backup content 1');
         $zip->addFromString('file2.txt', 'Backup content 2');
@@ -109,7 +113,7 @@ class BackupServiceTest extends TestCase
     public function testRollbackWithNonExistentBackup()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Backup not found: /non/existent/path/backup.zip");
+        $this->expectExceptionMessage('Backup not found: /non/existent/path/backup.zip');
 
         // We're not expecting the error method to be called anymore
         $this->command->shouldReceive('error')->never();
