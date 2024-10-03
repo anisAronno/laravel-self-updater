@@ -4,10 +4,18 @@ namespace AnisAronno\LaravelAutoUpdater\Tests;
 
 use AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setUpConfig();
+        Mockery::getConfiguration()->allowMockingNonExistentMethods(true);
+    }
+
     protected function getPackageProviders($app)
     {
         return [
@@ -15,11 +23,16 @@ class TestCase extends Orchestra
         ];
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function setUpConfig()
     {
-        // Set up default configuration for testing
-        $app['config']->set('auto-updater.release_url', 'https://github.com/user/repo');
-        $app['config']->set('auto-updater.purchase_key', 'test-purchase-key');
+        config([
+            'auto-updater.release_url' => 'https://github.com/user/repo',
+            'auto-updater.purchase_key' => 'test-purchase-key',
+            'auto-updater.exclude_items' => ['.env', '.git', 'storage', 'tests'],
+            'auto-updater.middleware' => ['web'],
+            'auto-updater.require_composer_install' => false,
+            'auto-updater.require_composer_update' => false,
+        ]);
     }
 
     public function artisan($command, $parameters = [])

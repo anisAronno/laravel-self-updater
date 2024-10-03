@@ -6,14 +6,7 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Process;
 
-/**
- * Class UpdateOrchestrator
- *
- * This class is responsible for orchestrating the update process.
- * It coordinates the execution of various tasks required to update the project.
- */
 class UpdateOrchestrator
 {
     protected BackupService $backupService;
@@ -24,22 +17,24 @@ class UpdateOrchestrator
 
     protected ComposerService $composerService;
 
-    /**
-     * UpdateOrchestrator constructor.
-     */
-    public function __construct(BackupService $backupService, DownloadService $downloadService, FileService $fileService, ComposerService $composerService)
-    {
+    protected $artisanCaller;
+
+    public function __construct(
+        BackupService $backupService,
+        DownloadService $downloadService,
+        FileService $fileService,
+        ComposerService $composerService,
+        ?callable $artisanCaller = null
+    ) {
         $this->backupService = $backupService;
         $this->downloadService = $downloadService;
         $this->fileService = $fileService;
         $this->composerService = $composerService;
+        $this->artisanCaller = $artisanCaller ?? function ($command, $parameters = []) {
+            return Artisan::call($command, $parameters);
+        };
     }
 
-    /**
-     * Process the update.
-     *
-     * @throws Exception
-     */
     public function processUpdate(array $releaseData, Command $command)
     {
         $backupPath = null;
@@ -61,27 +56,18 @@ class UpdateOrchestrator
         }
     }
 
-    /**
-     * Enable maintenance mode.
-     */
     protected function enableMaintenanceMode(Command $command)
     {
-        Artisan::call('down');
+        ($this->artisanCaller)('down');
         $command->info('Maintenance mode enabled.');
     }
 
-    /**
-     * Disable maintenance mode.
-     */
     protected function disableMaintenanceMode(Command $command)
     {
-        Artisan::call('up');
+        ($this->artisanCaller)('up');
         $command->info('Maintenance mode disabled.');
     }
 
-    /**
-     * Create a backup of the project files.
-     */
     protected function createBackup(Command $command): string
     {
         $backupPath = $this->backupService->backup($command);
@@ -90,11 +76,6 @@ class UpdateOrchestrator
         return $backupPath;
     }
 
-    /**
-     * Update the project files.
-     *
-     * @throws Exception
-     */
     protected function updateProject(array $releaseData, Command $command)
     {
         $zipballUrl = $this->getUpdateUrl($releaseData);
@@ -109,57 +90,44 @@ class UpdateOrchestrator
         $command->info('Files updated successfully.');
     }
 
-    /**
-     * Get the update URL from the release data.
-     *
-     * @throws Exception
-     */
-    protected function getUpdateUrl(array $releaseData): string
-    {
-        $zipballUrl = $releaseData['download_url'] ?? null;
-        if (is_null($zipballUrl)) {
-            throw new Exception('No update available.');
-        }
-
-        return $zipballUrl;
-    }
-
-    /**
-     * Run the migrations.
-     */
     protected function runMigrations(Command $command)
     {
         $command->info('Running migrations...');
-        Artisan::call('migrate', ['--force' => true]);
+        ($this->artisanCaller)('migrate', ['--force' => true]);
         $command->info('Migrations completed.');
     }
 
-    /**
-     * Clear the cache.
-     */
     protected function clearCache(Command $command)
     {
         $command->info('Clearing cache...');
-        Artisan::call('optimize:clear');
-        Process::run('composer clear-cache');
+        ($this->artisanCaller)('optimize:clear');
         $command->info('Cache cleared.');
     }
 
-    /**
-     * Install the Composer dependencies.
-     *
-     * @throws Exception
-     */
     protected function installComposerDependencies(Command $command)
     {
-        $command->info('Running composer install...');
-        $this->composerService->runComposerInstall(); // Use ComposerService
-        $command->info('Composer install completed.');
+        $requireComposerInstall = config('auto-updater.require_composer_install', false);
+        $requireComposerUpdate = config('auto-updater.require_composer_update', false);
+
+        if (! $requireComposerInstall && ! $requireComposerUpdate) {
+            $command->info('Skipping composer install/update.');
+
+            return;
+        }
+
+        if ($requireComposerInstall) {
+            $command->info('Running composer install...');
+            $this->composerService->runComposerInstall();
+            $command->info('Composer install completed.');
+        }
+
+        if ($requireComposerUpdate) {
+            $command->info('Running composer update...');
+            $this->composerService->runComposerUpdate();
+            $command->info('Composer update completed.');
+        }
     }
 
-    /**
-     * Cleanup the temporary files.
-     */
     protected function cleanup(array $paths, Command $command)
     {
         $command->info('Cleaning up...');
@@ -167,12 +135,7 @@ class UpdateOrchestrator
         $command->info('Cleanup completed.');
     }
 
-    /**
-     * Handle the failure scenario.
-     *
-     * @throws Exception
-     */
-    protected function handleFailure(Exception $e, string $backupPath, Command $command)
+    protected function handleFailure(Exception $e, ?string $backupPath, Command $command)
     {
         Log::error("Update failed: {$e->getMessage()}");
         $command->error("Update failed: {$e->getMessage()}");
@@ -184,5 +147,15 @@ class UpdateOrchestrator
         }
 
         throw $e;
+    }
+
+    protected function getUpdateUrl(array $releaseData): string
+    {
+        $zipballUrl = $releaseData['download_url'] ?? null;
+        if (is_null($zipballUrl)) {
+            throw new Exception('No update available.');
+        }
+
+        return $zipballUrl;
     }
 }

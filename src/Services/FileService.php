@@ -2,127 +2,213 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Finder\Finder;
 use ZipArchive;
 
-/**
- * Class FileService
- *
- * This class provides various file-related operations.
- */
 class FileService
 {
-    /**
-     * Get the list of files to back up.
-     */
+    protected $excludeItems;
+    protected $criticalDirectories;
+
+    public function __construct()
+    {
+        $this->excludeItems = config('auto-updater.exclude_items', []);
+        $this->criticalDirectories = [
+            base_path('bootstrap/cache'),
+            storage_path('app'),
+            storage_path('framework/cache'),
+            storage_path('framework/sessions'),
+            storage_path('framework/views'),
+            storage_path('logs'),
+        ];
+    }
+
     public function getFilesToBackup(string $basePath): array
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($basePath, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $finder = new Finder();
+        $finder->files()->in($basePath);
 
         $filesToBackup = [];
-
-        foreach ($iterator as $item) {
-            if ($item->isDir()) {
-                continue;
+        foreach ($finder as $file) {
+            $relativePath = $file->getRelativePathname();
+            if (! $this->shouldExclude($relativePath)) {
+                $filesToBackup[$file->getRealPath()] = $relativePath;
             }
-
-            $relativePath = str_replace($basePath.DIRECTORY_SEPARATOR, '', $item->getPathname());
-
-            if ($this->shouldExclude($relativePath)) {
-                continue;
-            }
-
-            $targetPath = $basePath.DIRECTORY_SEPARATOR.$relativePath;
-            $filesToBackup[$item->getPathname()] = $targetPath;
         }
 
         return $filesToBackup;
     }
 
-    /**
-     * Extract a zip file.
-     *
-     * @throws \Exception
-     */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive;
-
-        if ($zip->open($filePath) === true) {
-            File::ensureDirectoryExists($extractTo);
-            $zip->extractTo($extractTo);
-            $zip->close();
-
-            $extractedDirs = glob($extractTo.'/*', GLOB_ONLYDIR);
-
-            if (empty($extractedDirs)) {
-                throw new \Exception('Failed to locate extracted directory.');
-            }
-
-            $command->info('Zip file extracted successfully.');
-
-            return $extractedDirs[0];
-        } else {
-            throw new \Exception('Failed to open the zip file.');
+        $zip = new ZipArchive();
+        if ($zip->open($filePath) !== true) {
+            throw new Exception('Failed to open the zip file.');
         }
+
+        $this->performExtraction($zip, $extractTo);
+        $extractedDir = $this->getExtractedDirectory($extractTo);
+        $command->info('Zip file extracted successfully.');
+
+        return $extractedDir;
     }
 
-    /**
-     * Replace project files with the new files.
-     */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-
         $command->info('Replacing project files...');
-        $progressBar = $command->getOutput()->createProgressBar(iterator_count($iterator));
+        $finder = $this->getSourceFinder($source);
+        $progressBar = $command->getOutput()->createProgressBar($finder->count());
         $progressBar->start();
 
-        foreach ($iterator as $item) {
-            $target = str_replace($source, $destination, $item->getPathname());
-
-            if ($this->shouldSkipFile($target, $destination)) {
-                continue;
-            }
-
-            if ($item->isDir()) {
-                File::ensureDirectoryExists($target);
-            } else {
-                File::copy($item->getPathname(), $target, true);
-            }
-
-            $progressBar->advance();
-        }
+        $this->copyFiles($finder, $source, $destination, $progressBar);
 
         $progressBar->finish();
         $command->info("\nProject files replaced successfully.");
     }
 
-    /**
-     * Remove old files from the destination directory.
-     */
     public function removeOldFiles(string $source, string $destination, Command $command)
+    {
+        $command->info('Removing old files...');
+        $filesToRemove = $this->getFilesToRemove($source, $destination);
+        $progressBar = $command->getOutput()->createProgressBar(count($filesToRemove));
+        $progressBar->start();
+
+        $this->deleteOldFiles($filesToRemove, $destination, $progressBar);
+
+        $progressBar->finish();
+        $command->info("\nOld files removed successfully.");
+        $this->removeEmptyDirectories($destination, $command);
+    }
+
+    public function delete(string $path)
+    {
+        if (File::isDirectory($path)) {
+            File::deleteDirectory($path);
+        } elseif (File::exists($path)) {
+            File::delete($path);
+        }
+    }
+
+    public function cleanup(array $paths, Command $command)
+    {
+        foreach ($paths as $path) {
+            try {
+                $this->delete($path);
+            } catch (Exception $e) {
+                $this->logAndNotifyError("Failed to delete {$path}: " . $e->getMessage(), $command);
+            }
+        }
+        $command->info('Cleanup completed.');
+    }
+
+    protected function shouldExclude(string $path): bool
+    {
+        return $this->shouldSkipFile($path, base_path());
+    }
+
+    protected function shouldSkipFile(string $path, string $basePath): bool
+    {
+        $skipPaths = array_merge([
+            storage_path(),
+            $basePath . DIRECTORY_SEPARATOR . '.env',
+            $basePath . DIRECTORY_SEPARATOR . '.git',
+            $basePath . DIRECTORY_SEPARATOR . 'vendor',
+            $basePath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite',
+        ], $this->excludeItems);
+
+        return collect($skipPaths)->contains(fn ($skipPath) => str_starts_with($path, $skipPath));
+    }
+
+    protected function getFileList(string $dir): array
+    {
+        $finder = new Finder();
+        $finder->files()->in($dir);
+
+        return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
+    }
+
+    protected function removeEmptyDirectories(string $dir, Command $command)
+    {
+        if (! File::isDirectory($dir)) {
+            $command->warn("Directory does not exist: $dir");
+
+            return;
+        }
+
+        $command->info('Removing empty directories...');
+
+        try {
+            $this->processDirectories($dir, $command);
+        } catch (Exception $e) {
+            $this->logAndNotifyError("Error while removing empty directories: " . $e->getMessage(), $command);
+        }
+
+        $command->info('Empty directories removal process completed.');
+    }
+
+    private function performExtraction(ZipArchive $zip, string $extractTo): void
+    {
+        File::ensureDirectoryExists($extractTo);
+        $zip->extractTo($extractTo);
+        $zip->close();
+    }
+
+    private function getExtractedDirectory(string $extractTo): string
+    {
+        $extractedDirs = File::directories($extractTo);
+        if (empty($extractedDirs)) {
+            throw new Exception('Failed to locate extracted directory.');
+        }
+
+        return $extractedDirs[0];
+    }
+
+    private function getSourceFinder(string $source): Finder
+    {
+        $finder = new Finder();
+
+        return $finder->in($source)->ignoreDotFiles(false);
+    }
+
+    private function copyFiles(Finder $finder, string $source, string $destination, $progressBar): void
+    {
+        foreach ($finder as $item) {
+            $target = str_replace($source, $destination, $item->getRealPath());
+
+            if ($this->shouldSkipFile($target, $destination)) {
+                continue;
+            }
+
+            $this->copyFileOrCreateDirectory($item, $target);
+            $progressBar->advance();
+        }
+    }
+
+    private function copyFileOrCreateDirectory($item, string $target): void
+    {
+        if ($item->isDir()) {
+            File::ensureDirectoryExists($target);
+        } else {
+            File::copy($item->getRealPath(), $target, true);
+        }
+    }
+
+    private function getFilesToRemove(string $source, string $destination): array
     {
         $sourceFiles = $this->getFileList($source);
         $destFiles = $this->getFileList($destination);
 
-        $filesToRemove = array_diff($destFiles, $sourceFiles);
+        return array_diff($destFiles, $sourceFiles);
+    }
 
-        $command->info('Removing old files...');
-        $progressBar = $command->getOutput()->createProgressBar(count($filesToRemove));
-        $progressBar->start();
-
+    private function deleteOldFiles(array $filesToRemove, string $destination, $progressBar): void
+    {
         foreach ($filesToRemove as $file) {
-            $fullPath = $destination.DIRECTORY_SEPARATOR.$file;
+            $fullPath = $destination . DIRECTORY_SEPARATOR . $file;
 
             if ($this->shouldSkipFile($fullPath, $destination)) {
                 continue;
@@ -134,109 +220,50 @@ class FileService
 
             $progressBar->advance();
         }
-
-        $progressBar->finish();
-        $command->info("\nOld files removed successfully.");
-
-        $this->removeEmptyDirectories($destination, $command);
     }
 
-    /**
-     * Delete a file or directory.
-     */
-    public function delete(string $path)
+    private function processDirectories(string $dir, Command $command): void
     {
-        if (File::isDirectory($path)) {
-            File::deleteDirectory($path);
-        } elseif (File::exists($path)) {
-            File::delete($path);
+        $finder = new Finder();
+        $finder->directories()->in($dir);
+
+        foreach ($finder as $directory) {
+            $this->processDirectory($directory, $command);
         }
     }
 
-    /**
-     * Check if a file should be excluded from the backup.
-     */
-    protected function shouldExclude(string $path): bool
+    private function processDirectory($directory, Command $command): void
     {
-        return $this->shouldSkipFile($path, base_path());
-    }
+        $dirPath = $directory->getRealPath();
 
-    /**
-     * Check if a file should be skipped.
-     */
-    protected function shouldSkipFile(string $path, string $basePath): bool
-    {
-        $excludeItems = config('auto-updater.exclude_items', []);
+        if (! File::isDirectory($dirPath) || in_array($dirPath, $this->criticalDirectories)) {
+            return;
+        }
 
-        $skipPaths = array_merge([
-            storage_path(),
-            $basePath.DIRECTORY_SEPARATOR.'.env',
-            $basePath.DIRECTORY_SEPARATOR.'.git',
-            $basePath.DIRECTORY_SEPARATOR.'vendor',
-            $basePath.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'database.sqlite',
-        ], $excludeItems);
-
-        // Check if the path starts with any of the skip paths
-        foreach ($skipPaths as $skipPath) {
-            if (strpos($path, $skipPath) === 0) {
-                return true;
+        try {
+            if ($this->isEmptyDirectory($dirPath)) {
+                File::deleteDirectory($dirPath);
+                $command->line("Removed empty directory: $dirPath");
             }
+        } catch (Exception $e) {
+            $this->logAndNotifyWarning("Failed to process directory $dirPath: " . $e->getMessage(), $command);
         }
-
-        return false;
     }
 
-    /**
-     * Get the list of files in a directory.
-     */
-    protected function getFileList(string $dir): array
+    private function isEmptyDirectory(string $dirPath): bool
     {
-        $files = [];
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($iterator as $file) {
-            if (! $file->isDir()) {
-                $files[] = str_replace($dir.DIRECTORY_SEPARATOR, '', $file->getPathname());
-            }
-        }
-
-        return $files;
+        return ! (new Finder())->in($dirPath)->files()->count();
     }
 
-    /**
-     * Remove empty directories from a directory.
-     */
-    protected function removeEmptyDirectories(string $dir, Command $command)
+    private function logAndNotifyError(string $message, Command $command): void
     {
-        $command->info('Removing empty directories...');
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($iterator as $path) {
-            if ($path->isDir()) {
-                $dirPath = $path->getPathname();
-                if (! (new \RecursiveDirectoryIterator($dirPath))->valid()) {
-                    rmdir($dirPath);
-                    $command->line("Removed empty directory: $dirPath");
-                }
-            }
-        }
-        $command->info('Empty directories removed.');
+        Log::error($message);
+        $command->error($message);
     }
 
-    /**
-     * Cleanup the temporary files.
-     */
-    public function cleanup(array $paths, Command $command)
+    private function logAndNotifyWarning(string $message, Command $command): void
     {
-        foreach ($paths as $path) {
-            $this->delete($path);
-        }
-        $command->info('Cleanup completed.');
+        Log::warning($message);
+        $command->warn($message);
     }
 }
