@@ -30,7 +30,7 @@ class FileService
 
     public function getFilesToBackup(string $basePath): array
     {
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->files()->in($basePath);
 
         $filesToBackup = [];
@@ -46,7 +46,7 @@ class FileService
 
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         if ($zip->open($filePath) !== true) {
             throw new Exception('Failed to open the zip file.');
         }
@@ -126,7 +126,7 @@ class FileService
 
     protected function getFileList(string $dir): array
     {
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->files()->in($dir);
 
         return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
@@ -142,13 +142,61 @@ class FileService
 
         $command->info('Removing empty directories...');
 
-        try {
-            $this->processDirectories($dir, $command);
-        } catch (Exception $e) {
-            $this->logAndNotifyError('Error while removing empty directories: '.$e->getMessage(), $command);
-        }
+        $this->processDirectories($dir, $command);
 
         $command->info('Empty directories removal process completed.');
+    }
+
+    private function processDirectories(string $dir, Command $command): void
+    {
+        try {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $path) {
+                if ($path->isDir() && ! $path->isLink()) {
+                    $this->processDirectory($path->getPathname(), $command);
+                }
+            }
+        } catch (Exception $e) {
+            $this->logAndNotifyWarning("Error processing directories in $dir: ".$e->getMessage(), $command);
+        }
+    }
+
+    private function processDirectory(string $dirPath, Command $command): void
+    {
+        if (! File::isDirectory($dirPath) || in_array($dirPath, $this->criticalDirectories)) {
+            return;
+        }
+
+        try {
+            if ($this->isEmptyDirectory($dirPath)) {
+                File::deleteDirectory($dirPath);
+                $command->line("Removed empty directory: $dirPath");
+            }
+        } catch (Exception $e) {
+            $this->logAndNotifyWarning("Failed to process directory $dirPath: ".$e->getMessage(), $command);
+        }
+    }
+
+    private function isEmptyDirectory(string $dirPath): bool
+    {
+        try {
+            $iterator = new \FilesystemIterator($dirPath);
+
+            return ! $iterator->valid();
+        } catch (Exception $e) {
+            // If we can't read the directory, we'll assume it's not empty to be safe
+            return false;
+        }
+    }
+
+    private function logAndNotifyWarning(string $message, Command $command): void
+    {
+        Log::warning($message);
+        $command->warn($message);
     }
 
     private function performExtraction(ZipArchive $zip, string $extractTo): void
@@ -170,7 +218,7 @@ class FileService
 
     private function getSourceFinder(string $source): Finder
     {
-        $finder = new Finder;
+        $finder = new Finder();
 
         return $finder->in($source)->ignoreDotFiles(false);
     }
@@ -223,48 +271,9 @@ class FileService
         }
     }
 
-    private function processDirectories(string $dir, Command $command): void
-    {
-        $finder = new Finder;
-        $finder->directories()->in($dir);
-
-        foreach ($finder as $directory) {
-            $this->processDirectory($directory, $command);
-        }
-    }
-
-    private function processDirectory($directory, Command $command): void
-    {
-        $dirPath = $directory->getRealPath();
-
-        if (! File::isDirectory($dirPath) || in_array($dirPath, $this->criticalDirectories)) {
-            return;
-        }
-
-        try {
-            if ($this->isEmptyDirectory($dirPath)) {
-                File::deleteDirectory($dirPath);
-                $command->line("Removed empty directory: $dirPath");
-            }
-        } catch (Exception $e) {
-            $this->logAndNotifyWarning("Failed to process directory $dirPath: ".$e->getMessage(), $command);
-        }
-    }
-
-    private function isEmptyDirectory(string $dirPath): bool
-    {
-        return ! (new Finder)->in($dirPath)->files()->count();
-    }
-
     private function logAndNotifyError(string $message, Command $command): void
     {
         Log::error($message);
         $command->error($message);
-    }
-
-    private function logAndNotifyWarning(string $message, Command $command): void
-    {
-        Log::warning($message);
-        $command->warn($message);
     }
 }

@@ -34,6 +34,7 @@ class CheckUpdateCommand extends Command
 
             $latestVersion = ! empty($latestRelease['version']) ? ltrim($latestRelease['version'], 'v') : 'Not found';
             $changelog = $latestRelease['changelog'] ?? 'No changelog available';
+            $releaseData = $latestRelease['release_date'] ?? 'Not found';
 
             // Compare the current version with the latest release
             if (version_compare($latestVersion, $currentVersion, '>')) {
@@ -41,6 +42,7 @@ class CheckUpdateCommand extends Command
                 $this->line('Current Version: '.$currentVersion);
                 $this->line('Latest Version: '.$latestVersion);
                 $this->line('Changelog: '.PHP_EOL.$changelog);
+                $this->line('Release Date: '.PHP_EOL.$releaseData);
             } else {
                 $this->info('<fg=green>✅ Your project is up to date!</>');
             }

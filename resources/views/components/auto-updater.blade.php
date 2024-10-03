@@ -11,6 +11,7 @@
             <p>Latest Version: <span id="latestVersion" class="version-tag">{{ $latestVersion ?? 'Unknown' }}</span>
                 <span id="refreshIcon" class="refresh-icon" style="cursor: pointer;">&#x21bb;</span>
             </p>
+            <p>Release Date: <span id="releaseDate" class="version-tag">{{ $releaseDate ?? 'Unknown' }}</span></p>
 
             @if ($hasUpdate)
                 <button id="updateButton" class="update-button">Update Now</button>
