@@ -18,4 +18,6 @@ return [
         'public/.htaccess',
     ],
     'middleware' => ['web'],
+    'require_composer_install' => false,
+    'require_composer_update' => false,
 ];

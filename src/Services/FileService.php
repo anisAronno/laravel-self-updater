@@ -2,17 +2,13 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Finder\Finder;
 use ZipArchive;
 
-/**
- * Class FileService
- *
- * This class provides various file-related operations.
- */
 class FileService
 {
     /**
@@ -20,26 +16,15 @@ class FileService
      */
     public function getFilesToBackup(string $basePath): array
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($basePath, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $finder = new Finder;
+        $finder->files()->in($basePath);
 
         $filesToBackup = [];
-
-        foreach ($iterator as $item) {
-            if ($item->isDir()) {
-                continue;
+        foreach ($finder as $file) {
+            $relativePath = $file->getRelativePathname();
+            if (! $this->shouldExclude($relativePath)) {
+                $filesToBackup[$file->getRealPath()] = $basePath.DIRECTORY_SEPARATOR.$relativePath;
             }
-
-            $relativePath = str_replace($basePath.DIRECTORY_SEPARATOR, '', $item->getPathname());
-
-            if ($this->shouldExclude($relativePath)) {
-                continue;
-            }
-
-            $targetPath = $basePath.DIRECTORY_SEPARATOR.$relativePath;
-            $filesToBackup[$item->getPathname()] = $targetPath;
         }
 
         return $filesToBackup;
@@ -48,7 +33,7 @@ class FileService
     /**
      * Extract a zip file.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
@@ -59,17 +44,17 @@ class FileService
             $zip->extractTo($extractTo);
             $zip->close();
 
-            $extractedDirs = glob($extractTo.'/*', GLOB_ONLYDIR);
+            $extractedDirs = File::directories($extractTo);
 
             if (empty($extractedDirs)) {
-                throw new \Exception('Failed to locate extracted directory.');
+                throw new Exception('Failed to locate extracted directory.');
             }
 
             $command->info('Zip file extracted successfully.');
 
             return $extractedDirs[0];
         } else {
-            throw new \Exception('Failed to open the zip file.');
+            throw new Exception('Failed to open the zip file.');
         }
     }
 
@@ -78,17 +63,16 @@ class FileService
      */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-
         $command->info('Replacing project files...');
-        $progressBar = $command->getOutput()->createProgressBar(iterator_count($iterator));
+
+        $finder = new Finder;
+        $finder->in($source)->ignoreDotFiles(false);
+
+        $progressBar = $command->getOutput()->createProgressBar($finder->count());
         $progressBar->start();
 
-        foreach ($iterator as $item) {
-            $target = str_replace($source, $destination, $item->getPathname());
+        foreach ($finder as $item) {
+            $target = str_replace($source, $destination, $item->getRealPath());
 
             if ($this->shouldSkipFile($target, $destination)) {
                 continue;
@@ -97,7 +81,7 @@ class FileService
             if ($item->isDir()) {
                 File::ensureDirectoryExists($target);
             } else {
-                File::copy($item->getPathname(), $target, true);
+                File::copy($item->getRealPath(), $target, true);
             }
 
             $progressBar->advance();
@@ -112,12 +96,13 @@ class FileService
      */
     public function removeOldFiles(string $source, string $destination, Command $command)
     {
+        $command->info('Removing old files...');
+
         $sourceFiles = $this->getFileList($source);
         $destFiles = $this->getFileList($destination);
 
         $filesToRemove = array_diff($destFiles, $sourceFiles);
 
-        $command->info('Removing old files...');
         $progressBar = $command->getOutput()->createProgressBar(count($filesToRemove));
         $progressBar->start();
 
@@ -176,9 +161,8 @@ class FileService
             $basePath.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'database.sqlite',
         ], $excludeItems);
 
-        // Check if the path starts with any of the skip paths
         foreach ($skipPaths as $skipPath) {
-            if (strpos($path, $skipPath) === 0) {
+            if (str_starts_with($path, $skipPath)) {
                 return true;
             }
         }
@@ -191,16 +175,12 @@ class FileService
      */
     protected function getFileList(string $dir): array
     {
-        $files = [];
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
+        $finder = new Finder;
+        $finder->files()->in($dir);
 
-        foreach ($iterator as $file) {
-            if (! $file->isDir()) {
-                $files[] = str_replace($dir.DIRECTORY_SEPARATOR, '', $file->getPathname());
-            }
+        $files = [];
+        foreach ($finder as $file) {
+            $files[] = $file->getRelativePathname();
         }
 
         return $files;
@@ -212,20 +192,17 @@ class FileService
     protected function removeEmptyDirectories(string $dir, Command $command)
     {
         $command->info('Removing empty directories...');
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
 
-        foreach ($iterator as $path) {
-            if ($path->isDir()) {
-                $dirPath = $path->getPathname();
-                if (! (new \RecursiveDirectoryIterator($dirPath))->valid()) {
-                    rmdir($dirPath);
-                    $command->line("Removed empty directory: $dirPath");
-                }
+        $finder = new Finder;
+        $finder->directories()->in($dir);
+
+        foreach ($finder as $directory) {
+            if (! (new Finder)->in($directory->getRealPath())->files()->count()) {
+                File::deleteDirectory($directory->getRealPath());
+                $command->line("Removed empty directory: {$directory->getRealPath()}");
             }
         }
+
         $command->info('Empty directories removed.');
     }
 
@@ -235,7 +212,12 @@ class FileService
     public function cleanup(array $paths, Command $command)
     {
         foreach ($paths as $path) {
-            $this->delete($path);
+            try {
+                $this->delete($path);
+            } catch (Exception $e) {
+                Log::error("Failed to delete {$path}: ".$e->getMessage());
+                $command->error("Failed to delete {$path}: ".$e->getMessage());
+            }
         }
         $command->info('Cleanup completed.');
     }
