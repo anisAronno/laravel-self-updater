@@ -36,6 +36,7 @@ class GitHubProviderTest extends TestCase
             'tag_name' => 'v0.3.2',
             'zipball_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
             'body' => 'Test changelog',
+            'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
         $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
@@ -48,6 +49,7 @@ class GitHubProviderTest extends TestCase
             'version' => '0.3.2',
             'download_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
             'changelog' => 'Test changelog',
+            'release_date' => null,
         ];
 
         $this->assertEquals($expected, $this->provider->getLatestRelease());
@@ -61,6 +63,7 @@ class GitHubProviderTest extends TestCase
             'tag_name' => 'v0.3.2',
             'zipball_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
             'body' => 'Test changelog',
+            'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
         $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
@@ -73,6 +76,7 @@ class GitHubProviderTest extends TestCase
             'version' => '0.3.2',
             'download_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
             'changelog' => 'Test changelog',
+            'release_date' => null,
         ];
 
         $this->assertEquals($expected, $this->provider->getReleaseByVersion('0.3.2'));

@@ -3,6 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
 use InvalidArgumentException;
+use Carbon\Carbon;
 
 /**
  * Class CustomProvider
@@ -35,7 +36,7 @@ class CustomProvider extends AbstractVCSProvider
         }
 
         if ($this->purchaseKey) {
-            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
+            return $this->releaseUrl . '?purchase_key=' . urlencode($this->purchaseKey);
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));
@@ -63,6 +64,7 @@ class CustomProvider extends AbstractVCSProvider
             'version' => $data['version'] ? ltrim($data['version'], 'v') : null,
             'download_url' => $data['download_url'] ?? null,
             'changelog' => $data['changelog'] ?? 'No changelog available',
+            'release_date' => ! empty($data['release_date']) ? Carbon::parse($data['release_date'])->format('d M, Y h:i:s a') : null,
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
 use Exception;
+use Carbon\Carbon;
 
 /**
  * Class BitbucketProvider
@@ -59,11 +60,13 @@ class BitbucketProvider extends AbstractVCSProvider
     {
         [$workspace, $repo_slug] = $this->extractUserAndRepo();
         $repositoryParseData = compact('workspace', 'repo_slug');
+        $releaseDate = data_get($data, 'target.date', null);
 
         return [
             'version' => data_get($data, 'name'),
             'download_url' => $this->getZipDownloadUrl($repositoryParseData, data_get($data, 'name')),
             'changelog' => data_get($data, 'target.message', 'No changelog available'),
+            'release_date' => ! empty($releaseDate) ? Carbon::parse($releaseDate)->format('d M, Y h:i:s a') : null,
         ];
     }
 

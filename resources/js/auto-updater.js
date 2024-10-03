@@ -52,7 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Current Version: <span id="currentVersion" class="version-tag">${data.currentVersion || 'Unknown'}</span></p>
         <p>Latest Version: <span id="latestVersion" class="version-tag">${data.latestVersion || 'Unknown'}</span>
             <span id="refreshIcon" class="refresh-icon" style="cursor: pointer;">&#x21bb;</span>
-        </p>`;
+        </p>
+        <p>Release Date: <span id="latestVersion" class="version-tag">${data.releaseDate || 'Unknown' }</span></p>
+        `;
         elements.autoUpdaterContent.innerHTML += versionInfo;
 
         if (data.hasUpdate) {
