@@ -41,8 +41,8 @@ class CheckUpdateCommand extends Command
                 $this->info('<fg=yellow;bg=black;options=bold>🚀  Update Available! 🚀</>', 'info');
                 $this->line('Current Version: '.$currentVersion);
                 $this->line('Latest Version: '.$latestVersion);
+                $this->line('Release Date: '.$releaseData);
                 $this->line('Changelog: '.PHP_EOL.$changelog);
-                $this->line('Release Date: '.PHP_EOL.$releaseData);
             } else {
                 $this->info('<fg=green>✅ Your project is up to date!</>');
             }

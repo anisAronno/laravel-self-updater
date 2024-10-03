@@ -19,7 +19,7 @@ class FileServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->fileService = new FileService;
+        $this->fileService = new FileService();
 
         // Create a temporary directory for all file operations
         $this->tempDir = $this->app->basePath('temp/file_service_test_'.time());
@@ -32,13 +32,18 @@ class FileServiceTest extends TestCase
         $this->command->shouldReceive('line')->byDefault();
 
         // Create a stub for ProgressBar
-        $progressBar = new class
-        {
-            public function start() {}
+        $progressBar = new class () {
+            public function start()
+            {
+            }
 
-            public function advance() {}
+            public function advance()
+            {
+            }
 
-            public function finish() {}
+            public function finish()
+            {
+            }
         };
 
         // Mock the output and progress bar creation
@@ -88,7 +93,7 @@ class FileServiceTest extends TestCase
         $extractTo = $this->tempDir.'/extracted';
 
         // Create a test zip file
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         if ($zip->open($zipFile, ZipArchive::CREATE) === true) {
             $zip->addFromString('test.txt', 'Test content');
             $zip->addEmptyDir('empty_dir');
