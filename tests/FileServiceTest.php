@@ -32,18 +32,13 @@ class FileServiceTest extends TestCase
         $this->command->shouldReceive('line')->byDefault();
 
         // Create a stub for ProgressBar
-        $progressBar = new class () {
-            public function start()
-            {
-            }
+        $progressBar = new class
+        {
+            public function start() {}
 
-            public function advance()
-            {
-            }
+            public function advance() {}
 
-            public function finish()
-            {
-            }
+            public function finish() {}
         };
 
         // Mock the output and progress bar creation
