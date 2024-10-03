@@ -22,7 +22,7 @@ class DownloadServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->downloadService = new DownloadService();
+        $this->downloadService = new DownloadService;
         $this->command = Mockery::mock(Command::class);
 
         // Create a temporary directory for downloads
