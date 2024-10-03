@@ -187,6 +187,7 @@ For custom update sources, ensure your API returns:
 {
   "version": "1.0.0",
   "download_url": "https://example.com/api/v1/release",
+  "release_date": "01-02-2024",
   "changelog": "Your changelog text"
 }
 ```
