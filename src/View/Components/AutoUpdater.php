@@ -21,8 +21,6 @@ class AutoUpdater extends Component
 
     /**
      * Create a new component instance.
-     *
-     * @param ReleaseService $releaseService
      */
     public function __construct(ReleaseService $releaseService)
     {
@@ -42,8 +40,6 @@ class AutoUpdater extends Component
 
     /**
      * Check if a new version is available.
-     *
-     * @return JsonResponse
      */
     public function initiateSystemUpdate(): JsonResponse
     {
@@ -60,8 +56,6 @@ class AutoUpdater extends Component
 
     /**
      * Check for system updates.
-     *
-     * @return JsonResponse
      */
     public function checkForSystemUpdates(): JsonResponse
     {
@@ -75,9 +69,6 @@ class AutoUpdater extends Component
 
     /**
      * Retrieve version data from cache or fetch it from the repository.
-     *
-     * @param bool $forceRefresh
-     * @return array
      */
     private function retrieveVersionData(bool $forceRefresh = false): array
     {
@@ -90,8 +81,6 @@ class AutoUpdater extends Component
 
     /**
      * Check if version data is cached.
-     *
-     * @return bool
      */
     private function isVersionDataCached(): bool
     {
@@ -100,8 +89,6 @@ class AutoUpdater extends Component
 
     /**
      * Get version data from cache.
-     *
-     * @return array
      */
     private function getVersionDataFromCache(): array
     {
@@ -110,8 +97,6 @@ class AutoUpdater extends Component
 
     /**
      * Fetch and store version data.
-     *
-     * @return array
      */
     private function fetchAndStoreVersionData(): array
     {
@@ -127,8 +112,6 @@ class AutoUpdater extends Component
 
     /**
      * Fetch the latest version data.
-     *
-     * @return array
      */
     private function fetchLatestVersionData(): array
     {
@@ -140,10 +123,6 @@ class AutoUpdater extends Component
 
     /**
      * Compare and structure version data.
-     *
-     * @param string $currentVersion
-     * @param array $latestRelease
-     * @return array
      */
     private function compareAndStructureVersionData(string $currentVersion, array $latestRelease): array
     {
@@ -167,10 +146,6 @@ class AutoUpdater extends Component
 
     /**
      * Check if a new version is available.
-     *
-     * @param string $currentVersion
-     * @param string $latestVersion
-     * @return bool
      */
     private function isNewVersionAvailable(string $currentVersion, string $latestVersion): bool
     {
@@ -179,8 +154,6 @@ class AutoUpdater extends Component
 
     /**
      * Store version data in cache.
-     *
-     * @param array $versionData
      */
     private function storeVersionDataInCache(array $versionData): void
     {
@@ -189,9 +162,6 @@ class AutoUpdater extends Component
 
     /**
      * Create an error response.
-     *
-     * @param Exception $e
-     * @return array
      */
     private function createErrorResponse(Exception $e): array
     {
@@ -203,11 +173,6 @@ class AutoUpdater extends Component
 
     /**
      * Create a JSON response.
-     *
-     * @param bool $success
-     * @param string $message
-     * @param array $data
-     * @return JsonResponse
      */
     private function createJsonResponse(bool $success, string $message, array $data = []): JsonResponse
     {
