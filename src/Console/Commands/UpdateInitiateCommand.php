@@ -37,6 +37,15 @@ class UpdateInitiateCommand extends Command
                 return Command::SUCCESS;
             }
 
+            $currentVersion = $this->releaseService->getCurrentVersion();
+            $latestVersion = ltrim($releaseData['version'], 'v');
+
+            if (! version_compare($latestVersion, $currentVersion, '>')) {
+                $this->error('You are already using the latest version.');
+
+                return Command::SUCCESS;
+            }
+
             $this->info('Update process has been started.');
 
             $this->updateOrchestrator->processUpdate($releaseData, $this);

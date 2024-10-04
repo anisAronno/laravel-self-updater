@@ -44,6 +44,11 @@ class UpdateInitiateCommandTest extends TestCase
                 'download_url' => 'https://example.com/download/1.2.0',
             ]);
 
+        $this->releaseService
+            ->shouldReceive('getCurrentVersion')
+            ->once()
+            ->andReturn('1.1.0');
+
         $this->updateOrchestrator
             ->shouldReceive('processUpdate')
             ->with([
@@ -63,12 +68,17 @@ class UpdateInitiateCommandTest extends TestCase
     {
         $this->releaseService
             ->shouldReceive('collectReleaseData')
-            ->with(null) // No specific version passed, so it should fetch the latest version
+            ->with(null)
             ->once()
             ->andReturn([
                 'version' => '1.3.0',
                 'download_url' => 'https://example.com/download/1.3.0',
             ]);
+
+        $this->releaseService
+            ->shouldReceive('getCurrentVersion')
+            ->once()
+            ->andReturn('1.2.0');
 
         $this->updateOrchestrator
             ->shouldReceive('processUpdate')
@@ -120,13 +130,35 @@ class UpdateInitiateCommandTest extends TestCase
             ->with('1.2.0')
             ->once()
             ->andReturn([
-                'version' => null, // Missing data
+                'version' => null,
                 'download_url' => null,
             ]);
 
         $this->artisan('update:initiate 1.2.0')
             ->expectsOutput('Initiating update for version: 1.2.0')
             ->expectsOutput('No update available.')
+            ->assertExitCode(0);
+    }
+
+    public function testAlreadyUsingLatestVersion()
+    {
+        $this->releaseService
+            ->shouldReceive('collectReleaseData')
+            ->with(null)
+            ->once()
+            ->andReturn([
+                'version' => '1.2.0',
+                'download_url' => 'https://example.com/download/1.2.0',
+            ]);
+
+        $this->releaseService
+            ->shouldReceive('getCurrentVersion')
+            ->once()
+            ->andReturn('1.2.0');
+
+        $this->artisan('update:initiate')
+            ->expectsOutput('Initiating update for the latest version.')
+            ->expectsOutput('You are already using the latest version.')
             ->assertExitCode(0);
     }
 }

@@ -46,7 +46,7 @@ class GitHubProviderTest extends TestCase
             ->andReturn($mockResponse);
 
         $expected = [
-            'version' => '0.3.2',
+            'version' => 'v0.3.2',
             'download_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
             'changelog' => 'Test changelog',
             'release_date' => null,
@@ -73,7 +73,7 @@ class GitHubProviderTest extends TestCase
             ->andReturn($mockResponse);
 
         $expected = [
-            'version' => '0.3.2',
+            'version' => 'v0.3.2',
             'download_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
             'changelog' => 'Test changelog',
             'release_date' => null,

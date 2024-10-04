@@ -19,17 +19,32 @@ class AutoUpdater extends Component
 
     private array $versionData;
 
+    /**
+     * Create a new component instance.
+     *
+     * @param ReleaseService $releaseService
+     */
     public function __construct(ReleaseService $releaseService)
     {
         $this->releaseService = $releaseService;
         $this->versionData = $this->retrieveVersionData();
     }
 
+    /**
+     * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         return view('auto-updater::components.auto-updater', $this->versionData);
     }
 
+    /**
+     * Check if a new version is available.
+     *
+     * @return JsonResponse
+     */
     public function initiateSystemUpdate(): JsonResponse
     {
         try {
@@ -43,6 +58,11 @@ class AutoUpdater extends Component
         }
     }
 
+    /**
+     * Check for system updates.
+     *
+     * @return JsonResponse
+     */
     public function checkForSystemUpdates(): JsonResponse
     {
         $this->versionData = $this->retrieveVersionData(true);
@@ -53,6 +73,12 @@ class AutoUpdater extends Component
         return $this->createJsonResponse(true, 'Data refreshed successfully.', $this->versionData);
     }
 
+    /**
+     * Retrieve version data from cache or fetch it from the repository.
+     *
+     * @param bool $forceRefresh
+     * @return array
+     */
     private function retrieveVersionData(bool $forceRefresh = false): array
     {
         if (! $forceRefresh && $this->isVersionDataCached()) {
@@ -62,16 +88,31 @@ class AutoUpdater extends Component
         return $this->fetchAndStoreVersionData();
     }
 
+    /**
+     * Check if version data is cached.
+     *
+     * @return bool
+     */
     private function isVersionDataCached(): bool
     {
         return Cache::has(self::CACHE_KEY);
     }
 
+    /**
+     * Get version data from cache.
+     *
+     * @return array
+     */
     private function getVersionDataFromCache(): array
     {
         return Cache::get(self::CACHE_KEY);
     }
 
+    /**
+     * Fetch and store version data.
+     *
+     * @return array
+     */
     private function fetchAndStoreVersionData(): array
     {
         try {
@@ -84,6 +125,11 @@ class AutoUpdater extends Component
         }
     }
 
+    /**
+     * Fetch the latest version data.
+     *
+     * @return array
+     */
     private function fetchLatestVersionData(): array
     {
         $currentVersion = $this->releaseService->getCurrentVersion();
@@ -92,6 +138,13 @@ class AutoUpdater extends Component
         return $this->compareAndStructureVersionData($currentVersion, $latestRelease);
     }
 
+    /**
+     * Compare and structure version data.
+     *
+     * @param string $currentVersion
+     * @param array $latestRelease
+     * @return array
+     */
     private function compareAndStructureVersionData(string $currentVersion, array $latestRelease): array
     {
         $versionData = [
@@ -112,16 +165,34 @@ class AutoUpdater extends Component
         return $versionData;
     }
 
+    /**
+     * Check if a new version is available.
+     *
+     * @param string $currentVersion
+     * @param string $latestVersion
+     * @return bool
+     */
     private function isNewVersionAvailable(string $currentVersion, string $latestVersion): bool
     {
         return version_compare($currentVersion, $latestVersion, '>');
     }
 
+    /**
+     * Store version data in cache.
+     *
+     * @param array $versionData
+     */
     private function storeVersionDataInCache(array $versionData): void
     {
         Cache::put(self::CACHE_KEY, $versionData, self::CACHE_DURATION_IN_SECONDS);
     }
 
+    /**
+     * Create an error response.
+     *
+     * @param Exception $e
+     * @return array
+     */
     private function createErrorResponse(Exception $e): array
     {
         return [
@@ -130,6 +201,14 @@ class AutoUpdater extends Component
         ];
     }
 
+    /**
+     * Create a JSON response.
+     *
+     * @param bool $success
+     * @param string $message
+     * @param array $data
+     * @return JsonResponse
+     */
     private function createJsonResponse(bool $success, string $message, array $data = []): JsonResponse
     {
         return response()->json(array_merge(

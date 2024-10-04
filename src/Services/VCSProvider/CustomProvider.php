@@ -61,7 +61,7 @@ class CustomProvider extends AbstractVCSProvider
     protected function parseReleaseData(array $data): array
     {
         return array_merge($data, [
-            'version' => $data['version'] ? ltrim($data['version'], 'v') : null,
+            'version' => $data['version'] ? $data['version'] : null,
             'download_url' => $data['download_url'] ?? null,
             'changelog' => $data['changelog'] ?? 'No changelog available',
             'release_date' => ! empty($data['release_date']) ? Carbon::parse($data['release_date'])->format('d M, Y h:i:s a') : null,
