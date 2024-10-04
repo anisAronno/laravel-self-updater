@@ -1,207 +1,155 @@
 // auto-updater.js
-document.addEventListener('DOMContentLoaded', () => {
-    const elements = {
-        autoUpdaterContent: document.querySelector('.auto-updater-content'),
-        outputContainer: document.getElementById('outputContainer'),
-        refreshMessage: document.getElementById('refreshMessage')
+document.addEventListener('DOMContentLoaded', function() {
+    var config = {
+        checkUrl: '',
+        updateUrl: '',
+        csrfToken: ''
     };
 
-    const config = {
-        checkUrl: '', // This will be set dynamically
-        updateUrl: '', // This will be set dynamically
-        csrfToken: '' // This will be set dynamically
-    };
-
-    const utils = {
-        showMessage: (message, isError = false, targetElement) => {            
-            if (targetElement) {
-                targetElement.style.display = 'block';
-                targetElement.style.color = isError ? 'red' : 'green';
-                targetElement.textContent = message;
-            }            
-        },
-        clearMessage: (messageElement) => {
-            if (messageElement) {
-                messageElement.style.display = 'none';
-                messageElement.textContent = '';
-            }
-        },
-        toggleSpinner: (element, isSpinning) => {
-            if (element) {
-                element.style.color = isSpinning ? 'green' : 'red';
-                element.classList.toggle('spin', isSpinning);
-            }
-        },
-        handleResponse: async (response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return await response.json();
-        }
-    };
-
-    const updateUI = (data) => {
-        elements.autoUpdaterContent.innerHTML = ''; // Clear existing content
+    function updateUI(data) {
+        var content = document.querySelector('.auto-updater-content');
+        if (!content) return;
 
         if (data.error) {
-            elements.autoUpdaterContent.innerHTML = `<div class="error-message">${data.error}</div>`;
+            content.innerHTML = `<div class="error-message">${data.error}</div>`;
             return;
         }
 
-        const versionInfo = `
-        <p>Current Version: <span id="currentVersion" class="version-tag">${data.currentVersion || 'Unknown'}</span></p>
-        <p>Latest Version: <span id="latestVersion" class="version-tag">${data.latestVersion || 'Unknown'}</span>
-            <span id="refreshIcon" class="refresh-icon" style="cursor: pointer;">&#x21bb;</span>
-        </p>
-        <p>Release Date: <span id="latestVersion" class="version-tag">${data.releaseDate || 'Unknown' }</span></p>
+        content.innerHTML = `
+            <p>Current Version: <span id="currentVersion" class="version-tag">${data.currentVersion || 'Unknown'}</span></p>
+            <p>Latest Version: <span id="latestVersion" class="version-tag">${data.latestVersion || 'Unknown'}</span>
+                <span id="refreshIcon" class="refresh-icon" style="cursor: pointer;">&#x21bb;</span>
+            </p>
         `;
-        elements.autoUpdaterContent.innerHTML += versionInfo;
 
         if (data.hasUpdate) {
-            const updateButton = `<button id="updateButton" class="update-button">Update Now</button>`;
-            elements.autoUpdaterContent.innerHTML += updateButton;
-
-            if (data.changelog) {
-                const changelogSection = `
+            content.innerHTML += `
+                <p>Release Date: <span id="releaseDate" class="version-tag">${data.releaseDate || 'Unknown'}</span></p>
+                <button id="updateButton" class="update-button">Update Now</button>
                 <button id="toggleChangelog" class="changelog-button">Show Changelog</button>
                 <div id="changelogContainer" class="changelog-container" style="display: none;">
-                    <pre id="changelog" class="changelog-content">${data.changelog}</pre>
+                    <pre id="changelog" class="changelog-content">${data.changelog || 'No changelog available'}</pre>
                 </div>
             `;
-                elements.autoUpdaterContent.innerHTML += changelogSection;
-            }
-        } else if (data.current_version && data.latest_version) {
-            elements.autoUpdaterContent.innerHTML +=
-                `<p class="up-to-date">Your application is up to date!</p>`;
+        } else if (data.currentVersion && data.latestVersion) {
+            content.innerHTML += '<p class="up-to-date">Your application is up to date!</p>';
         } else {
-            elements.autoUpdaterContent.innerHTML +=
-                `<p class="warning-message">Unable to determine update status. Please try refreshing.</p>`;
+            content.innerHTML += '<p class="warning-message">Unable to determine update status. Please try refreshing.</p>';
         }
 
-        elements.autoUpdaterContent.innerHTML += `
-        <div id="outputContainer" class="output-container" style="display: none;">
-            <pre id="output" class="output-content"></pre>
-        </div>
-        <p id="refreshMessage" class="refresh-message" style="display: none;"></p>
-    `;
-
-        // Re-attach event listeners
         attachEventListeners();
-    };
+    }
 
-    const attachEventListeners = () => {
-        const refreshIcon = document.getElementById('refreshIcon');
+    function attachEventListeners() {
+        var refreshIcon = document.getElementById('refreshIcon');
         if (refreshIcon) {
-            refreshIcon.addEventListener('click', refreshData);
+            refreshIcon.addEventListener('click', checkForUpdates);
         }
 
-        const updateButton = document.getElementById('updateButton');
+        var updateButton = document.getElementById('updateButton');
         if (updateButton) {
             updateButton.addEventListener('click', initiateUpdate);
         }
 
-        const changelogButton = document.getElementById('toggleChangelog');
-        const changelogContainer = document.getElementById('changelogContainer');
+        var changelogButton = document.getElementById('toggleChangelog');
+        var changelogContainer = document.getElementById('changelogContainer');
         if (changelogButton && changelogContainer) {
-            changelogButton.addEventListener('click', () => {
-                const isHidden = changelogContainer.style.display === 'none';
+            changelogButton.addEventListener('click', function() {
+                var isHidden = changelogContainer.style.display === 'none';
                 changelogContainer.style.display = isHidden ? 'block' : 'none';
                 changelogButton.textContent = isHidden ? 'Hide Changelog' : 'Show Changelog';
             });
         }
-    };
+    }
 
-    const refreshData = async () => {
-        const refreshIcon = document.getElementById('refreshIcon');
-
-        utils.clearMessage(elements.refreshMessage);
-        utils.toggleSpinner(refreshIcon, true);
-
-        try {
-            const response = await fetch(config.checkUrl, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': config.csrfToken
-                }
-            });
-
-            const data = await utils.handleResponse(response);
-
-            if (data.success) {
-                updateUI(data);
-                displayRefreshMessage(data.message || 'Refresh completed successfully!');
-            } else {
-                throw new Error(data.message || 'Error checking for update');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            utils.showMessage('An error occurred: ' + error.message, true, elements.refreshMessage);
-        } finally {
-            utils.toggleSpinner(refreshIcon, false);
-            
-            // Add a timeout to clear the success message after 3 seconds
+    function showMessage(message, isError = false) {
+        var refreshMessage = document.getElementById('refreshMessage');
+        if (refreshMessage) {
+            refreshMessage.innerHTML = message.replace(/\n/g, '<br>');
+            refreshMessage.style.color = isError ? 'red' : 'green';
+            refreshMessage.style.display = 'block';
+            refreshMessage.style.whiteSpace = 'pre-wrap';
+            refreshMessage.style.wordBreak = 'break-word';
             setTimeout(() => {
-                utils.clearMessage(elements.refreshMessage);
-            }, 3000);
+                refreshMessage.style.display = 'none';
+            }, 5000);  // Increased to 5 seconds for longer messages
         }
-    };
+    }
 
-    const initiateUpdate = async () => {
-        const updateButton = document.getElementById('updateButton');
-        const outputContainer = document.getElementById('outputContainer');
-        const output = document.getElementById('output');
+    function checkForUpdates() {
+        var refreshIcon = document.getElementById('refreshIcon');
+        if (refreshIcon) refreshIcon.classList.add('spin');
 
-        utils.clearMessage(output);
-        utils.toggleSpinner(updateButton, true);
-        outputContainer.style.display = 'block';
-
-        try {
-            const response = await fetch(config.updateUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': config.csrfToken
-                }
-            });
-
-            const data = await utils.handleResponse(response);
-
-            if (data.success) {
-                utils.showMessage(data.message || 'Update completed successfully!', false, output);
-                refreshData();
-            } else {
-                throw new Error(data.message || 'Error initiating update');
+        fetch(config.checkUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': config.csrfToken
             }
-        } catch (error) {
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateUI(data);
+            showMessage('Refresh completed successfully!');
+        })
+        .catch(error => {
             console.error('Error:', error);
-            utils.showMessage('An error occurred: ' + error.message, true, output);
-        } finally {
-            utils.toggleSpinner(updateButton, false);
-        }
-    };
-
-    const displayRefreshMessage = function (message) {
-        requestAnimationFrame(() => {
-            const refreshMessage = document.getElementById('refreshMessage');
-            if (refreshMessage) {
-                utils.showMessage(message, false, refreshMessage);
-                setTimeout(() => {
-                    utils.clearMessage(refreshMessage);
-                }, 3000);
-            }
+            showMessage('Failed to check for updates. Please try again later.', true);
+        })
+        .finally(() => {
+            if (refreshIcon) refreshIcon.classList.remove('spin');
         });
-    };
-    
-    // Initial attachment of event listeners
-    attachEventListeners();
+    }
 
-    // Expose necessary functions to the global scope
+    function initiateUpdate() {
+        var updateButton = document.getElementById('updateButton');
+        var updateSpinner = document.getElementById('updateSpinner');
+
+        if (updateButton) updateButton.disabled = true;
+        if (updateSpinner) updateSpinner.style.display = 'flex';
+
+        fetch(config.updateUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': config.csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            showMessage(data.message || 'Update completed successfully!');
+            setTimeout(() => {
+                checkForUpdates();
+            }
+            , 3000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('Failed to update. Please try again later.', true);
+        })
+        .finally(() => {
+            if (updateButton) updateButton.disabled = false;
+            if (updateSpinner) updateSpinner.style.display = 'none';
+        });
+    }
+
+    function ensureSpinnerExists() {
+        var card = document.querySelector('.auto-updater-card');
+        if (card && !document.getElementById('updateSpinner')) {
+            card.insertAdjacentHTML('beforeend', `
+                <div id="updateSpinner" class="update-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Updating... Please wait.</p>
+                </div>
+            `);
+        }
+    }
+
     window.autoUpdater = {
-        setConfig: (newConfig) => {
-            Object.assign(config, newConfig);
-        },
-        refreshData: refreshData,
-        initiateUpdate: initiateUpdate
+        setConfig: function(newConfig) {
+            config = Object.assign(config, newConfig);
+            attachEventListeners();
+            ensureSpinnerExists();
+        }
     };
 });

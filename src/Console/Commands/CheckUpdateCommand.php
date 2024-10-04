@@ -26,7 +26,7 @@ class CheckUpdateCommand extends Command
             $currentVersion = $this->releaseService->getCurrentVersion();
             $latestRelease = $this->releaseService->collectReleaseData();
 
-            if (empty($latestRelease)) {
+            if (empty($latestRelease) || empty($latestRelease['version'])) {
                 $this->error('Failed to fetch the latest release data.');
 
                 return Command::SUCCESS;

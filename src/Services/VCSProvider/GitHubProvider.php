@@ -40,7 +40,7 @@ class GitHubProvider extends AbstractVCSProvider
     protected function parseReleaseData(array $data): array
     {
         return [
-            'version' => ltrim($data['tag_name'] ?? '', 'v'),
+            'version' => $data['tag_name'],
             'download_url' => $data['zipball_url'] ?? '',
             'changelog' => $data['body'] ?? 'No changelog available',
             'release_date' => ! empty($data['created_at']) ? Carbon::parse($data['created_at'])->format('d M, Y h:i:s a') : null,

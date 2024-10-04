@@ -1,10 +1,45 @@
 /* auto-updater.css */
+.auto-updater-card {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.auto-updater-header {
+    background-color: #4a5568;
+    color: white;
+    padding: 15px 20px;
+}
+
+.auto-updater-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.auto-updater-content {
+    padding: 20px;
+    position: relative;
+}
+
+.version-tag {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
 .refresh-icon {
     display: inline-block;
     font-size: 1.5em;
-    color: red;
-    margin: 0px 10px;
-    font-weight: 400;
+    color: #4299e1;
+    margin-left: 10px;
+    cursor: pointer;
     transition: transform 0.5s ease;
 }
 
@@ -18,9 +53,24 @@
     }
 }
 
-.refresh-message {
-    margin-top: 10px;
-    font-weight: bold;
+.update-button {
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+    background-color: #3182ce;
+}
+
+.update-button:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
 }
 
 .changelog-button {
@@ -44,6 +94,8 @@
     padding: 10px;
     background-color: #edf2f7;
     border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .changelog-content {
@@ -51,61 +103,6 @@
     font-family: 'Courier New', Courier, monospace;
     white-space: pre-wrap;
     word-break: break-all;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.auto-updater-card {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    max-width: 500px;
-    margin: 20px auto;
-}
-
-.auto-updater-header {
-    background-color: #4a5568;
-    color: white;
-    padding: 15px 20px;
-}
-
-.auto-updater-header h2 {
-    margin: 0;
-    font-size: 1.5em;
-}
-
-.auto-updater-content {
-    padding: 20px;
-}
-
-.version-tag {
-    background-color: #e2e8f0;
-    color: #4a5568;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-.update-button {
-    background-color: #4299e1;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-.update-button:hover {
-    background-color: #3182ce;
-}
-
-.update-button:disabled {
-    background-color: #a0aec0;
-    cursor: not-allowed;
 }
 
 .up-to-date {
@@ -113,20 +110,57 @@
     font-weight: bold;
 }
 
-.output-container {
-    display: none;
-    margin-top: 20px;
-    background-color: #2d3748;
-    border-radius: 4px;
-    padding: 10px;
-    max-height: 300px;
-    overflow-y: auto;
+.update-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
 }
 
-.output-content {
-    color: #a0aec0;
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0;
-    white-space: pre-wrap;
-    word-break: break-all;
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+.update-spinner p {
+    margin-top: 10px;
+    color: #4a5568;
+    font-weight: bold;
+}
+
+.refresh-message {
+    margin-top: 10px !important;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #e2e8f0;
+    animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.error-message {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
 }
