@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-class TestCase extends Orchestra
+abstract class TestCase extends Orchestra
 {
     protected function setUp(): void
     {
@@ -26,7 +26,7 @@ class TestCase extends Orchestra
     protected function setUpConfig()
     {
         config([
-            'auto-updater.release_url' => 'https://github.com/user/repo',
+            'auto-updater.release_url' => 'https://github.com/anisAronno/laravel-starter',
             'auto-updater.purchase_key' => 'test-purchase-key',
             'auto-updater.exclude_items' => ['.env', '.git', 'storage', 'tests'],
             'auto-updater.middleware' => ['web'],
@@ -42,16 +42,26 @@ class TestCase extends Orchestra
 
     public function be(Authenticatable $user, $driver = null)
     {
-        // Implement the method
+        $this->app['auth']->guard($driver)->setUser($user);
+
+        $this->app->instance('user', $user);
+
+        return $this;
     }
 
     public function call($method, $uri, $parameters = [], $files = [], $server = [], $content = null, $changeHistory = true)
     {
-        // Implement the method
+        return parent::call($method, $uri, $parameters, $files, $server, $content, $changeHistory);
     }
 
     public function seed($class = 'DatabaseSeeder')
     {
-        // Implement the method
+        $this->artisan('db:seed', ['--class' => $class]);
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }

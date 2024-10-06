@@ -8,7 +8,7 @@ class ConfigTest extends TestCase
 {
     public function testAutoUpdaterConfig()
     {
-        $this->assertEquals('https://github.com/user/repo', Config::get('auto-updater.release_url'));
+        $this->assertEquals('https://github.com/anisAronno/laravel-starter', Config::get('auto-updater.release_url'));
         $this->assertEquals('test-purchase-key', Config::get('auto-updater.purchase_key'));
         $this->assertEquals(['.env', '.git', 'storage', 'tests'], Config::get('auto-updater.exclude_items'));
         $this->assertEquals(['web'], Config::get('auto-updater.middleware'));
