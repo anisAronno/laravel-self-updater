@@ -9,9 +9,12 @@ use AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider;
 
 class LaravelAutoUpdaterServiceProviderTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    public function testServiceProviderIsLoaded()
     {
-        return [LaravelAutoUpdaterServiceProvider::class];
+        $this->assertTrue(
+            $this->app->providerIsLoaded(LaravelAutoUpdaterServiceProvider::class),
+            'The LaravelAutoUpdaterServiceProvider is not loaded'
+        );
     }
 
     public function testServiceProviderRegistersCommands()
@@ -25,9 +28,17 @@ class LaravelAutoUpdaterServiceProviderTest extends TestCase
         $this->assertTrue($this->app->make('config')->has('auto-updater'));
     }
 
+    public function testConfigurationIsPublished()
+    {
+        $this->artisan('vendor:publish', ['--provider' => LaravelAutoUpdaterServiceProvider::class])
+            ->assertExitCode(0);
+
+        $this->assertFileExists(config_path('auto-updater.php'));
+    }
+
     public function testServiceProviderBindsVCSProviderInterface()
     {
-        $this->app['config']->set('auto-updater.release_url', 'https://github.com/user/repo');
+        $this->app['config']->set('auto-updater.release_url', 'https://github.com/anisAronno/laravel-starter');
         $this->app['config']->set('auto-updater.purchase_key', 'test-key');
 
         $instance = $this->app->make(VCSProviderInterface::class);
