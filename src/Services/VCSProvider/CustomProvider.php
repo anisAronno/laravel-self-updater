@@ -28,8 +28,6 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Retrieve the purchase key from the environment or configuration.
-     *
-     * @return string|null
      */
     private function retrievePurchaseKey(): ?string
     {
@@ -44,9 +42,6 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Validate the purchase key format.
-     *
-     * @param string $key
-     * @return bool
      */
     private function isValidPurchaseKey(string $key): bool
     {
@@ -59,7 +54,7 @@ class CustomProvider extends AbstractVCSProvider
     protected function getApiUrl(): string
     {
         if ($this->purchaseKey) {
-            return $this->releaseUrl . '?purchase_key=' . urlencode($this->purchaseKey);
+            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));
