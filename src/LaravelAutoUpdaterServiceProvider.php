@@ -10,6 +10,11 @@ use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class LaravelAutoUpdaterServiceProvider
+ *
+ * Service provider for the Laravel Auto Updater package.
+ */
 class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 {
     /**

@@ -7,6 +7,11 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class UpdateOrchestrator
+ *
+ * Service for orchestrating the update process.
+ */
 class UpdateOrchestrator
 {
     protected BackupService $backupService;
@@ -19,6 +24,9 @@ class UpdateOrchestrator
 
     protected $artisanCaller;
 
+    /**
+     * UpdateOrchestrator constructor.
+     */
     public function __construct(
         BackupService $backupService,
         DownloadService $downloadService,
@@ -35,6 +43,9 @@ class UpdateOrchestrator
         };
     }
 
+    /**
+     * Process the update.
+     */
     public function processUpdate(array $releaseData, Command $command)
     {
         $backupPath = null;
@@ -56,18 +67,27 @@ class UpdateOrchestrator
         }
     }
 
+    /**
+     * Enable maintenance mode.
+     */
     protected function enableMaintenanceMode(Command $command)
     {
         ($this->artisanCaller)('down');
         $command->info('Maintenance mode enabled.');
     }
 
+    /**
+     * Disable maintenance mode.
+     */
     protected function disableMaintenanceMode(Command $command)
     {
         ($this->artisanCaller)('up');
         $command->info('Maintenance mode disabled.');
     }
 
+    /**
+     * Create a backup.
+     */
     protected function createBackup(Command $command): string
     {
         $backupPath = $this->backupService->backup($command);
@@ -76,6 +96,9 @@ class UpdateOrchestrator
         return $backupPath;
     }
 
+    /**
+     * Update the project.
+     */
     protected function updateProject(array $releaseData, Command $command)
     {
         $zipballUrl = $this->getUpdateUrl($releaseData);
@@ -90,6 +113,9 @@ class UpdateOrchestrator
         $command->info('Files updated successfully.');
     }
 
+    /**
+     * Run migrations.
+     */
     protected function runMigrations(Command $command)
     {
         $command->info('Running migrations...');
@@ -97,6 +123,9 @@ class UpdateOrchestrator
         $command->info('Migrations completed.');
     }
 
+    /**
+     * Clear cache.
+     */
     protected function clearCache(Command $command)
     {
         $command->info('Clearing cache...');
@@ -104,6 +133,9 @@ class UpdateOrchestrator
         $command->info('Cache cleared.');
     }
 
+    /**
+     * Install composer dependencies.
+     */
     protected function installComposerDependencies(Command $command)
     {
         $requireComposerInstall = config('auto-updater.require_composer_install', false);
@@ -128,6 +160,9 @@ class UpdateOrchestrator
         }
     }
 
+    /**
+     * Cleanup.
+     */
     protected function cleanup(array $paths, Command $command)
     {
         $command->info('Cleaning up...');
@@ -135,6 +170,12 @@ class UpdateOrchestrator
         $command->info('Cleanup completed.');
     }
 
+    /**
+     * Handle a failed update.
+     *
+     *
+     * @throws Exception
+     */
     protected function handleFailure(Exception $e, ?string $backupPath, Command $command)
     {
         Log::error("Update failed: {$e->getMessage()}");
@@ -149,6 +190,13 @@ class UpdateOrchestrator
         throw $e;
     }
 
+    /**
+     * Get the update URL.
+     *
+     *
+     *
+     * @throws Exception
+     */
     protected function getUpdateUrl(array $releaseData): string
     {
         $zipballUrl = $releaseData['download_url'] ?? null;

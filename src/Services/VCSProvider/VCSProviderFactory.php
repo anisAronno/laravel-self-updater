@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\URL;
 use InvalidArgumentException;
 use RuntimeException;
 
+/**
+ * Class VCSProviderFactory
+ *
+ * Factory for creating VCS providers.
+ */
 class VCSProviderFactory
 {
     /**
@@ -21,6 +26,8 @@ class VCSProviderFactory
 
     /**
      * Create a VCS provider instance.
+     *
+     *
      *
      * @throws InvalidArgumentException|RuntimeException
      */
@@ -51,6 +58,8 @@ class VCSProviderFactory
     /**
      * Validate the release URL.
      *
+     *
+     *
      * @throws InvalidArgumentException
      */
     protected static function validateReleaseUrl(?string $releaseUrl): void
@@ -66,6 +75,9 @@ class VCSProviderFactory
 
     /**
      * Register a new VCS provider.
+     *
+     *
+     *
      *
      * @throws InvalidArgumentException
      */

@@ -28,6 +28,9 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Retrieve the purchase key from the environment or configuration.
+     *
+     *
+     * @throws InvalidArgumentException
      */
     private function retrievePurchaseKey(): ?string
     {

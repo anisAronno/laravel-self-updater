@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\Finder\Finder;
 use ZipArchive;
 
+/**
+ * Class FileService
+ *
+ * Service for managing files.
+ */
 class FileService
 {
     protected $excludeItems;
@@ -28,6 +33,9 @@ class FileService
         ];
     }
 
+    /**
+     * Get the list of files to backup.
+     */
     public function getFilesToBackup(string $basePath): array
     {
         $finder = new Finder;
@@ -44,6 +52,13 @@ class FileService
         return $filesToBackup;
     }
 
+    /**
+     * Extract a zip file to the given directory.
+     *
+     *
+     *
+     * @throws Exception
+     */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
         $zip = new ZipArchive;
@@ -58,6 +73,9 @@ class FileService
         return $extractedDir;
     }
 
+    /**
+     * Replace project files with the files from the source directory.
+     */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
         $command->info('Replacing project files...');
@@ -71,6 +89,9 @@ class FileService
         $command->info("\nProject files replaced successfully.");
     }
 
+    /**
+     * Remove old files from the destination directory.
+     */
     public function removeOldFiles(string $source, string $destination, Command $command)
     {
         $command->info('Removing old files...');
@@ -85,6 +106,9 @@ class FileService
         $this->removeEmptyDirectories($destination, $command);
     }
 
+    /**
+     * Delete the given path.
+     */
     public function delete(string $path)
     {
         if (File::isDirectory($path)) {
@@ -94,6 +118,9 @@ class FileService
         }
     }
 
+    /**
+     * Cleanup the given paths.
+     */
     public function cleanup(array $paths, Command $command)
     {
         foreach ($paths as $path) {
@@ -106,11 +133,17 @@ class FileService
         $command->info('Cleanup completed.');
     }
 
+    /**
+     * Check if a file should be excluded.
+     */
     protected function shouldExclude(string $path): bool
     {
         return $this->shouldSkipFile($path, base_path());
     }
 
+    /**
+     * Check if a file should be skipped.
+     */
     protected function shouldSkipFile(string $path, string $basePath): bool
     {
         $skipPaths = array_merge([
@@ -124,6 +157,9 @@ class FileService
         return collect($skipPaths)->contains(fn ($skipPath) => str_starts_with($path, $skipPath));
     }
 
+    /**
+     * Get the list of files in the given directory.
+     */
     protected function getFileList(string $dir): array
     {
         $finder = new Finder;
@@ -132,6 +168,9 @@ class FileService
         return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
     }
 
+    /**
+     * Remove empty directories from the given directory.
+     */
     protected function removeEmptyDirectories(string $dir, Command $command)
     {
         if (! File::isDirectory($dir)) {
@@ -147,6 +186,9 @@ class FileService
         $command->info('Empty directories removal process completed.');
     }
 
+    /**
+     * Process directories in the given directory.
+     */
     private function processDirectories(string $dir, Command $command): void
     {
         try {
@@ -165,6 +207,9 @@ class FileService
         }
     }
 
+    /**
+     * Process the given directory.
+     */
     private function processDirectory(string $dirPath, Command $command): void
     {
         if (! File::isDirectory($dirPath) || in_array($dirPath, $this->criticalDirectories)) {
@@ -181,6 +226,9 @@ class FileService
         }
     }
 
+    /**
+     * Check if a directory is empty.
+     */
     private function isEmptyDirectory(string $dirPath): bool
     {
         try {
@@ -193,12 +241,18 @@ class FileService
         }
     }
 
+    /**
+     * Log and notify a warning message.
+     */
     private function logAndNotifyWarning(string $message, Command $command): void
     {
         Log::warning($message);
         $command->warn($message);
     }
 
+    /**
+     * Perform the extraction of the zip file.
+     */
     private function performExtraction(ZipArchive $zip, string $extractTo): void
     {
         File::ensureDirectoryExists($extractTo);
@@ -206,6 +260,13 @@ class FileService
         $zip->close();
     }
 
+    /**
+     * Get the extracted directory.
+     *
+     *
+     *
+     * @throws Exception
+     */
     private function getExtractedDirectory(string $extractTo): string
     {
         $extractedDirs = File::directories($extractTo);
@@ -216,6 +277,9 @@ class FileService
         return $extractedDirs[0];
     }
 
+    /**
+     * Get the source finder.
+     */
     private function getSourceFinder(string $source): Finder
     {
         $finder = new Finder;
@@ -223,6 +287,9 @@ class FileService
         return $finder->in($source)->ignoreDotFiles(false);
     }
 
+    /**
+     * Copy files from the source to the destination.
+     */
     private function copyFiles(Finder $finder, string $source, string $destination, $progressBar): void
     {
         foreach ($finder as $item) {
@@ -237,6 +304,9 @@ class FileService
         }
     }
 
+    /**
+     * Copy a file or create a directory.
+     */
     private function copyFileOrCreateDirectory($item, string $target): void
     {
         if ($item->isDir()) {
@@ -246,6 +316,9 @@ class FileService
         }
     }
 
+    /**
+     * Get the list of files to remove.
+     */
     private function getFilesToRemove(string $source, string $destination): array
     {
         $sourceFiles = $this->getFileList($source);
@@ -254,6 +327,9 @@ class FileService
         return array_diff($destFiles, $sourceFiles);
     }
 
+    /**
+     * Delete old files from the destination directory.
+     */
     private function deleteOldFiles(array $filesToRemove, string $destination, $progressBar): void
     {
         foreach ($filesToRemove as $file) {
@@ -271,6 +347,9 @@ class FileService
         }
     }
 
+    /**
+     * Log and notify an error message.
+     */
     private function logAndNotifyError(string $message, Command $command): void
     {
         Log::error($message);

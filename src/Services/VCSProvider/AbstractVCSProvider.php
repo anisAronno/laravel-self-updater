@@ -33,6 +33,9 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Parse the release data.
+     *
+     * @param  array  $data  The API response data.
+     * @return array The formatted release data.
      */
     abstract protected function parseReleaseData(array $data): array;
 

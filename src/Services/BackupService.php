@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use ZipArchive;
 
+/**
+ * Class BackupService
+ *
+ * Service for creating and rolling back backups.
+ */
 class BackupService
 {
     protected FileService $fileService;
@@ -22,6 +27,7 @@ class BackupService
 
     /**
      * Create a backup of the project files.
+     *
      *
      * @throws Exception
      */
@@ -72,7 +78,9 @@ class BackupService
     }
 
     /**
-     * Rollback to the backup.
+     * Roll back to the given backup.
+     *
+     *
      *
      * @throws Exception
      */

@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
+/**
+ * Class AutoUpdater
+ *
+ * Component for the auto-updater.
+ */
 class AutoUpdater extends Component
 {
     private const CACHE_KEY = 'auto_updater_data';

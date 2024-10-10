@@ -6,6 +6,11 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
 
+/**
+ * Class ComposerService
+ *
+ * Service for running composer commands.
+ */
 class ComposerService
 {
     /**
@@ -49,6 +54,7 @@ class ComposerService
 
     /**
      * Handle a failed composer command.
+     *
      *
      * @throws Exception
      */

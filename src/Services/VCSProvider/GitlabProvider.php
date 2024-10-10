@@ -22,7 +22,7 @@ class GitlabProvider extends AbstractVCSProvider
     }
 
     /**
-     * Extract the user and repository from the release URL.
+     * Build the API URL.
      */
     protected function buildApiUrl(?string $version): string
     {
