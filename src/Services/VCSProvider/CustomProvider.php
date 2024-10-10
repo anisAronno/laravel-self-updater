@@ -20,10 +20,37 @@ class CustomProvider extends AbstractVCSProvider
     /**
      * CustomProvider constructor.
      */
-    public function __construct(string $releaseUrl, ?string $purchaseKey)
+    public function __construct(string $releaseUrl)
     {
         parent::__construct($releaseUrl);
-        $this->purchaseKey = $purchaseKey;
+        $this->purchaseKey = $this->retrievePurchaseKey();
+    }
+
+    /**
+     * Retrieve the purchase key from the environment or configuration.
+     *
+     * @return string|null
+     */
+    private function retrievePurchaseKey(): ?string
+    {
+        $key = config('auto-updater.purchase_key');
+
+        if (! empty($key) && ! $this->isValidPurchaseKey($key)) {
+            throw new InvalidArgumentException('Invalid purchase key format.');
+        }
+
+        return $key;
+    }
+
+    /**
+     * Validate the purchase key format.
+     *
+     * @param string $key
+     * @return bool
+     */
+    private function isValidPurchaseKey(string $key): bool
+    {
+        return is_string($key) || is_numeric($key);
     }
 
     /**
@@ -31,12 +58,8 @@ class CustomProvider extends AbstractVCSProvider
      */
     protected function getApiUrl(): string
     {
-        if (! filter_var($this->releaseUrl, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException("Invalid custom API URL: {$this->releaseUrl}");
-        }
-
         if ($this->purchaseKey) {
-            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
+            return $this->releaseUrl . '?purchase_key=' . urlencode($this->purchaseKey);
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));

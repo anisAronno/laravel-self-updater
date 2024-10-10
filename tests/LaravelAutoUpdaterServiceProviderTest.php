@@ -39,7 +39,6 @@ class LaravelAutoUpdaterServiceProviderTest extends TestCase
     public function testServiceProviderBindsVCSProviderInterface()
     {
         $this->app['config']->set('auto-updater.release_url', 'https://github.com/anisAronno/laravel-starter');
-        $this->app['config']->set('auto-updater.purchase_key', 'test-key');
 
         $instance = $this->app->make(VCSProviderInterface::class);
         $this->assertInstanceOf(VCSProviderInterface::class, $instance);

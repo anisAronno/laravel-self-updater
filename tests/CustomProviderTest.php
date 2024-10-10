@@ -12,7 +12,7 @@ class CustomProviderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->provider = Mockery::mock(CustomProvider::class, ['https://custom-vcs.com/user/repo', 'purchase-key'])
+        $this->provider = Mockery::mock(CustomProvider::class, ['https://custom-vcs.com/user/repo'])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
