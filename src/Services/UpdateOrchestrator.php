@@ -26,12 +26,6 @@ class UpdateOrchestrator
 
     /**
      * UpdateOrchestrator constructor.
-     *
-     * @param BackupService $backupService
-     * @param DownloadService $downloadService
-     * @param FileService $fileService
-     * @param ComposerService $composerService
-     * @param callable|null $artisanCaller
      */
     public function __construct(
         BackupService $backupService,
@@ -51,9 +45,6 @@ class UpdateOrchestrator
 
     /**
      * Process the update.
-     *
-     * @param array $releaseData
-     * @param Command $command
      */
     public function processUpdate(array $releaseData, Command $command)
     {
@@ -78,8 +69,6 @@ class UpdateOrchestrator
 
     /**
      * Enable maintenance mode.
-     *
-     * @param Command $command
      */
     protected function enableMaintenanceMode(Command $command)
     {
@@ -89,8 +78,6 @@ class UpdateOrchestrator
 
     /**
      * Disable maintenance mode.
-     *
-     * @param Command $command
      */
     protected function disableMaintenanceMode(Command $command)
     {
@@ -100,10 +87,6 @@ class UpdateOrchestrator
 
     /**
      * Create a backup.
-     *
-     * @param Command $command
-     *
-     * @return string
      */
     protected function createBackup(Command $command): string
     {
@@ -115,9 +98,6 @@ class UpdateOrchestrator
 
     /**
      * Update the project.
-     *
-     * @param array $releaseData
-     * @param Command $command
      */
     protected function updateProject(array $releaseData, Command $command)
     {
@@ -135,8 +115,6 @@ class UpdateOrchestrator
 
     /**
      * Run migrations.
-     *
-     * @param Command $command
      */
     protected function runMigrations(Command $command)
     {
@@ -147,8 +125,6 @@ class UpdateOrchestrator
 
     /**
      * Clear cache.
-     *
-     * @param Command $command
      */
     protected function clearCache(Command $command)
     {
@@ -159,8 +135,6 @@ class UpdateOrchestrator
 
     /**
      * Install composer dependencies.
-     *
-     * @param Command $command
      */
     protected function installComposerDependencies(Command $command)
     {
@@ -188,9 +162,6 @@ class UpdateOrchestrator
 
     /**
      * Cleanup.
-     *
-     * @param array $paths
-     * @param Command $command
      */
     protected function cleanup(array $paths, Command $command)
     {
@@ -202,9 +173,6 @@ class UpdateOrchestrator
     /**
      * Handle a failed update.
      *
-     * @param Exception $e
-     * @param string|null $backupPath
-     * @param Command $command
      *
      * @throws Exception
      */
@@ -225,9 +193,7 @@ class UpdateOrchestrator
     /**
      * Get the update URL.
      *
-     * @param array $releaseData
      *
-     * @return string
      *
      * @throws Exception
      */

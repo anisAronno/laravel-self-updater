@@ -20,8 +20,6 @@ class CheckUpdateCommand extends Command
 
     /**
      * CheckUpdateCommand constructor.
-     *
-     * @param ReleaseService $releaseService
      */
     public function __construct(ReleaseService $releaseService)
     {

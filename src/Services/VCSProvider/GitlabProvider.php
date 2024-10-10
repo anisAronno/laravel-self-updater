@@ -13,8 +13,6 @@ class GitlabProvider extends AbstractVCSProvider
 {
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     public function getApiUrl(): string
     {
@@ -25,10 +23,6 @@ class GitlabProvider extends AbstractVCSProvider
 
     /**
      * Build the API URL.
-     *
-     * @param string|null $version
-     *
-     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {

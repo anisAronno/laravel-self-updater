@@ -18,9 +18,6 @@ class DownloadService
     /**
      * Download a file from the given URL.
      *
-     * @param string $url
-     * @param string $destination
-     * @param Command $command
      *
      * @throws Exception
      */
@@ -51,9 +48,6 @@ class DownloadService
 
     /**
      * Save the file to the given destination.
-     *
-     * @param string $destination
-     * @param string $content
      */
     protected function saveFile(string $destination, string $content)
     {

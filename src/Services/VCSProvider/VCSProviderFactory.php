@@ -27,9 +27,7 @@ class VCSProviderFactory
     /**
      * Create a VCS provider instance.
      *
-     * @param string|null $releaseUrl
      *
-     * @return VCSProviderInterface
      *
      * @throws InvalidArgumentException|RuntimeException
      */
@@ -60,9 +58,7 @@ class VCSProviderFactory
     /**
      * Validate the release URL.
      *
-     * @param string|null $releaseUrl
      *
-     * @return void
      *
      * @throws InvalidArgumentException
      */
@@ -80,11 +76,8 @@ class VCSProviderFactory
     /**
      * Register a new VCS provider.
      *
-     * @param string $domain
      *
-     * @param string $providerClass
      *
-     * @return void
      *
      * @throws InvalidArgumentException
      */
@@ -113,8 +106,6 @@ class VCSProviderFactory
 
     /**
      * Get all registered providers.
-     *
-     * @return array
      */
     public static function getProviders(): array
     {
@@ -123,10 +114,6 @@ class VCSProviderFactory
 
     /**
      * Remove a registered provider.
-     *
-     * @param string $domain
-     *
-     * @return bool
      */
     public static function removeProvider(string $domain): bool
     {
@@ -141,10 +128,6 @@ class VCSProviderFactory
 
     /**
      * Check if a provider is registered for a given domain.
-     *
-     * @param string $domain
-     *
-     * @return bool
      */
     public static function hasProvider(string $domain): bool
     {

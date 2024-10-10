@@ -23,9 +23,6 @@ class UpdateInitiateCommand extends Command
 
     /**
      * UpdateInitiateCommand constructor.
-     *
-     * @param ReleaseService $releaseService
-     * @param UpdateOrchestrator $updateOrchestrator
      */
     public function __construct(ReleaseService $releaseService, UpdateOrchestrator $updateOrchestrator)
     {

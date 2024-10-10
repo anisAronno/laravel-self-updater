@@ -28,26 +28,19 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Get the API URL.
-     *
-     * @return string
      */
     abstract protected function getApiUrl(): string;
 
     /**
      * Parse the release data.
      *
-     * @param array $data The API response data.
-     *
+     * @param  array  $data  The API response data.
      * @return array The formatted release data.
      */
     abstract protected function parseReleaseData(array $data): array;
 
     /**
      * Fetch the release data.
-     *
-     * @param string|null $version
-     *
-     * @return array
      */
     protected function fetchReleaseData(?string $version = null): array
     {
@@ -59,19 +52,11 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Build the API URL.
-     *
-     * @param string|null $version
-     *
-     * @return string
      */
     abstract protected function buildApiUrl(?string $version): string;
 
     /**
      * Make an API request.
-     *
-     * @param string $url
-     *
-     * @return array
      */
     protected function makeApiRequest(string $url): array
     {
@@ -86,8 +71,6 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Get the latest release.
-     *
-     * @return array
      */
     public function getLatestRelease(): array
     {
@@ -96,10 +79,6 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Get the release by version.
-     *
-     * @param string $version
-     *
-     * @return array
      */
     public function getReleaseByVersion(string $version): array
     {

@@ -19,8 +19,6 @@ class BackupService
 
     /**
      * BackupService constructor.
-     *
-     * @param FileService $fileService
      */
     public function __construct(FileService $fileService)
     {
@@ -30,7 +28,6 @@ class BackupService
     /**
      * Create a backup of the project files.
      *
-     * @param Command $command
      *
      * @throws Exception
      */
@@ -44,7 +41,7 @@ class BackupService
             $command->info('Starting backup process...');
             $filesToBackup = $this->fileService->getFilesToBackup(base_path());
 
-            $zip = new ZipArchive();
+            $zip = new ZipArchive;
             $zipPath = $backupPath.'/backup.zip';
 
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
@@ -83,9 +80,7 @@ class BackupService
     /**
      * Roll back to the given backup.
      *
-     * @param string $backupPath
      *
-     * @param Command $command
      *
      * @throws Exception
      */
@@ -100,7 +95,7 @@ class BackupService
         $command->info('Rolling back to backup...');
 
         try {
-            $zip = new ZipArchive();
+            $zip = new ZipArchive;
             if ($zip->open($zipPath) !== true) {
                 throw new Exception("Cannot open zip file: $zipPath");
             }
@@ -126,8 +121,6 @@ class BackupService
 
     /**
      * Get the backup path.
-     *
-     * @return string
      */
     protected function getBackupPath(): string
     {
@@ -136,12 +129,6 @@ class BackupService
 
     /**
      * Log backup details.
-     *
-     * @param string $backupPath
-     *
-     * @param string $zipPath
-     *
-     * @return void
      */
     protected function logBackupDetails(string $backupPath, string $zipPath): void
     {
@@ -155,12 +142,6 @@ class BackupService
 
     /**
      * Format bytes to human-readable format.
-     *
-     * @param int $bytes
-     *
-     * @param int $precision
-     *
-     * @return string
      */
     protected function formatBytes(int $bytes, int $precision = 2): string
     {

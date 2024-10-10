@@ -35,14 +35,10 @@ class FileService
 
     /**
      * Get the list of files to backup.
-     *
-     * @param string $basePath
-     *
-     * @return array
      */
     public function getFilesToBackup(string $basePath): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($basePath);
 
         $filesToBackup = [];
@@ -59,17 +55,13 @@ class FileService
     /**
      * Extract a zip file to the given directory.
      *
-     * @param string $filePath
-     * @param string $extractTo
-     * @param Command $command
      *
-     * @return string
      *
      * @throws Exception
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         if ($zip->open($filePath) !== true) {
             throw new Exception('Failed to open the zip file.');
         }
@@ -83,10 +75,6 @@ class FileService
 
     /**
      * Replace project files with the files from the source directory.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param Command $command
      */
     public function replaceProjectFiles(string $source, string $destination, Command $command)
     {
@@ -103,10 +91,6 @@ class FileService
 
     /**
      * Remove old files from the destination directory.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param Command $command
      */
     public function removeOldFiles(string $source, string $destination, Command $command)
     {
@@ -124,8 +108,6 @@ class FileService
 
     /**
      * Delete the given path.
-     *
-     * @param string $path
      */
     public function delete(string $path)
     {
@@ -138,9 +120,6 @@ class FileService
 
     /**
      * Cleanup the given paths.
-     *
-     * @param array $paths
-     * @param Command $command
      */
     public function cleanup(array $paths, Command $command)
     {
@@ -156,10 +135,6 @@ class FileService
 
     /**
      * Check if a file should be excluded.
-     *
-     * @param string $path
-     *
-     * @return bool
      */
     protected function shouldExclude(string $path): bool
     {
@@ -168,11 +143,6 @@ class FileService
 
     /**
      * Check if a file should be skipped.
-     *
-     * @param string $path
-     * @param string $basePath
-     *
-     * @return bool
      */
     protected function shouldSkipFile(string $path, string $basePath): bool
     {
@@ -189,14 +159,10 @@ class FileService
 
     /**
      * Get the list of files in the given directory.
-     *
-     * @param string $dir
-     *
-     * @return array
      */
     protected function getFileList(string $dir): array
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($dir);
 
         return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
@@ -204,9 +170,6 @@ class FileService
 
     /**
      * Remove empty directories from the given directory.
-     *
-     * @param string $dir
-     * @param Command $command
      */
     protected function removeEmptyDirectories(string $dir, Command $command)
     {
@@ -225,9 +188,6 @@ class FileService
 
     /**
      * Process directories in the given directory.
-     *
-     * @param string $dir
-     * @param Command $command
      */
     private function processDirectories(string $dir, Command $command): void
     {
@@ -249,9 +209,6 @@ class FileService
 
     /**
      * Process the given directory.
-     *
-     * @param string $dirPath
-     * @param Command $command
      */
     private function processDirectory(string $dirPath, Command $command): void
     {
@@ -271,10 +228,6 @@ class FileService
 
     /**
      * Check if a directory is empty.
-     *
-     * @param string $dirPath
-     *
-     * @return bool
      */
     private function isEmptyDirectory(string $dirPath): bool
     {
@@ -290,9 +243,6 @@ class FileService
 
     /**
      * Log and notify a warning message.
-     *
-     * @param string $message
-     * @param Command $command
      */
     private function logAndNotifyWarning(string $message, Command $command): void
     {
@@ -302,9 +252,6 @@ class FileService
 
     /**
      * Perform the extraction of the zip file.
-     *
-     * @param ZipArchive $zip
-     * @param string $extractTo
      */
     private function performExtraction(ZipArchive $zip, string $extractTo): void
     {
@@ -316,9 +263,7 @@ class FileService
     /**
      * Get the extracted directory.
      *
-     * @param string $extractTo
      *
-     * @return string
      *
      * @throws Exception
      */
@@ -334,25 +279,16 @@ class FileService
 
     /**
      * Get the source finder.
-     *
-     * @param string $source
-     *
-     * @return Finder
      */
     private function getSourceFinder(string $source): Finder
     {
-        $finder = new Finder();
+        $finder = new Finder;
 
         return $finder->in($source)->ignoreDotFiles(false);
     }
 
     /**
      * Copy files from the source to the destination.
-     *
-     * @param Finder $finder
-     * @param string $source
-     * @param string $destination
-     * @param $progressBar
      */
     private function copyFiles(Finder $finder, string $source, string $destination, $progressBar): void
     {
@@ -370,9 +306,6 @@ class FileService
 
     /**
      * Copy a file or create a directory.
-     *
-     * @param $item
-     * @param string $target
      */
     private function copyFileOrCreateDirectory($item, string $target): void
     {
@@ -385,11 +318,6 @@ class FileService
 
     /**
      * Get the list of files to remove.
-     *
-     * @param string $source
-     * @param string $destination
-     *
-     * @return array
      */
     private function getFilesToRemove(string $source, string $destination): array
     {
@@ -401,10 +329,6 @@ class FileService
 
     /**
      * Delete old files from the destination directory.
-     *
-     * @param array $filesToRemove
-     * @param string $destination
-     * @param $progressBar
      */
     private function deleteOldFiles(array $filesToRemove, string $destination, $progressBar): void
     {
@@ -425,9 +349,6 @@ class FileService
 
     /**
      * Log and notify an error message.
-     *
-     * @param string $message
-     * @param Command $command
      */
     private function logAndNotifyError(string $message, Command $command): void
     {
