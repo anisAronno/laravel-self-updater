@@ -5,6 +5,11 @@ namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
 use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use Illuminate\Console\Command;
 
+/**
+ * Class CheckUpdateCommand
+ *
+ * Command to check for available updates for the project.
+ */
 class CheckUpdateCommand extends Command
 {
     protected $signature = 'update:check';
@@ -13,12 +18,22 @@ class CheckUpdateCommand extends Command
 
     protected ReleaseService $releaseService;
 
+    /**
+     * CheckUpdateCommand constructor.
+     *
+     * @param ReleaseService $releaseService
+     */
     public function __construct(ReleaseService $releaseService)
     {
         parent::__construct();
         $this->releaseService = $releaseService;
     }
 
+    /**
+     * Handle the command.
+     *
+     * @return int
+     */
     public function handle()
     {
         try {

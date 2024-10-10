@@ -28,6 +28,10 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Retrieve the purchase key from the environment or configuration.
+     *
+     * @return string|null
+     *
+     * @throws InvalidArgumentException
      */
     private function retrievePurchaseKey(): ?string
     {
@@ -42,6 +46,10 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Validate the purchase key format.
+     *
+     * @param string $key
+     *
+     * @return bool
      */
     private function isValidPurchaseKey(string $key): bool
     {
@@ -50,6 +58,8 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Get the API URL.
+     *
+     * @return string
      */
     protected function getApiUrl(): string
     {
@@ -64,6 +74,10 @@ class CustomProvider extends AbstractVCSProvider
 
     /**
      * Build the API URL.
+     *
+     * @param string|null $version
+     *
+     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {

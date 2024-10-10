@@ -14,6 +14,8 @@ class BitbucketProvider extends AbstractVCSProvider
 {
     /**
      * Get the API URL.
+     *
+     * @return string
      */
     public function getApiUrl(): string
     {
@@ -23,7 +25,11 @@ class BitbucketProvider extends AbstractVCSProvider
     }
 
     /**
-     * Extract the user and repository from the release URL.
+     * Build the API URL.
+     *
+     * @param string|null $version
+     *
+     * @return string
      */
     protected function buildApiUrl(?string $version): string
     {

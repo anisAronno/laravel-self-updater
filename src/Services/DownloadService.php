@@ -8,8 +8,22 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class DownloadService
+ *
+ * Service for downloading files.
+ */
 class DownloadService
 {
+    /**
+     * Download a file from the given URL.
+     *
+     * @param string $url
+     * @param string $destination
+     * @param Command $command
+     *
+     * @throws Exception
+     */
     public function download(string $url, string $destination, Command $command)
     {
         $command->info("Downloading update from: $url");
@@ -35,6 +49,12 @@ class DownloadService
         }
     }
 
+    /**
+     * Save the file to the given destination.
+     *
+     * @param string $destination
+     * @param string $content
+     */
     protected function saveFile(string $destination, string $content)
     {
         $directory = dirname($destination);

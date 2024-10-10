@@ -6,6 +6,11 @@ use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
 use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
 use Illuminate\Console\Command;
 
+/**
+ * Class UpdateInitiateCommand
+ *
+ * Command for initiating the update process.
+ */
 class UpdateInitiateCommand extends Command
 {
     protected $signature = 'update:initiate {version?}';
@@ -16,6 +21,12 @@ class UpdateInitiateCommand extends Command
 
     protected UpdateOrchestrator $updateOrchestrator;
 
+    /**
+     * UpdateInitiateCommand constructor.
+     *
+     * @param ReleaseService $releaseService
+     * @param UpdateOrchestrator $updateOrchestrator
+     */
     public function __construct(ReleaseService $releaseService, UpdateOrchestrator $updateOrchestrator)
     {
         parent::__construct();
@@ -23,6 +34,11 @@ class UpdateInitiateCommand extends Command
         $this->updateOrchestrator = $updateOrchestrator;
     }
 
+    /**
+     * Handle the command.
+     *
+     * @return int
+     */
     public function handle()
     {
         try {
