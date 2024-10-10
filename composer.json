@@ -7,7 +7,8 @@
         "laravel",
         "auto",
         "updater",
-        "package"
+        "package",
+        "self-updater"
     ],
     "authors": [
         {
