@@ -81,7 +81,7 @@ PURCHASE_KEY=your_optional_purchase_key
 
 The `config/auto-updater.php` file contains important settings:
 
-- **Repository Configuration**: The file uses `ReleaseProviderFactory` to create an appropriate adapter based on your `RELEASE_URL`.
+- **Repository Configuration**: The file uses `VCSProviderFactory` to create an appropriate adapter based on your `RELEASE_URL`.
 - **Excluded Items**: Define files and folders to exclude from updates.
 - **Middleware**: Specify which middleware to apply to the auto-updater's API endpoints.
 - **Composer Dependencies**: Configure whether to run Composer install or update during the update process.

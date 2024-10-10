@@ -5,7 +5,7 @@ namespace AnisAronno\LaravelAutoUpdater;
 use AnisAronno\LaravelAutoUpdater\Console\Commands\CheckUpdateCommand;
 use AnisAronno\LaravelAutoUpdater\Console\Commands\UpdateInitiateCommand;
 use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\VCSFactory;
+use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\VCSProviderFactory;
 use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -22,9 +22,8 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
 
         $this->app->singleton(VCSProviderInterface::class, function () {
             $releaseUrl = config('auto-updater.release_url');
-            $purchaseKey = config('auto-updater.purchase_key');
 
-            return VCSFactory::create($releaseUrl, $purchaseKey);
+            return VCSProviderFactory::create($releaseUrl);
         });
     }
 
