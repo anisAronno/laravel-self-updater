@@ -10,7 +10,6 @@ use Mockery;
 
 class ReleaseServiceTest extends TestCase
 {
-
     /** @test */
     public function testReturnsTheCurrentVersionWhenComposerFileExistsAndContainsVersion()
     {
