@@ -33,11 +33,8 @@ class GitHubProviderTest extends TestCase
             'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
-        $mockApiRequestService->shouldReceive('get')
-            ->once()
-            ->with('https://api.github.com/repos/anisAronno/laravel-starter/releases/latest')
-            ->andReturn($mockResponse);
+        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService->shouldReceive('get')->once()->with('https://api.github.com/repos/anisAronno/laravel-starter/releases/latest')->andReturn($mockResponse);
 
         $expected = [
             'version' => 'v0.3.2',
@@ -52,7 +49,10 @@ class GitHubProviderTest extends TestCase
     public function testGetReleaseByVersion(): void
     {
         $mockResponse = Mockery::mock('Illuminate\Http\Client\Response');
-        $mockResponse->shouldReceive('failed')->andReturn(false);
+
+        // Mock the expected methods on the response
+        $mockResponse->shouldReceive('getStatusCode')->andReturn(200); // Status code check
+        $mockResponse->shouldReceive('failed')->andReturn(false); // Failure check
         $mockResponse->shouldReceive('json')->andReturn([
             'tag_name' => 'v0.3.2',
             'zipball_url' => 'https://api.github.com/repos/anisAronno/laravel-starter/zipball/v0.3.2',
@@ -60,9 +60,12 @@ class GitHubProviderTest extends TestCase
             'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
-        $mockApiRequestService->shouldReceive('get')
-            ->once()
+        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+
+        // Ensure ApiRequestService get method is mocked properly
+        $mockApiRequestService
+            ->shouldReceive('get')
+            ->twice() // Adjust if there are 2 calls
             ->with('https://api.github.com/repos/anisAronno/laravel-starter/releases/tags/v0.3.2')
             ->andReturn($mockResponse);
 
