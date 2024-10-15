@@ -47,17 +47,6 @@ class FileServiceTest extends TestCase
         $this->command->shouldReceive('getOutput')->andReturn($output);
     }
 
-    protected function tearDown(): void
-    {
-        // Clean up the temporary directory
-        if (File::isDirectory($this->tempDir)) {
-            File::deleteDirectory($this->tempDir);
-        }
-
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testGetFilesToBackup()
     {
         // Create test files
@@ -203,5 +192,16 @@ class FileServiceTest extends TestCase
         foreach ($paths as $path) {
             $this->assertFileDoesNotExist($path);
         }
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (File::isDirectory($this->tempDir)) {
+            File::deleteDirectory($this->tempDir);
+        }
+
+        Mockery::close();
+        parent::tearDown();
     }
 }

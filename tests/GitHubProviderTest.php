@@ -16,12 +16,6 @@ class GitHubProviderTest extends TestCase
         $this->provider = new GitHubProvider('https://github.com/anisAronno/laravel-starter');
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testGetApiUrl(): void
     {
         $expected = 'https://api.github.com/repos/anisAronno/laravel-starter/releases';

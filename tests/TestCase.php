@@ -58,10 +58,4 @@ abstract class TestCase extends Orchestra
     {
         $this->artisan('db:seed', ['--class' => $class]);
     }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
 }

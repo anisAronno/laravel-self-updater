@@ -34,17 +34,6 @@ class DownloadServiceTest extends TestCase
         Log::shouldReceive('error')->zeroOrMoreTimes();
     }
 
-    protected function tearDown(): void
-    {
-        // Clean up the temporary directory
-        if (File::isDirectory($this->tempDir)) {
-            File::deleteDirectory($this->tempDir);
-        }
-
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testSuccessfulDownload()
     {
         $url = 'https://example.com/update.zip';
@@ -109,5 +98,16 @@ class DownloadServiceTest extends TestCase
         $this->downloadService->download($url, $destination, $this->command);
 
         $this->assertFileDoesNotExist($destination);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (File::isDirectory($this->tempDir)) {
+            File::deleteDirectory($this->tempDir);
+        }
+
+        Mockery::close();
+        parent::tearDown();
     }
 }
