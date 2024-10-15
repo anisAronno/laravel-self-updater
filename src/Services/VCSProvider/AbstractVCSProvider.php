@@ -43,7 +43,6 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
      * Fetch the release data.
      *
      * @param  string|null  $version  The release version.
-     *
      * @return array The release data.
      *
      * @throws InvalidArgumentException If an error occurs.

@@ -33,7 +33,7 @@ class GitHubProviderTest extends TestCase
             'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
         $mockApiRequestService->shouldReceive('get')->once()->with('https://api.github.com/repos/anisAronno/laravel-starter/releases/latest')->andReturn($mockResponse);
 
         $expected = [
@@ -60,7 +60,7 @@ class GitHubProviderTest extends TestCase
             'release_date' => date('Y-m-d', strtotime('yesterday')),
         ]);
 
-        $mockApiRequestService = Mockery::mock('alias:' . ApiRequestService::class);
+        $mockApiRequestService = Mockery::mock('alias:'.ApiRequestService::class);
 
         // Ensure ApiRequestService get method is mocked properly
         $mockApiRequestService
