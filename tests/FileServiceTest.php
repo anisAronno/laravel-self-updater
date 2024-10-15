@@ -19,7 +19,7 @@ class FileServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->fileService = new FileService;
+        $this->fileService = new FileService();
 
         // Create a temporary directory for all file operations
         $this->tempDir = $this->app->basePath('temp/file_service_test_'.time());
@@ -32,30 +32,24 @@ class FileServiceTest extends TestCase
         $this->command->shouldReceive('line')->byDefault();
 
         // Create a stub for ProgressBar
-        $progressBar = new class
-        {
-            public function start() {}
+        $progressBar = new class () {
+            public function start()
+            {
+            }
 
-            public function advance() {}
+            public function advance()
+            {
+            }
 
-            public function finish() {}
+            public function finish()
+            {
+            }
         };
 
         // Mock the output and progress bar creation
         $output = Mockery::mock('Symfony\Component\Console\Output\OutputInterface');
         $output->shouldReceive('createProgressBar')->andReturn($progressBar);
         $this->command->shouldReceive('getOutput')->andReturn($output);
-    }
-
-    protected function tearDown(): void
-    {
-        // Clean up the temporary directory
-        if (File::isDirectory($this->tempDir)) {
-            File::deleteDirectory($this->tempDir);
-        }
-
-        Mockery::close();
-        parent::tearDown();
     }
 
     public function testGetFilesToBackup()
@@ -88,7 +82,7 @@ class FileServiceTest extends TestCase
         $extractTo = $this->tempDir.'/extracted';
 
         // Create a test zip file
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         if ($zip->open($zipFile, ZipArchive::CREATE) === true) {
             $zip->addFromString('test.txt', 'Test content');
             $zip->addEmptyDir('empty_dir');
@@ -203,5 +197,16 @@ class FileServiceTest extends TestCase
         foreach ($paths as $path) {
             $this->assertFileDoesNotExist($path);
         }
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (File::isDirectory($this->tempDir)) {
+            File::deleteDirectory($this->tempDir);
+        }
+
+        Mockery::close();
+        parent::tearDown();
     }
 }

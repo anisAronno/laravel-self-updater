@@ -22,12 +22,6 @@ class UpdateInitiateCommandTest extends TestCase
         $this->app->instance(UpdateOrchestrator::class, $this->updateOrchestrator);
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
     protected function getPackageProviders($app)
     {
         return [\AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider::class];

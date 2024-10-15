@@ -16,12 +16,6 @@ class GitLabProviderTest extends TestCase
         $this->provider = new GitlabProvider('https://gitlab.com/anis-aleshatech/laravel-starter');
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testGetApiUrl(): void
     {
         $expected = 'https://gitlab.com/api/v4/projects/anis-aleshatech%2Flaravel-starter/repository/tags';

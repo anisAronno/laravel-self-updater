@@ -10,12 +10,6 @@ use Mockery;
 
 class ReleaseServiceTest extends TestCase
 {
-    protected function tearDown(): void
-    {
-        Mockery::close(); // Clean up the mocks
-        parent::tearDown();
-    }
-
     /** @test */
     public function testReturnsTheCurrentVersionWhenComposerFileExistsAndContainsVersion()
     {

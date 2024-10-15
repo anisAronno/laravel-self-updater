@@ -17,12 +17,6 @@ class CustomProviderTest extends TestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testGetLatestRelease()
     {
         $expectedData = ['version' => '1.0.0'];

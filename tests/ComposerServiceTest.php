@@ -15,13 +15,7 @@ class ComposerServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->composerService = new ComposerService;
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
+        $this->composerService = new ComposerService();
     }
 
     public function testRunComposerInstall()

@@ -139,10 +139,4 @@ class AutoUpdaterComponentTest extends TestCase
 
         return $method->invokeArgs($object, $parameters);
     }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
 }

@@ -22,7 +22,7 @@ class DownloadServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->downloadService = new DownloadService;
+        $this->downloadService = new DownloadService();
         $this->command = Mockery::mock(Command::class);
 
         // Create a temporary directory for downloads
@@ -32,17 +32,6 @@ class DownloadServiceTest extends TestCase
         // Mock Log facade for all tests
         Log::shouldReceive('info')->zeroOrMoreTimes();
         Log::shouldReceive('error')->zeroOrMoreTimes();
-    }
-
-    protected function tearDown(): void
-    {
-        // Clean up the temporary directory
-        if (File::isDirectory($this->tempDir)) {
-            File::deleteDirectory($this->tempDir);
-        }
-
-        Mockery::close();
-        parent::tearDown();
     }
 
     public function testSuccessfulDownload()
@@ -109,5 +98,16 @@ class DownloadServiceTest extends TestCase
         $this->downloadService->download($url, $destination, $this->command);
 
         $this->assertFileDoesNotExist($destination);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (File::isDirectory($this->tempDir)) {
+            File::deleteDirectory($this->tempDir);
+        }
+
+        Mockery::close();
+        parent::tearDown();
     }
 }
