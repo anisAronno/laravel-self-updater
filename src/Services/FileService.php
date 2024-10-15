@@ -55,8 +55,6 @@ class FileService
     /**
      * Extract a zip file to the given directory.
      *
-     *
-     *
      * @throws Exception
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
@@ -262,8 +260,6 @@ class FileService
 
     /**
      * Get the extracted directory.
-     *
-     *
      *
      * @throws Exception
      */

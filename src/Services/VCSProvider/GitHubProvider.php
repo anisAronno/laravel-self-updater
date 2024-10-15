@@ -2,7 +2,10 @@
 
 namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
 
+use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
 use Carbon\Carbon;
+use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class GitHubProvider
@@ -28,7 +31,41 @@ class GitHubProvider extends AbstractVCSProvider
     {
         $baseUrl = $this->getApiUrl();
 
-        return $version ? "{$baseUrl}/tags/v{$version}" : "{$baseUrl}/latest";
+        // GitHub tags may or may not have the 'v' prefix, so we try both.
+        if ($version) {
+            $strippedVersion = ltrim($version, 'v');
+            $tagWithV = "{$baseUrl}/tags/v{$strippedVersion}";
+            $tagWithoutV = "{$baseUrl}/tags/{$strippedVersion}";
+
+            // Check which one exists first
+            if ($this->tagExists($tagWithV)) {
+                return $tagWithV;
+            } elseif ($this->tagExists($tagWithoutV)) {
+                return $tagWithoutV;
+            }
+
+            throw new InvalidArgumentException("Release version {$version} not found.");
+        }
+
+        return "{$baseUrl}/latest";
+    }
+
+    /**
+     * Check if the tag exists using Guzzle HTTP client via ApiRequestService.
+     */
+    private function tagExists(string $url): bool
+    {
+        try {
+            $response = ApiRequestService::get($url);
+
+            return $response->getStatusCode() === 200;
+        } catch (HttpException $e) {
+            if ($e->getStatusCode() && $e->getStatusCode() === 404) {
+                return false; // Tag does not exist
+            }
+
+            throw $e;
+        }
     }
 
     /**

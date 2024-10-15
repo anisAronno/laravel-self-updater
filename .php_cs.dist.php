@@ -1,10 +1,7 @@
 <?php
 
 $finder = Symfony\Component\Finder\Finder::create()
-    ->in([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
-    ])
+    ->in([__DIR__ . '/src', __DIR__ . '/tests'])
     ->name('*.php')
     ->notName('*.blade.php')
     ->ignoreDotFiles(true)
@@ -36,5 +33,11 @@ return (new PhpCsFixer\Config())
             'keep_multiple_spaces_after_comma' => true,
         ],
         'single_trait_insert_per_statement' => true,
+        'new_with_braces' => false,
+        'braces' => [
+            'allow_single_line_closure' => true,
+            'allow_single_line_anonymous_class_with_empty_body' => true,
+            'position_after_functions_and_oop_constructs' => 'same',
+        ],
     ])
     ->setFinder($finder);

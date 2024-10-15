@@ -27,8 +27,6 @@ class VCSProviderFactory
     /**
      * Create a VCS provider instance.
      *
-     *
-     *
      * @throws InvalidArgumentException|RuntimeException
      */
     public static function create(?string $releaseUrl): VCSProviderInterface
@@ -58,8 +56,6 @@ class VCSProviderFactory
     /**
      * Validate the release URL.
      *
-     *
-     *
      * @throws InvalidArgumentException
      */
     protected static function validateReleaseUrl(?string $releaseUrl): void
@@ -75,9 +71,6 @@ class VCSProviderFactory
 
     /**
      * Register a new VCS provider.
-     *
-     *
-     *
      *
      * @throws InvalidArgumentException
      */

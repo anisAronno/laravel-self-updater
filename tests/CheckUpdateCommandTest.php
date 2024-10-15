@@ -16,12 +16,6 @@ class CheckUpdateCommandTest extends TestCase
         $this->app->instance(ReleaseService::class, $this->releaseService);
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
     protected function getPackageProviders($app)
     {
         return [\AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider::class];

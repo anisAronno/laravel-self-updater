@@ -55,7 +55,6 @@ class ComposerService
     /**
      * Handle a failed composer command.
      *
-     *
      * @throws Exception
      */
     protected function handleCommandFailure(string $output)

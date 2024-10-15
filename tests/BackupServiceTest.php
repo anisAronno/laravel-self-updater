@@ -36,17 +36,6 @@ class BackupServiceTest extends TestCase
         File::makeDirectory($this->tempDir, 0755, true, true);
     }
 
-    protected function tearDown(): void
-    {
-        // Clean up the temporary directory
-        if (File::isDirectory($this->tempDir)) {
-            File::deleteDirectory($this->tempDir);
-        }
-
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testBackup()
     {
         // Create test files
@@ -119,5 +108,16 @@ class BackupServiceTest extends TestCase
         $this->command->shouldReceive('error')->never();
 
         $this->backupService->rollback('/non/existent/path', $this->command);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (File::isDirectory($this->tempDir)) {
+            File::deleteDirectory($this->tempDir);
+        }
+
+        Mockery::close();
+        parent::tearDown();
     }
 }

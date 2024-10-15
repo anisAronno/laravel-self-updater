@@ -41,11 +41,20 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Fetch the release data.
+     *
+     * @param  string|null  $version  The release version.
+     * @return array The release data.
+     *
+     * @throws InvalidArgumentException If an error occurs.
      */
     protected function fetchReleaseData(?string $version = null): array
     {
         $url = $this->buildApiUrl($version);
         $response = $this->makeApiRequest($url);
+
+        if (empty($response)) {
+            throw new InvalidArgumentException('Failed to fetch release data.');
+        }
 
         return $this->parseReleaseData($response);
     }

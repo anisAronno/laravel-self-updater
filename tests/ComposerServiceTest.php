@@ -18,12 +18,6 @@ class ComposerServiceTest extends TestCase
         $this->composerService = new ComposerService;
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
     public function testRunComposerInstall()
     {
         $this->mockComposerExecution('install --no-interaction', true);
