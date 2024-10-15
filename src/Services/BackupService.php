@@ -28,7 +28,6 @@ class BackupService
     /**
      * Create a backup of the project files.
      *
-     *
      * @throws Exception
      */
     public function backup(Command $command): string
@@ -79,8 +78,6 @@ class BackupService
 
     /**
      * Roll back to the given backup.
-     *
-     *
      *
      * @throws Exception
      */

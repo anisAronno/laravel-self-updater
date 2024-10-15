@@ -193,8 +193,6 @@ class UpdateOrchestrator
     /**
      * Get the update URL.
      *
-     *
-     *
      * @throws Exception
      */
     protected function getUpdateUrl(array $releaseData): string

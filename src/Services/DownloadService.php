@@ -18,7 +18,6 @@ class DownloadService
     /**
      * Download a file from the given URL.
      *
-     *
      * @throws Exception
      */
     public function download(string $url, string $destination, Command $command)
