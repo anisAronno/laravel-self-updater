@@ -1,8 +1,6 @@
 ---
 title: Documentation for Laravel Auto Updater package
 ---
-&nbsp;
-
 # Laravel Auto Updater
 
 A robust Laravel package facilitating automatic updates from GitHub, GitLab, Bitbucket, or custom repositories for your Laravel applications. **Supports Laravel version 10 and above.**
