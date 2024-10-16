@@ -209,7 +209,7 @@ These endpoints are protected by the middleware specified in the config file.
 
 Use the global component anywhere in your views:
 
-```blade
+```
 <x-auto-updater />
 ```
 
