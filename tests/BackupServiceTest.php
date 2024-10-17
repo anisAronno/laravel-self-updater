@@ -1,9 +1,9 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\BackupService;
-use AnisAronno\LaravelAutoUpdater\Services\FileService;
+use AnisAronno\LaravelSelfUpdater\Services\BackupService;
+use AnisAronno\LaravelSelfUpdater\Services\FileService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Mockery;
@@ -25,7 +25,7 @@ class BackupServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->fileService = new FileService;
+        $this->fileService = new FileService();
         $this->backupService = new BackupService($this->fileService);
         $this->output = Mockery::mock(OutputInterface::class);
         $this->command = Mockery::mock(Command::class);
@@ -58,7 +58,7 @@ class BackupServiceTest extends TestCase
         $this->assertFileExists($backupPath.'/backup.zip');
 
         // Verify zip contents
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
         $this->assertTrue($zip->open($backupPath.'/backup.zip') === true);
         $this->assertGreaterThan(0, $zip->numFiles);
         $zip->close();
@@ -71,7 +71,7 @@ class BackupServiceTest extends TestCase
         File::makeDirectory($backupPath);
         $zipPath = $backupPath.'/backup.zip';
 
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
         $zip->open($zipPath, \ZipArchive::CREATE);
         $zip->addFromString('file1.txt', 'Backup content 1');
         $zip->addFromString('file2.txt', 'Backup content 2');

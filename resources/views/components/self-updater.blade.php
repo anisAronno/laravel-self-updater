@@ -1,9 +1,9 @@
-<div id="autoUpdater" class="auto-updater-card">
-    <div class="auto-updater-header">
-        <h2>Auto Updater</h2>
+<div id="selfUpdater" class="self-updater-card">
+    <div class="self-updater-header">
+        <h2>Self Updater</h2>
     </div>
 
-    <div class="auto-updater-content">
+    <div class="self-updater-content">
         @if ($error)
             <div class="error-message">{{ $error }}</div>
         @else
@@ -36,13 +36,13 @@
 </div>
 
 @once
-    <link rel="stylesheet" href="{{ asset('vendor/auto-updater/css/auto-updater.css') }}">
-    <script src="{{ asset('vendor/auto-updater/js/auto-updater.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/self-updater/css/self-updater.css') }}">
+    <script src="{{ asset('vendor/self-updater/js/self-updater.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            window.autoUpdater.setConfig({
-                checkUrl: '{{ route('auto_updater.check') }}',
-                updateUrl: '{{ route('auto_updater.update') }}',
+            window.selfUpdater.setConfig({
+                checkUrl: '{{ route('self_updater.check') }}',
+                updateUrl: '{{ route('self_updater.update') }}',
                 csrfToken: '{{ csrf_token() }}'
             });
         });

@@ -1,6 +1,6 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Contracts;
+namespace AnisAronno\LaravelSelfUpdater\Contracts;
 
 /**
  * Interface VCSProviderInterface

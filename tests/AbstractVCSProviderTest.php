@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\AbstractVCSProvider;
+use AnisAronno\LaravelSelfUpdater\Services\VCSProvider\AbstractVCSProvider;
 use Mockery;
 
 class AbstractVCSProviderTest extends TestCase

@@ -1,10 +1,10 @@
 # Code of Conduct
 
-As contributors and maintainers of the Laravel Auto Updater for Laravel project, we are committed to creating an open and inclusive community. We value the participation of every individual and endeavor to foster a positive and respectful environment for all, irrespective of backgrounds or identities. We expect all contributors and users to adhere to this Code of Conduct in all project spaces, including but not limited to GitHub repositories, issue trackers, and communication channels.
+As contributors and maintainers of the Laravel Self Updater for Laravel project, we are committed to creating an open and inclusive community. We value the participation of every individual and endeavor to foster a positive and respectful environment for all, irrespective of backgrounds or identities. We expect all contributors and users to adhere to this Code of Conduct in all project spaces, including but not limited to GitHub repositories, issue trackers, and communication channels.
 
 ## Our Standards
 
-When engaging in the Laravel Auto Updater for Laravel community, we ask that you:
+When engaging in the Laravel Self Updater for Laravel community, we ask that you:
 
 1. **Be Respectful:** Treat all individuals with respect and consideration. Embrace diverse viewpoints and experiences. Harassment, discrimination, or any form of disrespectful behavior is not tolerated.
 
@@ -18,7 +18,7 @@ When engaging in the Laravel Auto Updater for Laravel community, we ask that you
 
 ## Unacceptable Behavior
 
-The following behaviors are considered unacceptable within the Laravel Auto Updater for Laravel community:
+The following behaviors are considered unacceptable within the Laravel Self Updater for Laravel community:
 
 1. **Harassment:** Any form of harassment, including offensive comments, verbal or written abuse, or unwelcome advances, is not tolerated.
 
@@ -40,4 +40,4 @@ This Code of Conduct is adapted from the Contributor Covenant version 2.0 availa
 
 ## Scope
 
-This Code of Conduct applies to all interactions within the Laravel Auto Updater for Laravel project, including GitHub repositories, issue trackers, social media channels, and any other project communication platforms. It applies to everyone involved in the project, including maintainers, contributors, users, and visitors.
+This Code of Conduct applies to all interactions within the Laravel Self Updater for Laravel project, including GitHub repositories, issue trackers, social media channels, and any other project communication platforms. It applies to everyone involved in the project, including maintainers, contributors, users, and visitors.

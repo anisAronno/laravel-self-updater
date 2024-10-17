@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Laravel Auto Updater configuration file.
- * This file is used to configure the Laravel Auto Updater package.
+ * Laravel Self Updater configuration file.
+ * This file is used to configure the Laravel Self Updater package.
  */
 return [
     'release_url' => env('RELEASE_URL', 'https://github.com/anisAronno/laravel-starter'),

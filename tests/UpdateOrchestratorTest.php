@@ -1,12 +1,12 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\BackupService;
-use AnisAronno\LaravelAutoUpdater\Services\ComposerService;
-use AnisAronno\LaravelAutoUpdater\Services\DownloadService;
-use AnisAronno\LaravelAutoUpdater\Services\FileService;
-use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
+use AnisAronno\LaravelSelfUpdater\Services\BackupService;
+use AnisAronno\LaravelSelfUpdater\Services\ComposerService;
+use AnisAronno\LaravelSelfUpdater\Services\DownloadService;
+use AnisAronno\LaravelSelfUpdater\Services\FileService;
+use AnisAronno\LaravelSelfUpdater\Services\UpdateOrchestrator;
 use Illuminate\Console\Command;
 use Mockery;
 use PHPUnit\Framework\TestCase;

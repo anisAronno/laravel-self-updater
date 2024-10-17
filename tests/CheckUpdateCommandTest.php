@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
 use Mockery;
 
 class CheckUpdateCommandTest extends TestCase
@@ -18,7 +18,7 @@ class CheckUpdateCommandTest extends TestCase
 
     protected function getPackageProviders($app)
     {
-        return [\AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider::class];
+        return [\AnisAronno\LaravelSelfUpdater\LaravelSelfUpdaterServiceProvider::class];
     }
 
     public function testHandleWithUpdateAvailable()

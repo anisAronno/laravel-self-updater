@@ -1,6 +1,6 @@
-# Contributing to Laravel Auto Updater
+# Contributing to Laravel Self Updater
 
-Thank you for considering contributing to the **Laravel Auto Updater** project! We appreciate your interest and help in improving our package. This document outlines how you can contribute to the project effectively.
+Thank you for considering contributing to the **Laravel Self Updater** project! We appreciate your interest and help in improving our package. This document outlines how you can contribute to the project effectively.
 
 ## How to Contribute
 
@@ -9,12 +9,14 @@ Thank you for considering contributing to the **Laravel Auto Updater** project! 
 
 2. **Clone Your Fork**  
    Clone your forked repository to your local machine using the command:
+
    ```bash
-   git clone https://github.com/your-username/laravel-auto-updater.git
+   git clone https://github.com/your-username/laravel-self-updater.git
    ```
 
 3. **Create a New Branch**  
    Create a new branch for your feature or bug fix:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -27,12 +29,14 @@ Thank you for considering contributing to the **Laravel Auto Updater** project! 
 
 6. **Commit Your Changes**  
    Commit your changes with a clear and descriptive message:
+
    ```bash
    git commit -m "Add a concise description of your changes"
    ```
 
 7. **Push to Your Fork**  
    Push your changes to your forked repository:
+
    ```bash
    git push origin feature/your-feature-name
    ```

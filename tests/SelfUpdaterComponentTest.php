@@ -1,16 +1,16 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
-use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\View\Components\SelfUpdater;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
 
-class AutoUpdaterComponentTest extends TestCase
+class SelfUpdaterComponentTest extends TestCase
 {
     /**
      * @var \Mockery\MockInterface|ReleaseService
@@ -18,7 +18,7 @@ class AutoUpdaterComponentTest extends TestCase
     protected $releaseService;
 
     /**
-     * @var AutoUpdater
+     * @var SelfUpdater
      */
     protected $component;
 
@@ -30,7 +30,7 @@ class AutoUpdaterComponentTest extends TestCase
         $this->releaseService = Mockery::mock(ReleaseService::class);
         $this->app->instance(ReleaseService::class, $this->releaseService);
 
-        $this->component = new AutoUpdater($this->releaseService);
+        $this->component = new SelfUpdater($this->releaseService);
     }
 
     public function testRetrieveVersionDataWhenUpdateAvailable()

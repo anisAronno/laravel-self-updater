@@ -1,9 +1,9 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
+namespace AnisAronno\LaravelSelfUpdater\Console\Commands;
 
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
-use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\Services\UpdateOrchestrator;
 use Illuminate\Console\Command;
 
 /**

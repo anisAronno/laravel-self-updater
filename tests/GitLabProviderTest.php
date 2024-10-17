@@ -1,9 +1,9 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\GitlabProvider;
+use AnisAronno\LaravelSelfUpdater\Services\ApiRequestService;
+use AnisAronno\LaravelSelfUpdater\Services\VCSProvider\GitlabProvider;
 use Mockery;
 
 class GitLabProviderTest extends TestCase

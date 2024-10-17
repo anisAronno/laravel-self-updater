@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider;
+use AnisAronno\LaravelSelfUpdater\LaravelSelfUpdaterServiceProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -19,19 +19,19 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            LaravelAutoUpdaterServiceProvider::class,
+            LaravelSelfUpdaterServiceProvider::class,
         ];
     }
 
     protected function setUpConfig()
     {
         config([
-            'auto-updater.release_url' => 'https://github.com/anisAronno/laravel-starter',
-            'auto-updater.purchase_key' => 'test-purchase-key',
-            'auto-updater.exclude_items' => ['.env', '.git', 'storage', 'tests'],
-            'auto-updater.middleware' => ['web'],
-            'auto-updater.require_composer_install' => false,
-            'auto-updater.require_composer_update' => false,
+            'self-updater.release_url' => 'https://github.com/anisAronno/laravel-starter',
+            'self-updater.purchase_key' => 'test-purchase-key',
+            'self-updater.exclude_items' => ['.env', '.git', 'storage', 'tests'],
+            'self-updater.middleware' => ['web'],
+            'self-updater.require_composer_install' => false,
+            'self-updater.require_composer_update' => false,
         ]);
     }
 

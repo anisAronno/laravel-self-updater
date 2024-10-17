@@ -1,21 +1,21 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater;
+namespace AnisAronno\LaravelSelfUpdater;
 
-use AnisAronno\LaravelAutoUpdater\Console\Commands\CheckUpdateCommand;
-use AnisAronno\LaravelAutoUpdater\Console\Commands\UpdateInitiateCommand;
-use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\VCSProviderFactory;
-use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
+use AnisAronno\LaravelSelfUpdater\Console\Commands\CheckUpdateCommand;
+use AnisAronno\LaravelSelfUpdater\Console\Commands\UpdateInitiateCommand;
+use AnisAronno\LaravelSelfUpdater\Contracts\VCSProviderInterface;
+use AnisAronno\LaravelSelfUpdater\Services\VCSProvider\VCSProviderFactory;
+use AnisAronno\LaravelSelfUpdater\View\Components\SelfUpdater;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class LaravelAutoUpdaterServiceProvider
+ * Class LaravelSelfUpdaterServiceProvider
  *
- * Service provider for the Laravel Auto Updater package.
+ * Service provider for the Laravel Self Updater package.
  */
-class LaravelAutoUpdaterServiceProvider extends ServiceProvider
+class LaravelSelfUpdaterServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
@@ -23,10 +23,10 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerCommands();
-        $this->mergeConfigFrom(__DIR__.'/../config/auto-updater-config.php', 'auto-updater');
+        $this->mergeConfigFrom(__DIR__.'/../config/self-updater-config.php', 'self-updater');
 
         $this->app->singleton(VCSProviderInterface::class, function () {
-            $releaseUrl = config('auto-updater.release_url');
+            $releaseUrl = config('self-updater.release_url');
 
             return VCSProviderFactory::create($releaseUrl);
         });
@@ -71,7 +71,7 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
      */
     protected function registerResources(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'auto-updater');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'self-updater');
     }
 
     /**
@@ -79,7 +79,7 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
      */
     protected function registerBladeComponents(): void
     {
-        Blade::component('auto-updater', AutoUpdater::class);
+        Blade::component('self-updater', SelfUpdater::class);
     }
 
     /**
@@ -88,16 +88,16 @@ class LaravelAutoUpdaterServiceProvider extends ServiceProvider
     protected function registerPublishing(): void
     {
         $this->publishes([
-            __DIR__.'/../config/auto-updater-config.php' => config_path('auto-updater.php'),
-        ], 'auto-updater-config');
+            __DIR__.'/../config/self-updater-config.php' => config_path('self-updater.php'),
+        ], 'self-updater-config');
 
         $this->publishes([
-            __DIR__.'/../resources/css' => public_path('vendor/auto-updater/css'),
-            __DIR__.'/../resources/js' => public_path('vendor/auto-updater/js'),
-        ], 'auto-updater-assets');
+            __DIR__.'/../resources/css' => public_path('vendor/self-updater/css'),
+            __DIR__.'/../resources/js' => public_path('vendor/self-updater/js'),
+        ], 'self-updater-assets');
 
         $this->publishes([
-            __DIR__.'/../resources/views/components' => resource_path('views/vendor/auto-updater'),
-        ], 'auto-updater-views');
+            __DIR__.'/../resources/views/components' => resource_path('views/vendor/self-updater'),
+        ], 'self-updater-views');
     }
 }

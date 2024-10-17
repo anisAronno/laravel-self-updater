@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\View\Components;
+namespace AnisAronno\LaravelSelfUpdater\View\Components;
 
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
 /**
- * Class AutoUpdater
+ * Class SelfUpdater
  *
- * Component for the auto-updater.
+ * Component for the self-updater.
  */
-class AutoUpdater extends Component
+class SelfUpdater extends Component
 {
-    private const CACHE_KEY = 'auto_updater_data';
+    private const CACHE_KEY = 'self_updater_data';
 
     private const CACHE_DURATION_IN_SECONDS = 600; // 10 minutes
 
@@ -40,7 +40,7 @@ class AutoUpdater extends Component
      */
     public function render()
     {
-        return view('auto-updater::components.auto-updater', $this->versionData);
+        return view('self-updater::components.self-updater', $this->versionData);
     }
 
     /**

@@ -1,4 +1,4 @@
-// auto-updater.js
+// self-updater.js
 document.addEventListener('DOMContentLoaded', function() {
     var config = {
         checkUrl: '',
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function updateUI(data) {
-        var content = document.querySelector('.auto-updater-content');
+        var content = document.querySelector('.self-updater-content');
         if (!content) return;
 
         if (data.error) {
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function ensureSpinnerExists() {
-        var card = document.querySelector('.auto-updater-card');
+        var card = document.querySelector('.self-updater-card');
         if (card && !document.getElementById('updateSpinner')) {
             card.insertAdjacentHTML('beforeend', `
                 <div id="updateSpinner" class="update-spinner" style="display: none;">
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    window.autoUpdater = {
+    window.selfUpdater = {
         setConfig: function(newConfig) {
             config = Object.assign(config, newConfig);
             attachEventListeners();

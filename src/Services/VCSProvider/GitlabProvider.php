@@ -1,6 +1,6 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+namespace AnisAronno\LaravelSelfUpdater\Services\VCSProvider;
 
 use Carbon\Carbon;
 

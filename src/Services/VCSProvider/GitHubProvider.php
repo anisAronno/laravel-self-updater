@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+namespace AnisAronno\LaravelSelfUpdater\Services\VCSProvider;
 
-use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
+use AnisAronno\LaravelSelfUpdater\Services\ApiRequestService;
 use Carbon\Carbon;
 use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\HttpException;

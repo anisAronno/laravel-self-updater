@@ -1,15 +1,15 @@
 ---
 name: Custom issue template
 about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: ""
+assignees: ""
 ---
 
 ---
+
 name: Custom Issue Template
-about: Report a bug or request a feature for Laravel Auto Updater
+about: Report a bug or request a feature for Laravel Self Updater
 title: "[BUG] / [FEATURE] - <short description>"
 labels: ''
 assignees: ''
@@ -25,7 +25,7 @@ assignees: ''
 1. <!-- First step -->
 2. <!-- Second step -->
 3. <!-- Third step -->
-   
+
 **Expected Behavior**
 
 <!-- A clear and concise description of what you expected to happen. -->

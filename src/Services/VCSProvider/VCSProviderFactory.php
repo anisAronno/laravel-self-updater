@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+namespace AnisAronno\LaravelSelfUpdater\Services\VCSProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
+use AnisAronno\LaravelSelfUpdater\Contracts\VCSProviderInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use InvalidArgumentException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelSelfUpdater\Services;
 
 use Exception;
 use Illuminate\Console\Command;
@@ -25,7 +25,7 @@ class DownloadService
         $command->info("Downloading update from: $url");
 
         try {
-            $requestTimeout = config('auto-updater.request_timeout', 120);
+            $requestTimeout = config('self-updater.request_timeout', 120);
 
             $response = Http::timeout($requestTimeout)->get($url);
 

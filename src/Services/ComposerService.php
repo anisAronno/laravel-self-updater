@@ -1,6 +1,6 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelSelfUpdater\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Log;

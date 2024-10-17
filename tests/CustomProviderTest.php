@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\CustomProvider;
+use AnisAronno\LaravelSelfUpdater\Services\VCSProvider\CustomProvider;
 use Mockery;
 
 class CustomProviderTest extends TestCase

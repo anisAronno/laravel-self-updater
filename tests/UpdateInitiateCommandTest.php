@@ -1,10 +1,10 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Console\Commands\UpdateInitiateCommand;
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
-use AnisAronno\LaravelAutoUpdater\Services\UpdateOrchestrator;
+use AnisAronno\LaravelSelfUpdater\Console\Commands\UpdateInitiateCommand;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\Services\UpdateOrchestrator;
 use Mockery;
 
 class UpdateInitiateCommandTest extends TestCase
@@ -24,7 +24,7 @@ class UpdateInitiateCommandTest extends TestCase
 
     protected function getPackageProviders($app)
     {
-        return [\AnisAronno\LaravelAutoUpdater\LaravelAutoUpdaterServiceProvider::class];
+        return [\AnisAronno\LaravelSelfUpdater\LaravelSelfUpdaterServiceProvider::class];
     }
 
     public function testInitiateUpdateForSpecificVersion()
