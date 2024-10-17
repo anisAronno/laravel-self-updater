@@ -1,6 +1,6 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+namespace AnisAronno\LaravelSelfUpdater\Services\VCSProvider;
 
 use Carbon\Carbon;
 use InvalidArgumentException;
@@ -33,7 +33,7 @@ class CustomProvider extends AbstractVCSProvider
      */
     private function retrievePurchaseKey(): ?string
     {
-        $key = config('auto-updater.purchase_key');
+        $key = config('self-updater.purchase_key');
 
         if (! empty($key) && ! $this->isValidPurchaseKey($key)) {
             throw new InvalidArgumentException('Invalid purchase key format.');

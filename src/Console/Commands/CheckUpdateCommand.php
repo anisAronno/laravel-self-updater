@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Console\Commands;
+namespace AnisAronno\LaravelSelfUpdater\Console\Commands;
 
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
 use Illuminate\Console\Command;
 
 /**

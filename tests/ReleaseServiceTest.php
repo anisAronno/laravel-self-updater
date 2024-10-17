@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Services;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
-use AnisAronno\LaravelAutoUpdater\Services\ReleaseService;
-use AnisAronno\LaravelAutoUpdater\Tests\TestCase;
+use AnisAronno\LaravelSelfUpdater\Contracts\VCSProviderInterface;
+use AnisAronno\LaravelSelfUpdater\Services\ReleaseService;
+use AnisAronno\LaravelSelfUpdater\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use Mockery;
 

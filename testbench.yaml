@@ -1,20 +1,20 @@
 workbench:
-    welcome: true
-    install: true
-    start: /laravel-auto-updater
-    user: contact@anichur.com
-    guard: web
-    sync:
-        - from: ./public/
-          to: public/vendor/auto-updater
-    build:
-        - asset-publish
-        - create-sqlite-db
-        - migrate:refresh
-    assets:
-        - auto-updater-assets
-    discovers:
-        web: false
-        api: true
-        commands: true
-        views: true
+  welcome: true
+  install: true
+  start: /laravel-self-updater
+  user: contact@anichur.com
+  guard: web
+  sync:
+    - from: ./public/
+      to: public/vendor/self-updater
+  build:
+    - asset-publish
+    - create-sqlite-db
+    - migrate:refresh
+  assets:
+    - self-updater-assets
+  discovers:
+    web: false
+    api: true
+    commands: true
+    views: true

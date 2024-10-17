@@ -1,18 +1,18 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
 use Illuminate\Support\Facades\Config;
 
 class ConfigTest extends TestCase
 {
-    public function testAutoUpdaterConfig()
+    public function testSelfUpdaterConfig()
     {
-        $this->assertEquals('https://github.com/anisAronno/laravel-starter', Config::get('auto-updater.release_url'));
-        $this->assertEquals('test-purchase-key', Config::get('auto-updater.purchase_key'));
-        $this->assertEquals(['.env', '.git', 'storage', 'tests'], Config::get('auto-updater.exclude_items'));
-        $this->assertEquals(['web'], Config::get('auto-updater.middleware'));
-        $this->assertFalse(Config::get('auto-updater.require_composer_install'));
-        $this->assertFalse(Config::get('auto-updater.require_composer_update'));
+        $this->assertEquals('https://github.com/anisAronno/laravel-starter', Config::get('self-updater.release_url'));
+        $this->assertEquals('test-purchase-key', Config::get('self-updater.purchase_key'));
+        $this->assertEquals(['.env', '.git', 'storage', 'tests'], Config::get('self-updater.exclude_items'));
+        $this->assertEquals(['web'], Config::get('self-updater.middleware'));
+        $this->assertFalse(Config::get('self-updater.require_composer_install'));
+        $this->assertFalse(Config::get('self-updater.require_composer_update'));
     }
 }

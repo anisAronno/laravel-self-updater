@@ -1,9 +1,9 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services\VCSProvider;
+namespace AnisAronno\LaravelSelfUpdater\Services\VCSProvider;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
-use AnisAronno\LaravelAutoUpdater\Services\ApiRequestService;
+use AnisAronno\LaravelSelfUpdater\Contracts\VCSProviderInterface;
+use AnisAronno\LaravelSelfUpdater\Services\ApiRequestService;
 use InvalidArgumentException;
 
 /**

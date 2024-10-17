@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\VCSProvider\BitbucketProvider;
+use AnisAronno\LaravelSelfUpdater\Services\VCSProvider\BitbucketProvider;
 use Mockery;
 
 class BitbucketProviderTest extends TestCase

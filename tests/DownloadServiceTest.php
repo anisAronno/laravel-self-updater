@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\DownloadService;
+use AnisAronno\LaravelSelfUpdater\Services\DownloadService;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -22,7 +22,7 @@ class DownloadServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->downloadService = new DownloadService;
+        $this->downloadService = new DownloadService();
         $this->command = Mockery::mock(Command::class);
 
         // Create a temporary directory for downloads

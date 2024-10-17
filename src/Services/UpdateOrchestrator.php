@@ -1,6 +1,6 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelSelfUpdater\Services;
 
 use Exception;
 use Illuminate\Console\Command;
@@ -138,8 +138,8 @@ class UpdateOrchestrator
      */
     protected function installComposerDependencies(Command $command)
     {
-        $requireComposerInstall = config('auto-updater.require_composer_install', false);
-        $requireComposerUpdate = config('auto-updater.require_composer_update', false);
+        $requireComposerInstall = config('self-updater.require_composer_install', false);
+        $requireComposerUpdate = config('self-updater.require_composer_update', false);
 
         if (! $requireComposerInstall && ! $requireComposerUpdate) {
             $command->info('Skipping composer install/update.');

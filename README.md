@@ -1,11 +1,11 @@
-# Laravel Auto Updater
+# Laravel Self Updater
 
 A robust Laravel package facilitating automatic updates from GitHub, GitLab, Bitbucket, or custom repositories for your Laravel applications.
 **Supports Laravel version 10 and above.**
 
 ## Table of Contents
 
-- [Laravel Auto Updater](#laravel-auto-updater)
+- [Laravel Self Updater](#laravel-self-updater)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Installation](#installation)
@@ -45,22 +45,22 @@ A robust Laravel package facilitating automatic updates from GitHub, GitLab, Bit
 Install the package via Composer:
 
 ```bash
-composer require anisaronno/laravel-auto-updater
+composer require anisaronno/laravel-self-updater
 ```
 
 Publish the configuration file:
 
 ```bash
-php artisan vendor:publish --tag=auto-updater-config
+php artisan vendor:publish --tag=self-updater-config
 ```
 
-This creates `auto-updater.php` in your `config` directory.
+This creates `self-updater.php` in your `config` directory.
 
 Optionally, publish assets and views:
 
 ```bash
-php artisan vendor:publish --tag=auto-updater-assets
-php artisan vendor:publish --tag=auto-updater-views
+php artisan vendor:publish --tag=self-updater-assets
+php artisan vendor:publish --tag=self-updater-views
 ```
 
 ## Configuration
@@ -79,16 +79,16 @@ PURCHASE_KEY=your_optional_purchase_key
 
 ### Config File
 
-The `config/auto-updater.php` file contains important settings:
+The `config/self-updater.php` file contains important settings:
 
 - **Repository Configuration**: The file uses `VCSProviderFactory` to create an appropriate adapter based on your `RELEASE_URL`.
 - **Excluded Items**: Define files and folders to exclude from updates.
-- **Middleware**: Specify which middleware to apply to the auto-updater's API endpoints.
+- **Middleware**: Specify which middleware to apply to the self-updater's API endpoints.
 - **Composer Dependencies**: Configure whether to run Composer install or update during the update process.
 
 ### Excluding Items from Updates
 
-Edit the `exclude_items` array in `config/auto-updater.php`:
+Edit the `exclude_items` array in `config/self-updater.php`:
 
 ```php
 "exclude_items" => [
@@ -103,7 +103,7 @@ Edit the `exclude_items` array in `config/auto-updater.php`:
 
 ### Set Middleware in the Config File
 
-To configure the middleware, edit the `middleware` array in the `config/auto-updater.php` file:
+To configure the middleware, edit the `middleware` array in the `config/self-updater.php` file:
 
 ```php
 "middleware" => ['web'],
@@ -196,8 +196,8 @@ For custom update sources, ensure your API returns:
 
 Access these endpoints for programmatic updates:
 
-- Check for updates: `GET /api/auto-updater/check`
-- Initiate update: `POST /api/auto-updater/update`
+- Check for updates: `GET /api/self-updater/check`
+- Initiate update: `POST /api/self-updater/update`
 
 These endpoints are protected by the middleware specified in the config file.
 
@@ -206,12 +206,12 @@ These endpoints are protected by the middleware specified in the config file.
 Use the global component anywhere in your views:
 
 ```blade
-<x-auto-updater />
+<x-self-updater />
 ```
 
 ## Contribution Guidelines
 
-We welcome contributions! Please see our [Contribution Guide](https://github.com/anisAronno/laravel-auto-updater/blob/develop/CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contribution Guide](https://github.com/anisAronno/laravel-self-updater/blob/develop/CONTRIBUTING.md) for details.
 
 ## License
 

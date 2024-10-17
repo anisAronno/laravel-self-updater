@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Services;
+namespace AnisAronno\LaravelSelfUpdater\Services;
 
-use AnisAronno\LaravelAutoUpdater\Contracts\VCSProviderInterface;
+use AnisAronno\LaravelSelfUpdater\Contracts\VCSProviderInterface;
 use Illuminate\Support\Facades\File;
 
 /**

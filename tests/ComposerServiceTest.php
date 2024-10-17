@@ -1,8 +1,8 @@
 <?php
 
-namespace AnisAronno\LaravelAutoUpdater\Tests;
+namespace AnisAronno\LaravelSelfUpdater\Tests;
 
-use AnisAronno\LaravelAutoUpdater\Services\ComposerService;
+use AnisAronno\LaravelSelfUpdater\Services\ComposerService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
@@ -15,7 +15,7 @@ class ComposerServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->composerService = new ComposerService;
+        $this->composerService = new ComposerService();
     }
 
     public function testRunComposerInstall()

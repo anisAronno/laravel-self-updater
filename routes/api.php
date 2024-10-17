@@ -1,15 +1,15 @@
 <?php
 
-use AnisAronno\LaravelAutoUpdater\View\Components\AutoUpdater;
+use AnisAronno\LaravelSelfUpdater\View\Components\SelfUpdater;
 use Illuminate\Support\Facades\Route;
 
 // set middleware from config file
-$middleware = config('auto-updater.middleware', []);
+$middleware = config('self-updater.middleware', []);
 
 Route::middleware($middleware)->prefix('api')->group(function () {
-    Route::post('/auto-updater/update', [AutoUpdater::class, 'initiateSystemUpdate'])
-        ->name('auto_updater.update');
+    Route::post('/self-updater/update', [SelfUpdater::class, 'initiateSystemUpdate'])
+        ->name('self_updater.update');
 
-    Route::get('/auto-updater/check', [AutoUpdater::class, 'checkForSystemUpdates'])
-        ->name('auto_updater.check');
+    Route::get('/self-updater/check', [SelfUpdater::class, 'checkForSystemUpdates'])
+        ->name('self_updater.check');
 });

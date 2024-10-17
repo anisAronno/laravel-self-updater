@@ -11,7 +11,7 @@
     backupStaticProperties="false"
 >
   <testsuites>
-    <testsuite name="Laravel Auto Updater Test Suite">
+    <testsuite name="Laravel Self Updater Test Suite">
         <directory suffix="Test.php">./tests</directory>
     </testsuite>
   </testsuites>
