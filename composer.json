@@ -1,7 +1,7 @@
 {
   "name": "anisaronno/laravel-self-updater",
   "description": "Laravel Self Updater is a package that helps you to update your Laravel application automatically.",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "license": "MIT",
   "keywords": [
     "laravel",
