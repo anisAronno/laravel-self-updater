@@ -33,21 +33,13 @@ class CustomProvider extends AbstractVCSProvider
      */
     private function retrievePurchaseKey(): ?string
     {
-        $key = config('self-updater.purchase_key');
+        $key = config('self-updater.license_key');
 
-        if (! empty($key) && ! $this->isValidPurchaseKey($key)) {
+        if (! empty($key) && ! is_string($key)) {
             throw new InvalidArgumentException('Invalid purchase key format.');
         }
 
         return $key;
-    }
-
-    /**
-     * Validate the purchase key format.
-     */
-    private function isValidPurchaseKey(string $key): bool
-    {
-        return is_string($key) || is_numeric($key);
     }
 
     /**
@@ -56,12 +48,10 @@ class CustomProvider extends AbstractVCSProvider
     protected function getApiUrl(): string
     {
         if ($this->purchaseKey) {
-            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
+            return $this->releaseUrl.'?license_key='.urlencode($this->purchaseKey);
         }
 
-        $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));
-
-        return sprintf('https://api.github.com/repos/%s/%s/releases', $parts[1], $parts[2]);
+        return $this->releaseUrl;
     }
 
     /**
