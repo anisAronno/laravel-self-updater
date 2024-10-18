@@ -33,7 +33,7 @@ class CustomProvider extends AbstractVCSProvider
      */
     private function retrievePurchaseKey(): ?string
     {
-        $key = config('self-updater.purchase_key');
+        $key = config('self-updater.license_key');
 
         if (! empty($key) && ! $this->isValidPurchaseKey($key)) {
             throw new InvalidArgumentException('Invalid purchase key format.');
@@ -56,7 +56,7 @@ class CustomProvider extends AbstractVCSProvider
     protected function getApiUrl(): string
     {
         if ($this->purchaseKey) {
-            return $this->releaseUrl.'?purchase_key='.urlencode($this->purchaseKey);
+            return $this->releaseUrl.'?license_key='.urlencode($this->purchaseKey);
         }
 
         $parts = explode('/', parse_url($this->releaseUrl, PHP_URL_PATH));

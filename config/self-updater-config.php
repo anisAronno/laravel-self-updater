@@ -6,7 +6,7 @@
  */
 return [
     'release_url' => env('RELEASE_URL', 'https://github.com/anisAronno/laravel-starter'),
-    'purchase_key' => env('PURCHASE_KEY', null),
+    'license_key' => env('LICENSE_KEY') ?? env('PURCHASE_KEY', 'your-license-key'),
     'request_timeout' => 120,
     'exclude_items' => [
         '.env',

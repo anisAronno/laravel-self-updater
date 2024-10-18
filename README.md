@@ -71,11 +71,11 @@ Add these to your `.env` file:
 
 ```dotenv
 RELEASE_URL=https://github.com/anisAronno/laravel-starter
-PURCHASE_KEY=your_optional_purchase_key
+LICENSE_KEY=your_optional_purchase_key
 ```
 
 - `RELEASE_URL`: Your repository's release URL
-- `PURCHASE_KEY`: (Optional) For authenticated APIs or private repos
+- `LICENSE_KEY`: (Optional) For authenticated APIs or private repos
 
 ### Config File
 

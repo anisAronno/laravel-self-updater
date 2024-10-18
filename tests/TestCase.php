@@ -27,7 +27,7 @@ abstract class TestCase extends Orchestra
     {
         config([
             'self-updater.release_url' => 'https://github.com/anisAronno/laravel-starter',
-            'self-updater.purchase_key' => 'test-purchase-key',
+            'self-updater.license_key' => 'test-purchase-key',
             'self-updater.exclude_items' => ['.env', '.git', 'storage', 'tests'],
             'self-updater.middleware' => ['web'],
             'self-updater.require_composer_install' => false,
