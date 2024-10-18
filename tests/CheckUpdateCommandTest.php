@@ -67,7 +67,7 @@ class CheckUpdateCommandTest extends TestCase
         $this->releaseService->shouldReceive('getCurrentVersion')->once()->andThrow(new \Exception('Test exception'));
 
         $this->artisan('update:check')
-            ->expectsOutput('An error occurred while checking for updates: Test exception')
+            ->expectsOutput('Error: Test exception')
             ->assertExitCode(1);
     }
 }

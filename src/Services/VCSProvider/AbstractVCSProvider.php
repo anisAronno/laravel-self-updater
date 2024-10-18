@@ -4,6 +4,7 @@ namespace AnisAronno\LaravelSelfUpdater\Services\VCSProvider;
 
 use AnisAronno\LaravelSelfUpdater\Contracts\VCSProviderInterface;
 use AnisAronno\LaravelSelfUpdater\Services\ApiRequestService;
+use Illuminate\Http\Client\RequestException;
 use InvalidArgumentException;
 
 /**
@@ -49,14 +50,20 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
      */
     protected function fetchReleaseData(?string $version = null): array
     {
-        $url = $this->buildApiUrl($version);
-        $response = $this->makeApiRequest($url);
+        try {
+            $url = $this->buildApiUrl($version);
+            $response = $this->makeApiRequest($url);
 
-        if (empty($response)) {
-            throw new InvalidArgumentException('Failed to fetch release data.');
+            if (empty($response)) {
+                throw new InvalidArgumentException('No release data found.');
+            }
+
+            return $this->parseReleaseData($response);
+        } catch (RequestException $e) {
+            throw new InvalidArgumentException('Request failed: ' . $e->getMessage(), 0, $e);
+        } catch (\Throwable $e) {
+            throw new InvalidArgumentException('An unexpected error occurred: ' . $e->getMessage(), 0, $e);
         }
-
-        return $this->parseReleaseData($response);
     }
 
     /**
@@ -66,13 +73,20 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
     /**
      * Make an API request.
+     *
+     * @param  string  $url  The API URL.
+     *
+     * @return array The API response data.
+     *
+     * @throws RequestException If an error occurs.
+     *
      */
     protected function makeApiRequest(string $url): array
     {
         $response = ApiRequestService::get($url);
 
         if ($response->failed()) {
-            return [];
+            $response->throw();
         }
 
         return $response->json();

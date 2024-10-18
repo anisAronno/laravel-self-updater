@@ -15,7 +15,7 @@ class ComposerServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->composerService = new ComposerService;
+        $this->composerService = new ComposerService();
     }
 
     public function testRunComposerInstall()
