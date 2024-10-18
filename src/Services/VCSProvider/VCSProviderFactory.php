@@ -40,7 +40,6 @@ class VCSProviderFactory
                 }
             }
 
-            // If no matching provider found, use CustomProvider
             return new CustomProvider($releaseUrl);
         } catch (InvalidArgumentException $e) {
             Log::error("Invalid release URL: {$e->getMessage()}");
@@ -66,6 +65,19 @@ class VCSProviderFactory
 
         if (! URL::isValidUrl($releaseUrl)) {
             throw new InvalidArgumentException("Invalid release URL format: $releaseUrl");
+        }
+
+        // Check for malicious content or virus patterns
+        $maliciousPatterns = [
+            '/<script\b[^>]*>(.*?)<\/script>/is', // Script tags
+            '/(javascript:|data:)/i', // JavaScript or data URIs
+            '/[<>]/', // HTML tags
+        ];
+
+        foreach ($maliciousPatterns as $pattern) {
+            if (preg_match($pattern, $releaseUrl)) {
+                throw new InvalidArgumentException("Release URL contains malicious content: $releaseUrl");
+            }
         }
     }
 

@@ -38,7 +38,7 @@ class FileService
      */
     public function getFilesToBackup(string $basePath): array
     {
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->files()->in($basePath);
 
         $filesToBackup = [];
@@ -59,7 +59,7 @@ class FileService
      */
     public function extractZip(string $filePath, string $extractTo, Command $command): string
     {
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         if ($zip->open($filePath) !== true) {
             throw new Exception('Failed to open the zip file.');
         }
@@ -160,7 +160,7 @@ class FileService
      */
     protected function getFileList(string $dir): array
     {
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->files()->in($dir);
 
         return array_map(fn ($file) => $file->getRelativePathname(), iterator_to_array($finder));
@@ -278,7 +278,7 @@ class FileService
      */
     private function getSourceFinder(string $source): Finder
     {
-        $finder = new Finder;
+        $finder = new Finder();
 
         return $finder->in($source)->ignoreDotFiles(false);
     }

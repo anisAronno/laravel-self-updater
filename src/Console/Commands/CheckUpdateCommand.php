@@ -62,7 +62,7 @@ class CheckUpdateCommand extends Command
 
             return Command::SUCCESS;
         } catch (\Throwable $th) {
-            $this->error('An error occurred while checking for updates: '.$th->getMessage());
+            $this->error('Error: '.$th->getMessage());
 
             return Command::FAILURE;
         }
