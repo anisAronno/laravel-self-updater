@@ -60,9 +60,9 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
 
             return $this->parseReleaseData($response);
         } catch (RequestException $e) {
-            throw new InvalidArgumentException('Request failed: ' . $e->getMessage(), 0, $e);
+            throw new InvalidArgumentException('Request failed: '.$e->getMessage(), 0, $e);
         } catch (\Throwable $e) {
-            throw new InvalidArgumentException('An unexpected error occurred: ' . $e->getMessage(), 0, $e);
+            throw new InvalidArgumentException('An unexpected error occurred: '.$e->getMessage(), 0, $e);
         }
     }
 
@@ -75,11 +75,9 @@ abstract class AbstractVCSProvider implements VCSProviderInterface
      * Make an API request.
      *
      * @param  string  $url  The API URL.
-     *
      * @return array The API response data.
      *
      * @throws RequestException If an error occurs.
-     *
      */
     protected function makeApiRequest(string $url): array
     {

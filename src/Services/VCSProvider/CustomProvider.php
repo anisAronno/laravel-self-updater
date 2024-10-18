@@ -48,7 +48,7 @@ class CustomProvider extends AbstractVCSProvider
     protected function getApiUrl(): string
     {
         if ($this->purchaseKey) {
-            return $this->releaseUrl . '?license_key=' . urlencode($this->purchaseKey);
+            return $this->releaseUrl.'?license_key='.urlencode($this->purchaseKey);
         }
 
         return $this->releaseUrl;
