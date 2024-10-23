@@ -16,7 +16,10 @@
     </testsuite>
   </testsuites>
   <php>
-    <env name="APP_NAME" value="mysite"/>
+    <env name="DB_CONNECTION" value="mysql"/>
+    <env name="DB_DATABASE" value="laravel_test"/>
+    <env name="DB_USERNAME" value="root"/>
+    <env name="DB_PASSWORD" value="your_password"/>
   </php>
   <source>
     <include>

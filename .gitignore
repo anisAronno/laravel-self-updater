@@ -4,13 +4,15 @@
 .phpunit.result.cache
 .phpunit.result
 phpunit.xml.bak
-.idea
 .idea/
 .vscode/
 .phpunit.cache
-.phpunit.cache/
 workbench
 .php-cs-fixer.cache
 build
 composer.lock
 tests/temp
+composer.phar
+Thumbs.db
+/phpunit.xml
+/.fleet
