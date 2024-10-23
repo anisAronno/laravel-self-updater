@@ -12,7 +12,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 **Full Changelog**: https://github.com/anisAronno/laravel-self-updater/compare/v0.3.1...v0.3.2
 
-## 0.3.1 - 2024-10-17
+## v0.3.1 - 2024-10-17
 
 ### What's Changed
 
@@ -28,7 +28,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.3.0 - 2024-10-17
+## v0.3.0 - 2024-10-17
 
 ### What's Changed
 
@@ -45,7 +45,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.2.4 - 2024-10-16
+## v0.2.4 - 2024-10-16
 
 ### What's Changed
 
@@ -61,7 +61,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.2.3 - 2024-10-11
+## v0.2.3 - 2024-10-11
 
 ### What's New
 
@@ -73,7 +73,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.2.2 - 2024-10-08
+## v0.2.2 - 2024-10-08
 
 ### What's New
 
@@ -85,7 +85,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.2.1 - 2024-10-06
+## v0.2.1 - 2024-10-06
 
 ### What's Changed
 
@@ -97,7 +97,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.2.0 - 2024-10-04
+## v0.2.0 - 2024-10-04
 
 ### New Features
 
@@ -113,7 +113,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.1.2 - 2024-10-04
+## v0.1.2 - 2024-10-04
 
 ### What's New
 
@@ -122,7 +122,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.1.1 - 2024-10-03
+## v0.1.1 - 2024-10-03
 
 ### What's Changed
 
@@ -134,7 +134,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.1.0 - 2024-10-02
+## v0.1.0 - 2024-10-02
 
 ### Release Notes
 
@@ -143,7 +143,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.0.2 - 2024-10-02
+## v0.0.2 - 2024-10-02
 
 ### Highlights
 
@@ -152,7 +152,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ---
 
-## 0.0.1 - 2024-10-01
+## v0.0.1 - 2024-10-01
 
 ### Release Title
 
