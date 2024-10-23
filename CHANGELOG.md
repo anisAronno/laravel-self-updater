@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-self-updater` will be documented in this file.
 
+## v0.3.2 - 2024-10-23
+
+**Full Changelog**: https://github.com/anisAronno/laravel-self-updater/compare/v0.3.1...v0.3.2
+
+**Full Changelog**: https://github.com/anisAronno/laravel-self-updater/compare/v0.3.1...v0.3.2
+
 ## 0.3.1 - 2024-10-17
 
 ### What's Changed
@@ -14,6 +20,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 * @anisAronno made their first contribution in [#4](https://github.com/anisAronno/laravel-auto-updater/pull/4).
 
 **Full Changelog**: [0.3.0...0.3.1](https://github.com/anisAronno/laravel-auto-updater/compare/0.3.0...0.3.1)
+
 
 ---
 
@@ -31,6 +38,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 **Full Changelog**: [0.2.4...0.3.0](https://github.com/anisAronno/laravel-auto-updater/compare/0.2.4...0.3.0)
 
+
 ---
 
 ## 0.2.4 - 2024-10-16
@@ -46,6 +54,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 **Full Changelog**: [0.2.3...0.2.4](https://github.com/anisAronno/laravel-auto-updater/compare/0.2.3...0.2.4)
 
+
 ---
 
 ## 0.2.3 - 2024-10-11
@@ -56,6 +65,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 * Improved user experience by enhancing command-line feedback during updates.
 
 **Full Changelog**: [0.2.2...0.2.3](https://github.com/anisAronno/laravel-auto-updater/compare/0.2.2...0.2.3)
+
 
 ---
 
@@ -68,6 +78,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 **Full Changelog**: [0.2.1...0.2.2](https://github.com/anisAronno/laravel-auto-updater/compare/0.2.1...0.2.2)
 
+
 ---
 
 ## 0.2.1 - 2024-10-06
@@ -78,6 +89,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 * Enhanced command-line interface messages for clearer user feedback.
 
 **Full Changelog**: [0.2.0...0.2.1](https://github.com/anisAronno/laravel-auto-updater/compare/0.2.0...0.2.1)
+
 
 ---
 
@@ -94,6 +106,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 **Full Changelog**: [0.1.2...0.2.0](https://github.com/anisAronno/laravel-auto-updater/compare/0.1.2...0.2.0)
 
+
 ---
 
 ## 0.1.2 - 2024-10-04
@@ -101,6 +114,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 ### What's New
 
 * Updated the README file for improved clarity on installation and usage instructions.
+
 
 ---
 
@@ -113,6 +127,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 **Full Changelog**: [0.1.0...0.1.1](https://github.com/anisAronno/laravel-auto-updater/compare/0.1.0...0.1.1)
 
+
 ---
 
 ## 0.1.0 - 2024-10-02
@@ -121,6 +136,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 * Initial release of the Laravel Self Updater package with basic features for managing updates.
 
+
 ---
 
 ## 0.0.2 - 2024-10-02
@@ -128,6 +144,7 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 ### Highlights
 
 * Updated Composer command for better dependency management.
+
 
 ---
 
