@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master
+          token: ${{ secrets.GH_TOKEN }}  # Use the secret you added for authentication
 
       - name: Update Changelog
         uses: stefanzweifel/changelog-updater-action@v1
@@ -26,3 +27,4 @@ jobs:
           branch: master
           commit_message: "Update Changelog for version ${{ github.event.release.tag_name }}"
           file_pattern: CHANGELOG.md
+          token: ${{ secrets.GH_TOKEN }}  # Use the secret here for pushing changes
