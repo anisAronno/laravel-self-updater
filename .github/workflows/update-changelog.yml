@@ -21,8 +21,8 @@ jobs:
           release-notes: ${{ github.event.release.body }}
 
       - name: Commit updated CHANGELOG
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: master
-          commit_message: Update CHANGELOG
+          commit_message: "Update Changelog for version ${{ github.event.release.tag_name }}"
           file_pattern: CHANGELOG.md
