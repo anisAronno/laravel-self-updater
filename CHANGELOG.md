@@ -4,8 +4,6 @@ All notable changes to `laravel-self-updater` will be documented in this file.
 
 ## v0.3.2 - 2024-10-23
 
-### v0.3.2 - 2024-10-23
-
 #### What's Changed
 
 - Added changelog file and git workflow for changelog updates
