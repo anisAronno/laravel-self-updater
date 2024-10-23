@@ -12,8 +12,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: master
-          token: ${{ secrets.GH_TOKEN }}  # Use the secret you added for authentication
+          token: ${{ secrets.GH_TOKEN }}  # Use the secret for authentication
+          ref: master  # Checkout the master branch first
 
       - name: Update Changelog
         uses: stefanzweifel/changelog-updater-action@v1
@@ -21,10 +21,30 @@ jobs:
           latest-version: ${{ github.event.release.name }}
           release-notes: ${{ github.event.release.body }}
 
-      - name: Commit updated CHANGELOG
+      - name: Commit updated CHANGELOG to master
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          branch: master
+          branch: master  # Commit to master branch
           commit_message: "Update Changelog for version ${{ github.event.release.tag_name }}"
           file_pattern: CHANGELOG.md
-          token: ${{ secrets.GH_TOKEN }}  # Use the secret here for pushing changes
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Checkout develop branch
+        run: |
+          git fetch origin
+          git checkout develop  # Switch to the develop branch
+          git pull origin develop
+
+      - name: Update Changelog for develop branch
+        uses: stefanzweifel/changelog-updater-action@v1
+        with:
+          latest-version: ${{ github.event.release.name }}
+          release-notes: ${{ github.event.release.body }}
+
+      - name: Commit updated CHANGELOG to develop
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: develop  # Commit to develop branch
+          commit_message: "Update Changelog for version ${{ github.event.release.tag_name }}"
+          file_pattern: CHANGELOG.md
+          token: ${{ secrets.GH_TOKEN }}

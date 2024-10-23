@@ -2,40 +2,6 @@
 
 All notable changes to `laravel-self-updater` will be documented in this file.
 
-## v0.3.2 - 2024-10-23
-
-### Release: Laravel Self Updater v0.3.2
-
-🚀 **We're pleased to announce the release of Laravel Self Updater v0.3.2!**
-
-This update focuses on improving project management and repository cleanliness with the following key changes:
-
-##### What's Changed
-
-- **Added Changelog File**:
-  
-  - Introduced a structured changelog to document all notable changes, ensuring better transparency for future updates.
-  
-- **Implemented Git Workflow for Changelog Management**:
-  
-  - Automated changelog generation using a new Git workflow, making it easier to track and update changes with every release.
-  
-- **Added Pull Request Template**:
-  
-  - A standardized PR template is now in place to streamline contributions and maintain consistency across all pull requests.
-  
-- **Reset Git Cache**:
-  
-  - Cleared and reset the Git cache to remove unnecessary or ignored files, ensuring a cleaner repository.
-  
-
-
----
-
-This version lays the groundwork for better project maintenance and contributions. Thanks for your continued support! 🎉
-
-**Full Changelog**: https://github.com/anisAronno/laravel-self-updater/compare/v0.3.1...v0.3.2
-
 ## 0.3.1 - 2024-10-17
 
 ### What's Changed
